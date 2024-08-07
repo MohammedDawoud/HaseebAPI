@@ -88,7 +88,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
 
-                InvUUID=x.InvUUID??"",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -194,7 +194,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate=x.VoucherAlarmDate??"",
                 VoucherAlarmCheck=x.VoucherAlarmCheck??false,
                 IsSendAlarm=x.IsSendAlarm??0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -302,7 +302,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -409,7 +409,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -521,7 +521,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                 //ProjectDescription = x.Project != null ? x.Project.ProjectDescription : null,
                 //SketchNo = x.Project != null ? x.Project.SketchNo : null,
                 //DistrictName = x.Project != null ? x.Project.DistrictName : null,
@@ -638,7 +638,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -744,7 +744,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                 VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
@@ -851,7 +851,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                 AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                 DepitNotiId = x.DepitNotiId ?? 0,
 
@@ -954,7 +954,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -1061,7 +1061,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -1164,7 +1164,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -1275,7 +1275,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -1377,7 +1377,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -1479,7 +1479,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                     //DetailsDesc = x.VoucherDetails[0].Description,
@@ -1585,7 +1585,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CustomerAccountId = x.Customer != null ? x.Customer.AccountId : 0,
                     Rad = x.Rad,
@@ -1687,7 +1687,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -1799,7 +1799,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -1902,7 +1902,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             Rad = x.Rad,
                             RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -2007,7 +2007,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                     //DetailsDesc = x.VoucherDetails[0].Description,
@@ -2114,7 +2114,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -2216,7 +2216,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -2315,7 +2315,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -2415,7 +2415,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             Rad = x.Rad,
                             RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -2518,7 +2518,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                     TransactionTypeName = x.AccTransactionTypes!.NameAr ?? "",
@@ -2624,7 +2624,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -2726,7 +2726,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -2825,7 +2825,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -2924,7 +2924,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -3024,7 +3024,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             Rad = x.Rad,
                             RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -3127,7 +3127,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                     TransactionTypeName = x.AccTransactionTypes!.NameAr ?? "",
@@ -3233,7 +3233,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -3336,7 +3336,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -3435,7 +3435,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -3535,7 +3535,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             Rad = x.Rad,
                             RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -3637,7 +3637,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                     //DetailsDesc = x.VoucherDetails[0].Description,
@@ -3743,7 +3743,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CustomerAccountId = x.Customer != null ? x.Customer.AccountId : 0,
                     Rad = x.Rad,
@@ -3852,7 +3852,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -3910,7 +3910,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -4010,7 +4010,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             Rad = x.Rad,
                             RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -4112,7 +4112,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                     //DetailsDesc = x.VoucherDetails[0].Description,
@@ -4224,7 +4224,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -4320,7 +4320,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -4432,7 +4432,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                         Rad = x.Rad,
                         RadName = x.Rad == false ? "ساري" : "ملغي",
@@ -4536,7 +4536,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
                             AccountNameRet = x.AccountNameRet,
@@ -4639,7 +4639,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                     {
@@ -4860,7 +4860,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -4969,7 +4969,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5040,7 +5040,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5107,7 +5107,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             VoucherDetails = x.VoucherDetails,
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5175,7 +5175,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                             AddInvoiceImg = x.AddInvoiceImg,
                             VoucherDetails = x.VoucherDetails,
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5242,7 +5242,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5307,7 +5307,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5374,7 +5374,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5443,7 +5443,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
 
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
@@ -5551,7 +5551,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                     DepitNotiId = x.DepitNotiId ?? 0,
 
@@ -5659,7 +5659,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5730,7 +5730,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5797,7 +5797,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                             AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
 
                             VoucherDetails = x.VoucherDetails,
@@ -5866,7 +5866,7 @@ namespace TaamerProject.Repository.Repositories
                             VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                             VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                             IsSendAlarm = x.IsSendAlarm ?? 0,
-                            InvUUID = x.InvUUID ?? "",
+                            InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                             AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                             VoucherDetails = x.VoucherDetails,
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -5933,7 +5933,7 @@ namespace TaamerProject.Repository.Repositories
                         VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                         VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                         IsSendAlarm = x.IsSendAlarm ?? 0,
-                        InvUUID = x.InvUUID ?? "",
+                        InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
@@ -6002,7 +6002,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                     {
@@ -6183,7 +6183,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -6289,7 +6289,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
@@ -6394,7 +6394,7 @@ namespace TaamerProject.Repository.Repositories
                 VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                 VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                 IsSendAlarm = x.IsSendAlarm ?? 0,
-                InvUUID = x.InvUUID ?? "",
+                InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                 AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
 
                 PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
@@ -6502,7 +6502,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                               InvUUID = x.InvUUID ?? "",
+                                                                               InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                CreditNotiId = x.CreditNotiId ?? 0,
                                                                                DepitNotiId = x.DepitNotiId ?? 0,
@@ -6569,7 +6569,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                               InvUUID = x.InvUUID ?? "",
+                                                                               InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                CreditNotiId = x.CreditNotiId ?? 0,
                                                                                DepitNotiId = x.DepitNotiId ?? 0,
@@ -6641,7 +6641,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                               InvUUID = x.InvUUID ?? "",
+                                                                               InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                CreditNotiId = x.CreditNotiId ?? 0,
                                                                                DepitNotiId = x.DepitNotiId ?? 0,
@@ -6708,7 +6708,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                   VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                   VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                   IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                                  InvUUID = x.InvUUID ?? "",
+                                                                                  InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                   CreditNotiId = x.CreditNotiId ?? 0,
                                                                                   DepitNotiId = x.DepitNotiId ?? 0,
@@ -6782,7 +6782,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                   VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                   VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                   IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                                  InvUUID = x.InvUUID ?? "",
+                                                                                  InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                   CreditNotiId = x.CreditNotiId ?? 0,
                                                                                   DepitNotiId = x.DepitNotiId ?? 0,
@@ -6850,7 +6850,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                   VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                   VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                   IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                                  InvUUID = x.InvUUID ?? "",
+                                                                                  InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                   CreditNotiId = x.CreditNotiId ?? 0,
                                                                                   DepitNotiId = x.DepitNotiId ?? 0,
@@ -6917,7 +6917,7 @@ namespace TaamerProject.Repository.Repositories
                                                                                   VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                                                                                   VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                                                                                   IsSendAlarm = x.IsSendAlarm ?? 0,
-                                                                                  InvUUID = x.InvUUID ?? "",
+                                                                                  InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                                                                                   CreditNotiId = x.CreditNotiId ?? 0,
                                                                                   DepitNotiId = x.DepitNotiId ?? 0,
@@ -6986,7 +6986,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -7215,7 +7215,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     ContractNo=x.Project!=null?x.Project!.Contracts!=null?x.Project!.Contracts.ContractNo:"":"",
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
@@ -7389,7 +7389,7 @@ namespace TaamerProject.Repository.Repositories
                     VoucherAlarmDate = x.VoucherAlarmDate ?? "",
                     VoucherAlarmCheck = x.VoucherAlarmCheck ?? false,
                     IsSendAlarm = x.IsSendAlarm ?? 0,
-                    InvUUID = x.InvUUID ?? "",
+                    InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                     PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
 

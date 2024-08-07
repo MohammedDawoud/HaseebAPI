@@ -2016,6 +2016,7 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.QRCode).HasColumnName("QRCode");
                 entity.Property(t => t.PIH).HasColumnName("PIH");
                 entity.Property(t => t.SingedXMLFileName).HasColumnName("SingedXMLFileName");
+                entity.Property(t => t.StorehouseId).HasColumnName("StorehouseId");
 
                 modelBuilder.Entity<Invoices>().HasMany<VoucherDetails>(s => s.VoucherDetails).WithOne(g => g.Invoices).HasForeignKey(s => s.InvoiceId);
                 modelBuilder.Entity<Invoices>().HasMany<Transactions>(s => s.TransactionDetails).WithOne(g => g.Invoices).HasForeignKey(s => s.InvoiceId);

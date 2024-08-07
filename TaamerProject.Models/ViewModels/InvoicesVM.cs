@@ -130,6 +130,7 @@ namespace TaamerProject.Models
 
         public string? SupplierName { get; set; }
         public string? ClauseName { get; set; }
+        public int? StorehouseId { get; set; }
 
 
         public List<VoucherDetailsVM> VoucherDetails { get; set; }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Haseeb.Service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e7578717c830001a6db6795ecceb0dc24ba39f42")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e80e3470f498437b57c985fc91a45dc79737a2f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Haseeb.Service")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Haseeb.Service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

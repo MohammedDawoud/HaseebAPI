@@ -88,6 +88,8 @@ namespace TaamerProject.Models
         public string? QRCode { get; set; }
         public string? PIH { get; set; }
         public string? SingedXMLFileName { get; set; }
+        public int? StorehouseId { get; set; }
+
 
         public virtual Accounts? Accounts { get; set; }
 

@@ -1,0 +1,30 @@
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.deps.json
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.runtimeconfig.json
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.dll
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.pdb
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.csproj.AssemblyReference.cache
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.AssemblyInfoInputs.cache
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.AssemblyInfo.cs
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.csproj.CoreCompileInputs.cache
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.sourcelink.json
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.dll
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\refint\Haseeb.Models.dll
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.pdb
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.genruntimeconfig.cache
+C:\Users\CITY_LAP\Source\Repos\Bayanatech.HaseebPro\TaamerProject.Models\obj\Debug\net7.0\ref\Haseeb.Models.dll
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.deps.json
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.runtimeconfig.json
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.dll
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\bin\Debug\net7.0\Haseeb.Models.pdb
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.csproj.AssemblyReference.cache
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.AssemblyInfoInputs.cache
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.AssemblyInfo.cs
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.csproj.CoreCompileInputs.cache
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.sourcelink.json
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.dll
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\refint\Haseeb.Models.dll
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.pdb
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\Haseeb.Models.genruntimeconfig.cache
+D:\Bayanatech\Web Application Haseeb\API_Haseeb\TaamerProject.Models\obj\Debug\net7.0\ref\Haseeb.Models.dll

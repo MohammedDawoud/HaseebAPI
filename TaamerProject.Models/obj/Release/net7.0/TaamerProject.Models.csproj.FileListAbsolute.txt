@@ -1,0 +1,14 @@
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\bin\Release\net7.0\TaamerProject.Models.deps.json
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\bin\Release\net7.0\TaamerProject.Models.runtimeconfig.json
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\bin\Release\net7.0\TaamerProject.Models.dll
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\bin\Release\net7.0\TaamerProject.Models.pdb
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.csproj.AssemblyReference.cache
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.AssemblyInfoInputs.cache
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.AssemblyInfo.cs
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.csproj.CoreCompileInputs.cache
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.dll
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\refint\TaamerProject.Models.dll
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.pdb
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\TaamerProject.Models.genruntimeconfig.cache
+D:\TaamerPro\OnionArchitecture\TaamerProject.Models\obj\Release\net7.0\ref\TaamerProject.Models.dll

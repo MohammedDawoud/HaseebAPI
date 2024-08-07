@@ -420,3 +420,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/TaamerProject.Service/Haseeb.Service.csproj
+/TaamerProject.Service/Services/AccServices/AccountsService.cs
+/TaamerProject.API/Haseeb.API.csproj
+/TaamerProject.API/appsettings.json

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TaamerProject.Models.Common;
 using TaamerProject.Models;
 using static Haseeb.Models.ViewModels.PaymentsAndEarns;
+using Haseeb.Models.ViewModels;
 
 namespace TaamerProject.Service.Interfaces
 {
@@ -122,6 +123,9 @@ namespace TaamerProject.Service.Interfaces
 
         Task<IEnumerable<DailyPaymentsandEarns>> GetDayilypaymentsandearns(int? CustomerId, string Date, int BranchId, string Con);
         Task<IEnumerable<DailyPaymentsandEarns>> GetMonthlypaymentsandearns(int? paytype, string startdate, string Enddate, int BranchId, string Con);
+
+        Task<IEnumerable<MonthlyPaymentsandEarns>> GetyearlyInvoicesWithDetails_ByYear(int? paytype, int Year, int BranchId, string Con);
+        Task<IEnumerable<MonthlyPaymentsandEarns>> GetMonthlypaymentsandearns_ًWithDayes(int? paytype, string startdate, string Enddate, int BranchId, string Con);
 
     }
 }

@@ -13,6 +13,7 @@ using TaamerProject.Repository.Interfaces;
 using TaamerProject.Models.DBContext;
 using Microsoft.IdentityModel.Tokens;
 using static Haseeb.Models.ViewModels.PaymentsAndEarns;
+using Haseeb.Models.ViewModels;
 
 namespace TaamerProject.Repository.Repositories
 {
@@ -5716,7 +5717,7 @@ namespace TaamerProject.Repository.Repositories
 
 
                public async Task<IEnumerable<DailyPaymentsandEarns>> GetMonthlypaymentsandearns(int? Paytype, string startDate,string EndDate, int BranchId, string Con)
-        {
+               {
             try
             {
                 List<DailyPaymentsandEarns> lmd = new List<DailyPaymentsandEarns>();
@@ -5788,6 +5789,156 @@ namespace TaamerProject.Repository.Repositories
             }
 
         }
+
+
+
+        public async Task<IEnumerable<MonthlyPaymentsandEarns>> GetMonthlypaymentsandearns_ًWithDayes(int? Paytype, string startDate, string EndDate, int BranchId, string Con)
+        {
+            try
+            {
+                List<MonthlyPaymentsandEarns> lmd = new List<MonthlyPaymentsandEarns>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GetMonthlyInvoicesWithDetails_dayes";
+                        command.Connection = con;
+
+                        command.Parameters.Add(new SqlParameter("@StartDate", startDate));
+                        command.Parameters.Add(new SqlParameter("@EndDate", EndDate));
+
+                        //command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        if (Paytype == 0 || Paytype == null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@PayType", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@PayType", Paytype));
+                        }
+
+                        if (BranchId == 0 || BranchId == null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        }
+
+
+
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+
+                        // loop for adding add from dataset to list<modeldata>  
+                        {
+                            lmd.Add(new MonthlyPaymentsandEarns
+                            {
+                                InvoiceDate = dr[1].ToString(),
+                                InvoiceValue = dr[2].ToString(),
+                                TaxAmount = dr[3].ToString(),
+                                DiscountValue = dr[4].ToString(),
+                                TotalValue = dr[5].ToString(),
+                                Cost = dr[6].ToString(),
+                                Earnings = dr[7].ToString(),
+                                Mardod = dr[8].ToString(),
+                                FinalEarnings = dr[9].ToString(),
+
+                            });
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception ex)
+            {
+                List<MonthlyPaymentsandEarns> lmd = new List<MonthlyPaymentsandEarns>();
+                return lmd;
+            }
+
+        }
+
+        public async Task<IEnumerable<MonthlyPaymentsandEarns>> GetyearlyInvoicesWithDetails_ByYear(int? Paytype, int YearId, int BranchId, string Con)
+        {
+            try
+            {
+                List<MonthlyPaymentsandEarns> lmd = new List<MonthlyPaymentsandEarns>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GetyearlyInvoicesWithDetails_ByYear";
+                        command.Connection = con;
+
+                        command.Parameters.Add(new SqlParameter("@Year", YearId));
+
+                        //command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        if (Paytype == 0 || Paytype == null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@PayType", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@PayType", Paytype));
+                        }
+
+                        if (BranchId == 0 || BranchId == null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        }
+
+
+
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+
+                        // loop for adding add from dataset to list<modeldata>  
+                        {
+                            lmd.Add(new MonthlyPaymentsandEarns
+                            {
+                                InvoiceDate = dr[1].ToString(),
+                                InvoiceValue = dr[2].ToString(),
+                                TaxAmount = dr[3].ToString(),
+                                DiscountValue = dr[4].ToString(),
+                                TotalValue = dr[5].ToString(),
+                                Cost = dr[6].ToString(),
+                                Earnings = dr[7].ToString(),
+                                Mardod = dr[8].ToString(),
+                                FinalEarnings = dr[9].ToString(),
+
+                            });
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception ex)
+            {
+                List<MonthlyPaymentsandEarns> lmd = new List<MonthlyPaymentsandEarns>();
+                return lmd;
+            }
+
+        }
+
 
         public async Task<IEnumerable<AccountStatmentVM>> GetFullAccountStatmentDGV(string FromDate, string ToDate, string AccountCode, string CCID, string Con, int BranchId, int YearId)
         {

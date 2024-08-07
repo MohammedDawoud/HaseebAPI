@@ -1429,6 +1429,32 @@ namespace TaamerProject.API.Controllers
 
 
         }
+        [HttpPost("GetMonthlypaymentsandearns_WithDayes")]
+
+
+        public IActionResult GetMonthlypaymentsandearns_WithDayes([FromForm] int? PayType, [FromForm] string? StartDate, [FromForm] string? EndDate)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+
+            var result = _accountsService.GetMonthlypaymentsandearns_ًWithDayes(PayType, StartDate, EndDate, _globalshared.BranchId_G, Con);
+            return Ok(result);
+
+
+        }
+
+        [HttpPost("GetyearlyInvoicesWithDetails_ByYear")]
+
+        public IActionResult GetyearlyInvoicesWithDetails_ByYear([FromForm] int? PayType, [FromForm] int Year)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+
+            var result = _accountsService.GetyearlyInvoicesWithDetails_ByYear(PayType, Year, _globalshared.BranchId_G, Con);
+            return Ok(result);
+
+
+        }
         #endregion
 
         //public IActionResult DetailedRevenuReport(string CustomerId, string FromDate, string ToDate)

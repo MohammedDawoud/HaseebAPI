@@ -2231,6 +2231,97 @@ namespace TaamerProject.Repository.Repositories
             }
 
         }
+        public async Task<IEnumerable<QuantitieVM>> GetAllQuantities(string FromDate, string ToDate, int ServiceId, int StorehouseId, int YearId, int BranchId, string lang, string Con)
+        {
+            try
+            {
+                List<QuantitieVM> lmd = new List<QuantitieVM>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GetAllQuantities";
+                        command.Connection = con;
+                        if (FromDate == "")
+                        {
+                            command.Parameters.Add(new SqlParameter("@From", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@From", FromDate));
+                        }
+                        if (ToDate == "")
+                        {
+                            command.Parameters.Add(new SqlParameter("@to", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@to", ToDate));
+                        }
+
+                        if (ServiceId == 0)
+                        {
+                            command.Parameters.Add(new SqlParameter("@ServiceId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@ServiceId", ServiceId));
+                        }
+                        if (StorehouseId == 0)
+                        {
+                            command.Parameters.Add(new SqlParameter("@StorehouseId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@StorehouseId", StorehouseId));
+                        }
+                        command.Parameters.Add(new SqlParameter("@YearId", YearId));
+                        command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        decimal qtyStorehouse_V = 0;
+                        decimal qtyTotal_V = 0;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            qtyStorehouse_V=(Convert.ToDecimal((dr["DebentureQty"]).ToString()) + Convert.ToDecimal((dr["PurQty"]).ToString())) - Convert.ToDecimal((dr["DebentureQty"]).ToString());
+                            qtyTotal_V = qtyStorehouse_V + Convert.ToDecimal((dr["Begbalance"]).ToString());
+                            lmd.Add(new QuantitieVM
+                            {
+                                ServicesId = Convert.ToInt32((dr["ServicesId"]).ToString()),
+                                ServicesName = (dr["ServicesName"]).ToString(),
+                                ServiceName_EN = (dr["ServiceName_EN"]).ToString(),
+                                Amount = Convert.ToDecimal((dr["Amount"]).ToString()),
+                                AmountPur = Convert.ToDecimal((dr["AmountPur"]).ToString()),
+                                Begbalance = Convert.ToInt32((dr["Begbalance"]).ToString()),
+                                SerialNumber = (dr["SerialNumber"]).ToString(),
+                                ItemCode = (dr["ItemCode"]).ToString(),
+                                PurQty = Convert.ToDecimal((dr["PurQty"]).ToString()),
+                                SalesQty = Convert.ToDecimal((dr["SalesQty"]).ToString()),
+                                DebentureQty = Convert.ToInt32((dr["DebentureQty"]).ToString()),
+                                qtyStorehouse = Convert.ToDecimal((qtyStorehouse_V).ToString()) ,
+                                qtyTotal = Convert.ToDecimal((qtyTotal_V).ToString()) ,
+                            });
+
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                List<QuantitieVM> lmd = new List<QuantitieVM>();
+                return lmd;
+            }
+
+        }
 
 
         public async Task<IEnumerable<TrainBalanceVM>> GetTrailBalanceDGVNew2(string FromDate, string ToDate, int CCID, int YearId, int BranchId, string lang, string Con, int ZeroCheck, string AccountCode, string LVL, int FilteringType,string FilteringTypeStr,string AccountIds)

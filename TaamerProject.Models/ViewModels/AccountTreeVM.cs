@@ -127,6 +127,23 @@ namespace TaamerProject.Models
 
     }
 
+    public class QuantitieVM
+    {
+        public int ServicesId { get; set; }
+        public string? ServicesName { get; set; }
+        public string? ServiceName_EN { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? AmountPur { get; set; }
+        public int? Begbalance { get; set; }
+        public string? SerialNumber { get; set; }
+        public string? ItemCode { get; set; }
+        public decimal? PurQty { get; set; }
+        public decimal? SalesQty { get; set; }
+        public int? DebentureQty { get; set; }
+        public decimal? qtyStorehouse { get; set; }
+        public decimal? qtyTotal { get; set; }
+    }
+
     public class DetailsMonitorVM
     {
 

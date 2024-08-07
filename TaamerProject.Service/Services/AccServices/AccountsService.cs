@@ -1873,10 +1873,15 @@ namespace TaamerProject.Service.Services
                 return await _accountsRepository.GetTrailBalanceDGVNew(FromDate, ToDate, CCID, yearid ?? default(int), BranchId, lang, Con, ZeroCheck, AccountCode, LVL, FilteringType, FilteringTypeStr, AccountIds);
             }
             return new List<TrainBalanceVM>();
-
-
         }
-
+        public async Task<IEnumerable<QuantitieVM>> GetAllQuantities(string FromDate, string ToDate, int ServiceId, int StorehouseId, int BranchId, string lang, string Con, int? yearid)
+        {
+            if (yearid != null)
+            {
+                return await _accountsRepository.GetAllQuantities(FromDate, ToDate, ServiceId, StorehouseId, yearid ?? default(int), BranchId, lang, Con);
+            }
+            return new List<QuantitieVM>();
+        }
         public async Task<IEnumerable<TrainBalanceVM>> GetTrailBalanceDGVNew_old(string FromDate, string ToDate, int CCID, int BranchId, string lang, string Con, int? yearid, int ZeroCheck, string AccountCode, string LVL)
         {
             if (yearid != null)

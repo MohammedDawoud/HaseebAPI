@@ -999,6 +999,20 @@ namespace TaamerProject.API.Controllers
             var result = _accountsService.GetTrailBalanceDGVNew(FromDate??"", ToDate??"", costID, _globalshared.BranchId_G,_globalshared.Lang_G, Con, _globalshared.YearId_G, ZeroCheck??0, AccountCode ?? "", LVL, FilteringType, FilteringTypeStr??"", AccountIds);
             return Ok(result );
         }
+        [HttpPost("GetAllQuantities")]
+
+        public IActionResult GetAllQuantities([FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] string? ServiceId, [FromForm] string? StorehouseId)
+        {
+
+
+            int serviceId = Convert.ToInt32(ServiceId ?? "0");
+            int storehouseId = Convert.ToInt32(StorehouseId ?? "0");
+
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var result = _accountsService.GetAllQuantities(FromDate ?? "", ToDate ?? "", serviceId, storehouseId, _globalshared.BranchId_G, _globalshared.Lang_G, Con, _globalshared.YearId_G);
+            return Ok(result);
+        }
+
         [HttpGet("GetTrailBalanceDGV2")]
 
         public IActionResult GetTrailBalanceDGV2(string FromDate, string ToDate, string CostCenter, int ZeroCheck, string AccountCode, string LVL, int FilteringType, string FilteringTypeStr, string AccountIds)

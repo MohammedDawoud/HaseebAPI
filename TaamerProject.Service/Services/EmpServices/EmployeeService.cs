@@ -1,0 +1,2348 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using TaamerProject.Models;
+using TaamerProject.Models.Common;
+using TaamerProject.Models.DBContext;
+using TaamerProject.Repository.Interfaces;
+using TaamerProject.Repository.Repositories;
+using TaamerProject.Service.IGeneric;
+using TaamerProject.Service.Interfaces;
+using Haseeb.Service.LocalResources;
+using static Azure.Core.HttpHeader;
+
+namespace TaamerProject.Service.Services
+{
+    public class EmployeeService : IEmployeesService
+    {
+        private readonly IEmployeesRepository _employeeRepository;
+        private readonly IBranchesRepository _BranchesRepository;
+        private readonly IAccountsRepository _accountsRepository;
+        private readonly IEmpStructureRepository _EmpStructureRepository;
+        private readonly ICustodyRepository _CustodyRepository;
+        private readonly IJobRepository _JobRepository;
+        private readonly IUsersRepository _UserRepository;
+        private readonly IPayrollMarchesRepository _payrollMarchesRepository;
+        private readonly ISys_SystemActionsRepository _Sys_SystemActionsRepository;
+        private readonly IEmpContractRepository _empContractRepository;
+        private readonly IContractRepository _contractRepository;
+
+        private readonly ISettingsRepository _SettingsRepository;
+        private readonly IProjectPhasesTasksRepository _ProjectPhasesTasksRepository;
+        private readonly IProjectRepository _ProjectRepository;
+        private readonly IWorkOrdersRepository _workordersRepository;
+        private readonly ITransactionsRepository _TransactionsRepository;
+        private readonly ISystemAction _SystemAction;
+        private readonly TaamerProjectContext _TaamerProContext;
+        private  IPayrollMarchesService _payrollMarchesService;
+        private readonly INationalityRepository _NationalityRepository;
+        private readonly IOrganizationsService _organizationsService;
+        private readonly ICustomerMailService _customerMailService;
+
+
+
+
+        public EmployeeService(IEmployeesRepository employeesRepository, IBranchesRepository branchesRepository, IAccountsRepository accountsRepository, IEmpStructureRepository empStructureRepository,
+            ICustodyRepository custodyRepository, IJobRepository jobRepository, IUsersRepository usersRepository, IPayrollMarchesRepository payrollMarchesRepository,
+            ISys_SystemActionsRepository sys_SystemActions, IEmpContractRepository empContractRepository, IContractRepository contractRepository, ISettingsRepository settingsRepository,
+            IProjectPhasesTasksRepository projectPhasesTasksRepository, IProjectRepository projectRepository, IWorkOrdersRepository workOrdersRepository,
+            ITransactionsRepository transactionsRepository, ISystemAction systemAction, TaamerProjectContext dataContext, IPayrollMarchesService payrollMarchesService
+            , INationalityRepository nationalityRepository,IOrganizationsService organizationsService,ICustomerMailService customerMailService)
+        { 
+            _employeeRepository = employeesRepository;
+            _BranchesRepository = branchesRepository;
+            _accountsRepository = accountsRepository;
+            _EmpStructureRepository = empStructureRepository;
+            _CustodyRepository = custodyRepository;
+            _JobRepository = jobRepository;
+            _UserRepository = usersRepository;
+            _SystemAction = systemAction;
+            _payrollMarchesRepository = payrollMarchesRepository;
+            _Sys_SystemActionsRepository = sys_SystemActions;
+            _empContractRepository = empContractRepository;
+            _contractRepository = contractRepository;
+
+            _SettingsRepository = settingsRepository;
+            _ProjectPhasesTasksRepository = projectPhasesTasksRepository;
+            _ProjectRepository = projectRepository;
+            _workordersRepository = workOrdersRepository;
+            _TransactionsRepository = transactionsRepository;
+            _TaamerProContext = dataContext;
+            _payrollMarchesService = payrollMarchesService;
+            _NationalityRepository= nationalityRepository;
+            _organizationsService = organizationsService;
+            _customerMailService = customerMailService;
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetAllEmployees(string lang, int BranchId)
+        {
+            var employees = await _employeeRepository.GetAllEmployees(lang, BranchId);
+            return employees;
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetAllArchivesEmployees(string lang, int BranchId)
+        {
+            var employees =await _employeeRepository.GetAllArchivesEmployees(lang, BranchId);
+            return employees;
+        }
+        public string GetEmployeeJobName(int EmpId, string lang, int BranchId)
+        {
+            int? Empjobid = _employeeRepository.GetMatching(s => s.EmployeeId == EmpId).FirstOrDefault().JobId ?? default(int);
+            var jobsName = _JobRepository.GetMatching(w => w.JobId == Empjobid).FirstOrDefault().JobNameAr;
+            return jobsName;
+        }
+        public Job GetEmployeeJob(int EmpId, string lang, int BranchId)
+        {
+            int? Empjobid = _employeeRepository.GetMatching(s => s.EmployeeId == EmpId).FirstOrDefault().JobId ?? default(int);
+            var jobs = _JobRepository.GetMatching(w => w.JobId == Empjobid).FirstOrDefault();
+            return jobs;
+        }
+        public async Task< IEnumerable<EmployeesVM>> GetAllBranchEmployees(string lang)
+        {
+            var employees =await _employeeRepository.GetAllBranchEmployees(lang);
+            return employees;
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetAllEmployees(string lang, int SearchAll, int Branch)
+        {
+            var employees =await _employeeRepository.GetAllEmployees(lang, SearchAll, Branch);
+            return employees;
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetAllEmployeesSearch(EmployeesVM SalarySearch, string lang, int UserId, int BranchId, string Con)
+        {
+            if (SalarySearch.IsSearch)
+            {
+                var Emps = await _employeeRepository.GetAllEmployeesBySearchObject(SalarySearch, lang, BranchId, Con);
+                return Emps;
+            }
+            else
+            {
+                return await _employeeRepository.GetAllEmployeesSearch(lang, BranchId);
+            }
+        }
+        public IEnumerable<EmployeesVM> GetAllEmployeesSearch(bool IsAllBranch, string lang, int UserId, int BranchId,int Monthno,int YearId, string Con)
+        {
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno, YearId, Con).Result;
+
+        
+            return Emps;
+        }
+
+
+        public IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, string Con)
+        {
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Con).Result;
+
+            ///PayrollMarches
+            foreach (var Emp in Emps)
+            {
+
+                var payroll = _payrollMarchesRepository.GetPayrollMarches(Emp.EmployeeId, DateTime.Now.Month).Result;
+                if (payroll == null)
+                {
+
+                    var payrollObj = new PayrollMarches()
+                    {
+                        EmpId = Emp.EmployeeId,
+                        MonthNo = DateTime.Now.Month,
+                        MainSalary = Emp.Salary,
+                        SalaryOfThisMonth = Emp.ThisMonthSalary,
+                        Bonus = Emp.Bonus,
+                        CommunicationAllawance = Emp.CommunicationAllawance,
+                        ProfessionAllawance = Emp.ProfessionAllawance,
+                        TransportationAllawance = Emp.TransportationAllawance,
+                        HousingAllowance = Emp.HousingAllowance,
+                        MonthlyAllowances = Emp.MonthlyAllowances,
+                        ExtraAllowances = Emp.ExtraAllowances,
+                        TotalRewards = Emp.TotalRewards,
+                        TotalDiscounts = Emp.TotalDiscounts,
+                        TotalLoans = Emp.TotalLoans,
+                        TotalSalaryOfThisMonth = Emp.TotalySalaries,
+                        TotalAbsDays = Emp.TotalDayAbs,
+                        TotalVacations = Emp.TotalPaidVacations,
+                        Taamen = Emp.Taamen
+
+
+                    };
+                    var AddPayroll = _payrollMarchesService.SavePayrollMarches(payrollObj, UserId, BranchId);
+                }
+                else if (!payroll.PostDate.HasValue)
+                {
+                    payroll.MainSalary = Emp.Salary;
+                    payroll.SalaryOfThisMonth = Emp.ThisMonthSalary;
+                    payroll.Bonus = Emp.Bonus;
+                    payroll.CommunicationAllawance = Emp.CommunicationAllawance;
+                    payroll.ProfessionAllawance = Emp.ProfessionAllawance;
+                    payroll.TransportationAllawance = Emp.TransportationAllawance;
+                    payroll.HousingAllowance = Emp.HousingAllowance;
+                    payroll.MonthlyAllowances = Emp.MonthlyAllowances;
+                    payroll.ExtraAllowances = Emp.ExtraAllowances;
+                    payroll.TotalRewards = Emp.TotalRewards;
+                    payroll.TotalDiscounts = Emp.TotalDiscounts;
+                    payroll.TotalLoans = Emp.TotalLoans;
+                    payroll.TotalSalaryOfThisMonth = Emp.TotalySalaries;
+                    payroll.TotalAbsDays = Emp.TotalDayAbs;
+                    payroll.TotalVacations = Emp.TotalPaidVacations;
+                    payroll.Taamen = Emp.Taamen;
+                    _payrollMarchesService.SavePayrollMarches(payroll, UserId, BranchId);
+                }
+            }
+            return Emps;
+        }
+
+
+        public IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId,int Monthno, string Con)
+        {
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno,DateTime.Now.Year, Con).Result;
+
+            ///PayrollMarches
+            foreach (var Emp in Emps)
+            {
+
+                var payroll = _payrollMarchesRepository.GetPayrollMarches(Emp.EmployeeId, Monthno,DateTime.Now.Year).Result;
+                if (payroll == null)
+                {
+
+                    var payrollObj = new PayrollMarches()
+                    {
+                        EmpId = Emp.EmployeeId,
+                        MonthNo = Monthno,
+                        MainSalary = Emp.Salary,
+                        SalaryOfThisMonth = Emp.ThisMonthSalary,
+                        Bonus = Emp.Bonus,
+                        CommunicationAllawance = Emp.CommunicationAllawance,
+                        ProfessionAllawance = Emp.ProfessionAllawance,
+                        TransportationAllawance = Emp.TransportationAllawance,
+                        HousingAllowance = Emp.HousingAllowance,
+                        MonthlyAllowances = Emp.MonthlyAllowances,
+                        ExtraAllowances = Emp.ExtraAllowances,
+                        TotalRewards = Emp.TotalRewards,
+                        TotalDiscounts = Emp.TotalDiscounts,
+                        TotalLoans = Emp.TotalLoans,
+                        TotalSalaryOfThisMonth = Emp.TotalySalaries,
+                        TotalAbsDays = Emp.TotalDayAbs,
+                        TotalVacations = Emp.TotalPaidVacations,
+                        Taamen = Emp.Taamen,
+                        YearId=DateTime.Now.Year,
+                        
+
+
+                    };
+                    var AddPayroll = _payrollMarchesService.SavePayrollMarches(payrollObj, UserId, BranchId);
+                }
+                else if (!payroll.PostDate.HasValue)
+                {
+                    payroll.MainSalary = Emp.Salary;
+                    payroll.SalaryOfThisMonth = Emp.ThisMonthSalary;
+                    payroll.Bonus = Emp.Bonus;
+                    payroll.CommunicationAllawance = Emp.CommunicationAllawance;
+                    payroll.ProfessionAllawance = Emp.ProfessionAllawance;
+                    payroll.TransportationAllawance = Emp.TransportationAllawance;
+                    payroll.HousingAllowance = Emp.HousingAllowance;
+                    payroll.MonthlyAllowances = Emp.MonthlyAllowances;
+                    payroll.ExtraAllowances = Emp.ExtraAllowances;
+                    payroll.TotalRewards = Emp.TotalRewards;
+                    payroll.TotalDiscounts = Emp.TotalDiscounts;
+                    payroll.TotalLoans = Emp.TotalLoans;
+                    payroll.TotalSalaryOfThisMonth = Emp.TotalySalaries;
+                    payroll.TotalAbsDays = Emp.TotalDayAbs;
+                    payroll.TotalVacations = Emp.TotalPaidVacations;
+                    payroll.Taamen = Emp.Taamen;
+                    payroll.YearId = DateTime.Now.Year;
+                    _payrollMarchesService.SavePayrollMarches(payroll, UserId, BranchId);
+                }
+            }
+            return Emps;
+        }
+
+
+        public IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno,int YearId, string Con)
+        {
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno,YearId, Con).Result;
+
+            ///PayrollMarches
+            foreach (var Emp in Emps)
+            {
+
+                var payroll = _payrollMarchesRepository.GetPayrollMarches(Emp.EmployeeId, Monthno,YearId).Result;
+                if (payroll == null)
+                {
+
+                    var payrollObj = new PayrollMarches()
+                    {
+                        EmpId = Emp.EmployeeId,
+                        MonthNo = Monthno,
+                        MainSalary = Emp.Salary,
+                        SalaryOfThisMonth = Emp.ThisMonthSalary,
+                        Bonus = Emp.Bonus,
+                        CommunicationAllawance = Emp.CommunicationAllawance,
+                        ProfessionAllawance = Emp.ProfessionAllawance,
+                        TransportationAllawance = Emp.TransportationAllawance,
+                        HousingAllowance = Emp.HousingAllowance,
+                        MonthlyAllowances = Emp.MonthlyAllowances,
+                        ExtraAllowances = Emp.ExtraAllowances,
+                        TotalRewards = Emp.TotalRewards,
+                        TotalDiscounts = Emp.TotalDiscounts,
+                        TotalLoans = Emp.TotalLoans,
+                        TotalSalaryOfThisMonth = Emp.TotalySalaries,
+                        TotalAbsDays = Emp.TotalDayAbs,
+                        TotalVacations = Emp.TotalPaidVacations,
+                        Taamen = Emp.Taamen,
+                        YearId=YearId
+
+
+                    };
+                    var AddPayroll = _payrollMarchesService.SavePayrollMarches(payrollObj, UserId, BranchId);
+                }
+                else if (!payroll.PostDate.HasValue)
+                {
+                    payroll.MainSalary = Emp.Salary;
+                    payroll.SalaryOfThisMonth = Emp.ThisMonthSalary;
+                    payroll.Bonus = Emp.Bonus;
+                    payroll.CommunicationAllawance = Emp.CommunicationAllawance;
+                    payroll.ProfessionAllawance = Emp.ProfessionAllawance;
+                    payroll.TransportationAllawance = Emp.TransportationAllawance;
+                    payroll.HousingAllowance = Emp.HousingAllowance;
+                    payroll.MonthlyAllowances = Emp.MonthlyAllowances;
+                    payroll.ExtraAllowances = Emp.ExtraAllowances;
+                    payroll.TotalRewards = Emp.TotalRewards;
+                    payroll.TotalDiscounts = Emp.TotalDiscounts;
+                    payroll.TotalLoans = Emp.TotalLoans;
+                    payroll.TotalSalaryOfThisMonth = Emp.TotalySalaries;
+                    payroll.TotalAbsDays = Emp.TotalDayAbs;
+                    payroll.TotalVacations = Emp.TotalPaidVacations;
+                    payroll.Taamen = Emp.Taamen;
+                    payroll.YearId = YearId;
+                    _payrollMarchesService.SavePayrollMarches(payroll, UserId, BranchId);
+                }
+            }
+            return Emps;
+        }
+        public IEnumerable<EmployeesVM> GetEmployeesForPayrollPrint(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno, int YearId, string Con)
+        {
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno, YearId, Con).Result;
+
+            return Emps;
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetEmployeeByUserid(int UserId)
+        {
+            return await _employeeRepository.GetEmployeeByUserid(UserId);
+        }
+        public string GetAccountCodeNewValue(int parentid, int accountid)
+        {
+            try
+            {
+                var AccountCodeNew = "";
+                var CodeNewList = new List<decimal>();
+                var Accounts = _accountsRepository.GetMatching(s => s.ParentId == parentid && s.IsDeleted == false).Where(a => a.AccountId != accountid);
+                if (Accounts.Count() > 0)
+                {
+                    foreach (var v in Accounts)
+                    {
+                        if (v.AccountCodeNew != "")
+                        {
+                            decimal ValueDec = Convert.ToDecimal(v.AccountCodeNew);
+                            CodeNewList.Add(ValueDec);
+                        }
+
+                    }
+                    var getmax = CodeNewList.Max();
+                    AccountCodeNew = (getmax + 1).ToString();
+
+                }
+                else
+                {
+                    var Accounts2 = _accountsRepository.GetById(parentid);
+                    if (((Accounts2.Level ?? 0) + 1 == 1) || ((Accounts2.Level ?? 0) + 1 == 2))
+                    {
+                        AccountCodeNew = Accounts2.AccountCodeNew + "01";
+                    }
+                    else
+                    {
+                        AccountCodeNew = Accounts2.AccountCodeNew + "0001";
+
+                    }
+                }
+                return AccountCodeNew;
+            }
+            catch (Exception ex)
+            {
+
+                return "";
+            }
+
+
+        }
+
+        public GeneralMessage SaveEmployee(Employees emp, int UserId, int BranchId)
+        {
+            try
+            {
+                if(emp.BirthDate != null) {
+                var bdate = DateTime.ParseExact(emp.BirthDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    emp.BirthDate = bdate.ToString();
+                }
+                string EmpAccCode = "";
+                var codeExist = _employeeRepository.GetMatching(s => s.IsDeleted == false&& string.IsNullOrEmpty(s.EndWorkDate) && s.EmployeeId != emp.EmployeeId && s.EmployeeNo == emp.EmployeeNo).FirstOrDefault();
+                var EmpNational = _employeeRepository.SearchEmployeesOfNational(emp.NationalId, "", emp.BranchId.Value, emp.EmployeeId).Result;
+
+                if (codeExist != null)
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في حفظ موظف";
+                   _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "رقم الموظف موجود من قبل", "", "", ActionDate, UserId, emp.BranchId.Value, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "رقم الموظف موجود من قبل" };
+                }
+                if (emp.UserId != null && emp.UserId !=0)
+                {
+                    var UserExist = _employeeRepository.GetMatching(s => s.IsDeleted == false && s.UserId == emp.UserId);
+                    if (UserExist.Count() > 0)
+                    {
+                        var x = UserExist.LastOrDefault().EmployeeId;
+                        if (UserExist.LastOrDefault().EmployeeId != emp.EmployeeId)
+                        {
+                            //-----------------------------------------------------------------------------------------------------------------
+                            string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            string ActionNote = "فشل في حفظ موظف";
+                           _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "تم ربط موظف اخر بهذا المستخدم", "", "", ActionDate, UserId, emp.BranchId.Value, ActionNote, 0);
+                            //-----------------------------------------------------------------------------------------------------------------
+
+                            return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "تم ربط موظف اخر بهذا المستخدم" };
+
+                        }
+                    }
+                }
+                if (EmpNational != 0)
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في حفظ موظف";
+                    _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "قم بتغيير رقم الاقامه لانه موجود بالفعل", "", "", ActionDate, UserId, emp.BranchId.Value, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "قم بتغيير رقم الاقامه لانه موجود بالفعل" };
+                }
+
+                if (emp.EmployeeId == 0)
+                {
+                    emp.AddUser = UserId;
+                    //emp.BranchId = BranchId;
+                    emp.AddDate = DateTime.Now;
+                    emp.Active = false;
+                    //employee Acc
+                    if (emp.AccountId == null)
+                    {
+                        if (emp.Email != null)
+                        {
+                            var EmpEmail = _employeeRepository.SearchEmployeesOfEmail(emp.Email, emp.BranchId.Value).Result;
+
+                            if (EmpEmail != 0)
+                            {
+                                //-----------------------------------------------------------------------------------------------------------------
+                                string ActionDate1 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                                string ActionNote1 = "فشل في حفظ موظف";
+                               _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "قم بتغيير اسم الميل، فهو موجود بالفعل!", "", "", ActionDate1, UserId, emp.BranchId.Value, ActionNote1, 0);
+                                //-----------------------------------------------------------------------------------------------------------------
+
+                                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "قم بتغيير اسم الميل، فهو موجود بالفعل!" };
+                            }
+                        }
+
+
+                        var Branch2 = _BranchesRepository.GetById(emp.BranchId.Value);
+                        if (Branch2 == null || Branch2.EmployeesAccId == null)
+                        {
+                            //-----------------------------------------------------------------------------------------------------------------
+                            string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            string ActionNote2 = "فشل في حفظ موظف";
+                           _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, تأكد من انشاء حساب رئيسي للموظفين وربطه بالفرع الحالي", "", "", ActionDate2, UserId, emp.BranchId.Value, ActionNote2, 0);
+                            //-----------------------------------------------------------------------------------------------------------------
+
+                            return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "خطأ في الحفظ, تأكد من انشاء حساب رئيسي للموظفين وربطه بالفرع الحالي " };
+                        }
+
+                        if (Branch2 == null || Branch2.LoanAccId == null)
+                        {
+                            //-----------------------------------------------------------------------------------------------------------------
+                            string ActionDate3 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            string ActionNote3 = "فشل في حفظ موظف";
+                           _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, تأكد من انشاء حساب رئيسي للسلف وربطه بالفرع الحالي", "", "", ActionDate3, UserId, BranchId, ActionNote3, 0);
+                            //-----------------------------------------------------------------------------------------------------------------
+
+                            return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "خطأ في الحفظ, تأكد من انشاء حساب رئيسي للسلف وربطه بالفرع الحالي " };
+                        }
+                        //if (Branch2 == null || Branch2.PurchaseDiscAccId == null)
+                        //{
+                        //    //-----------------------------------------------------------------------------------------------------------------
+                        //    string ActionDate4 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        //    string ActionNote4 = "فشل في حفظ موظف";
+                        //    SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, تأكد من انشاء حساب رئيسي لحصيلة جزاءات الموظف وربطه بالفرع الحالي", "", "", ActionDate4, UserId, BranchId, ActionNote4, 0);
+                        //    //-----------------------------------------------------------------------------------------------------------------
+
+                        //    return new GeneralMessage { Result = false, Message = "خطأ في الحفظ, تأكد من انشاء حساب رئيسي لحصيلة جزاءات الموظف وربطه بالفرع الحالي " };
+                        //}
+                        //if (Branch2 == null || Branch2.PurchaseApprovalAccId == null)
+                        //{
+                        //    return new GeneralMessage { Result = false, Message = "خطأ في الحفظ, تأكد من انشاء حساب رئيسي لمكافئات الموظف وربطه بالفرع الحالي " };
+                        //}
+                        //if (Branch2 == null || Branch2.RevenuesAccountId == null)
+                        //{
+                        //    return new GeneralMessage { Result = false, Message = "خطأ في الحفظ, تأكد من انشاء حساب رئيسي لراتب الموظف وربطه بالفرع الحالي " };
+                        //}
+                        if (Branch2 == null || Branch2.PurchaseDelayAccId == null)
+                        {
+                            //-----------------------------------------------------------------------------------------------------------------
+                            string ActionDate5 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            string ActionNote5 = "فشل في حفظ موظف";
+                           _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, تأكد من انشاء حساب رئيسي لعهد الموظف وربطه بالفرع الحالي", "", "", ActionDate5, UserId, emp.BranchId.Value, ActionNote5, 0);
+                            //-----------------------------------------------------------------------------------------------------------------
+
+                            return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "خطأ في الحفظ, تأكد من انشاء حساب رئيسي لعهد الموظف وربطه بالفرع الحالي " };
+                        }
+
+                        try
+                        {
+                            var Branch = _BranchesRepository.GetById(emp.BranchId.Value);
+                            if (Branch != null && Branch.EmployeesAccId != null)
+                            {
+                                var parentEmpAcc = _accountsRepository.GetById((int)Branch.EmployeesAccId);
+                                var newEmpAcc = new Accounts();
+
+                                //var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.IsMain == false && s.Classification == 7 && s.ParentId == parentEmpAcc.AccountId && s.BranchId == BranchId).Count() + 1).ToString();
+                                var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId).Count() + 1).ToString();
+                                if (int.Parse(substrCode.ToString()) < 10)
+                                    substrCode = "0000" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 100)
+                                    substrCode = "000" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 1000)
+                                    substrCode = "00" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 10000)
+                                    substrCode = "0" + substrCode;
+                                var fullcode = parentEmpAcc.Code + substrCode;
+                                var checkcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.Code.Trim() == fullcode.Trim());
+                                if (checkcode.Count() != 0)
+                                {
+                                    var lastcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId).OrderByDescending(x => x.Code).FirstOrDefault().Code;
+                                    fullcode = (int.Parse(lastcode.ToString()) + 1).ToString();
+                                }
+                                newEmpAcc.Code = fullcode;
+
+                                var ValNewAccount = GetAccountCodeNewValue(parentEmpAcc.AccountId, 0);
+                                newEmpAcc.AccountCodeNew = ValNewAccount;
+
+                                //newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                                newEmpAcc.Classification = parentEmpAcc.Classification??15;
+                                newEmpAcc.ParentId = parentEmpAcc.AccountId;
+                                newEmpAcc.IsMain = false;
+                                newEmpAcc.Level = parentEmpAcc.Level + 1;
+                                newEmpAcc.Nature = 2; //depit
+                                newEmpAcc.Halala = true;
+                                newEmpAcc.NameAr = "حساب الموظف" + "  " + emp.EmployeeNameAr;
+                                newEmpAcc.NameEn = emp.EmployeeNameEn + " " + "Employee Account";
+                                newEmpAcc.Type = 2; //bugget
+                                newEmpAcc.Active = true;
+                                newEmpAcc.AddUser = UserId;
+                                newEmpAcc.BranchId = emp.BranchId.Value;
+                                newEmpAcc.AddDate = DateTime.Now;
+
+                                _TaamerProContext.Accounts.Add(newEmpAcc);
+                                parentEmpAcc.IsMain = true; // update main acc
+                                _TaamerProContext.SaveChanges();
+                                emp.AccountId = newEmpAcc.AccountId;//_accountsRepository.GetMaxId() + 1;
+                                var cutAcc = _accountsRepository.GetById((int)emp.AccountId);
+                                if (cutAcc != null)
+                                {
+                                    EmpAccCode = cutAcc.Code;
+                                }
+                            }
+                            else
+                            {
+                                //-----------------------------------------------------------------------------------------------------------------
+                                string ActionDate6 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                                string ActionNote6 = "فشل في حفظ موظف";
+                               _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, فشل في انشاء حساب للموظف تأكد من انشاء حساب رئيسي للموظفين وربطه بالفرع الحالي", "", "", ActionDate6, UserId, BranchId, ActionNote6, 0);
+                                //-----------------------------------------------------------------------------------------------------------------
+
+                                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "خطأ في الحفظ, فشل في انشاء حساب للموظف تأكد من انشاء حساب رئيسي للموظفين وربطه بالفرع الحالي " };
+                            }
+
+                            if (Branch != null && Branch.LoanAccId != null)
+                            {
+                                var parentEmpAcc = _accountsRepository.GetById((int)Branch.LoanAccId);
+                                var newEmpAcc = new Accounts();
+                                //var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.IsMain == false && s.Classification == 7 && s.ParentId == parentEmpAcc.AccountId && s.BranchId == BranchId).Count() + 1).ToString();
+                                var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId).Count() + 1).ToString();
+                                // var substrCode = (_accountsRepository.GetMatching(s => s.IsMain == false && s.Classification == 2 && s.ParentId == parentCustAcc.AccountId).Count() + 1).ToString();
+                                if (int.Parse(substrCode.ToString()) < 10)
+                                    substrCode = "0000" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 100)
+                                    substrCode = "000" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 1000)
+                                    substrCode = "00" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 10000)
+                                    substrCode = "0" + substrCode;
+                                var fullcode = parentEmpAcc.Code + substrCode;
+                                var checkcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.Code.Trim() == fullcode.Trim());
+                                if (checkcode.Count() != 0)
+                                {
+                                    var lastcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId).OrderByDescending(x => x.Code).FirstOrDefault().Code;
+                                    fullcode = (int.Parse(lastcode.ToString()) + 1).ToString();
+                                }
+                                newEmpAcc.Code = fullcode;
+
+                                var ValNewAccount = GetAccountCodeNewValue(parentEmpAcc.AccountId, 0);
+                                newEmpAcc.AccountCodeNew = ValNewAccount;
+                                // newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                                //newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                                newEmpAcc.Classification = parentEmpAcc.Classification ?? 15;
+                                newEmpAcc.ParentId = parentEmpAcc.AccountId;
+                                newEmpAcc.IsMain = false;
+                                newEmpAcc.Level = parentEmpAcc.Level + 1;
+                                newEmpAcc.Nature = 1; //depit
+                                newEmpAcc.Halala = true;
+                                newEmpAcc.NameAr = " حساب السلف للموظف " + "  " + emp.EmployeeNameAr;
+                                newEmpAcc.NameEn = emp.EmployeeNameEn + " " + "  Employee Loan Account ";
+                                newEmpAcc.Type = 2; //bugget
+                                newEmpAcc.Active = true;
+                                newEmpAcc.AddUser = UserId;
+                                newEmpAcc.BranchId = emp.BranchId.Value;
+                                newEmpAcc.AddDate = DateTime.Now;
+
+                                _TaamerProContext.Accounts.Add(newEmpAcc);
+                                parentEmpAcc.IsMain = true; // update main acc
+                                _TaamerProContext.SaveChanges();
+                                emp.AccountIDs = newEmpAcc.AccountId;//_accountsRepository.GetMaxId() + 1;
+                                //var cutAcc = _accountsRepository.GetById(emp.AccountIDs);
+                                //if (cutAcc != null)
+                                //{
+                                //    EmpAccCode = cutAcc.Code;
+                                //}
+                            }
+                            else
+                            {
+                                //-----------------------------------------------------------------------------------------------------------------
+                                string ActionDate7 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                                string ActionNote7 = "فشل في حفظ موظف";
+                               _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, فشل في انشاء حساب سلف للموظف تأكد من انشاء حساب رئيسي للسلف وربطه بالفرع الحالي", "", "", ActionDate7, UserId, emp.BranchId.Value, ActionNote7, 0);
+                                //-----------------------------------------------------------------------------------------------------------------
+
+                                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "خطأ في الحفظ, فشل في انشاء حساب سلف للموظف تأكد من انشاء حساب رئيسي للسلف وربطه بالفرع الحالي " };
+                            }
+
+
+                            //if (Branch != null && Branch.PurchaseDiscAccId != null)
+                            //{
+                            //    var parentEmpAcc = _accountsRepository.GetById(Branch.PurchaseDiscAccId);
+                            //    var newEmpAcc = new Accounts();
+                            //var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId && s.BranchId == BranchId).Count() + 1).ToString();
+                            //    newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                            //    newEmpAcc.Classification = 15;
+                            //    newEmpAcc.ParentId = parentEmpAcc.AccountId;
+                            //    newEmpAcc.IsMain = false;
+                            //    newEmpAcc.Level = parentEmpAcc.Level + 1;
+                            //    newEmpAcc.Nature = 1;
+                            //    newEmpAcc.Halala = true;
+                            //    newEmpAcc.NameAr = " حساب  حصيلة جزاءات للموظف " + "  " + emp.EmployeeNameAr;
+                            //    newEmpAcc.NameEn = emp.EmployeeNameEn + " " + "  Employee Discount Account ";
+                            //    newEmpAcc.Type = 2; //bugget
+                            //    newEmpAcc.Active = true;
+                            //    newEmpAcc.AddUser = UserId;
+                            //    newEmpAcc.BranchId = BranchId;
+                            //    newEmpAcc.AddDate = DateTime.Now;
+
+                            //    _accountsRepository.Add(newEmpAcc);
+                            //    parentEmpAcc.IsMain = true; // update main acc
+                            //    _uow.SaveChanges();
+                            //    emp.AccountIDs_Discount = newEmpAcc.AccountId;//_accountsRepository.GetMaxId() + 1;
+                            //    //var cutAcc = _accountsRepository.GetById(emp.AccountIDs);
+                            //    //if (cutAcc != null)
+                            //    //{
+                            //    //    EmpAccCode = cutAcc.Code;
+                            //    //}
+                            //}
+                            //else
+                            //{
+                            //    //-----------------------------------------------------------------------------------------------------------------
+                            //    string ActionDate8 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            //    string ActionNote8 = "فشل في حفظ موظف";
+                            //    SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, فشل في انشاء حساب خصومات للموظف تأكد من انشاء حساب رئيسي  لحصيلة جزاءات الموظف وربطه بالفرع الحالي", "", "", ActionDate8, UserId, BranchId, ActionNote8, 0);
+                            //    //-----------------------------------------------------------------------------------------------------------------
+
+                            //    return new GeneralMessage { Result = false, Message = "خطأ في الحفظ, فشل في انشاء حساب خصومات للموظف تأكد من انشاء حساب رئيسي  لحصيلة جزاءات الموظف وربطه بالفرع الحالي " };
+                            //}
+
+
+                            //if (Branch != null && Branch.PurchaseApprovalAccId != null)
+                            //{
+                            //    var parentEmpAcc = _accountsRepository.GetById(Branch.PurchaseApprovalAccId);
+                            //    var newEmpAcc = new Accounts();
+                            //var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId && s.BranchId == BranchId).Count() + 1).ToString();
+                            //    newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                            //    newEmpAcc.Classification = 15;
+                            //    newEmpAcc.ParentId = parentEmpAcc.AccountId;
+                            //    newEmpAcc.IsMain = false;
+                            //    newEmpAcc.Level = parentEmpAcc.Level + 1;
+                            //    newEmpAcc.Nature = 2;
+                            //    newEmpAcc.Halala = true;
+                            //    newEmpAcc.NameAr = " حساب مكافئات للموظف " + "  " + emp.EmployeeNameAr;
+                            //    newEmpAcc.NameEn = emp.EmployeeNameEn + " " + "  Employee Bouns Account ";
+                            //    newEmpAcc.Type = 2; //bugget
+                            //    newEmpAcc.Active = true;
+                            //    newEmpAcc.AddUser = UserId;
+                            //    newEmpAcc.BranchId = BranchId;
+                            //    newEmpAcc.AddDate = DateTime.Now;
+
+                            //    _accountsRepository.Add(newEmpAcc);
+                            //    parentEmpAcc.IsMain = true; // update main acc
+                            //    _uow.SaveChanges();
+                            //    emp.AccountIDs_Bouns = newEmpAcc.AccountId;//_accountsRepository.GetMaxId() + 1;
+                            //    //var cutAcc = _accountsRepository.GetById(emp.AccountIDs);
+                            //    //if (cutAcc != null)
+                            //    //{
+                            //    //    EmpAccCode = cutAcc.Code;
+                            //    //}
+                            //}
+                            //else
+                            //{
+                            //    return new GeneralMessage { Result = false, Message = "خطأ في الحفظ, فشل في انشاء حساب مكافئات للموظف تأكد من انشاء حساب رئيسي لمكافئات الموظف وربطه بالفرع الحالي " };
+                            //}
+
+                            //if (Branch != null && Branch.RevenuesAccountId != null)
+                            //{
+                            //    var parentEmpAcc = _accountsRepository.GetById(Branch.RevenuesAccountId);
+                            //    var newEmpAcc = new Accounts();
+                            //var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId && s.BranchId == BranchId).Count() + 1).ToString();
+                            //    newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                            //    newEmpAcc.Classification = 15;
+                            //    newEmpAcc.ParentId = parentEmpAcc.AccountId;
+                            //    newEmpAcc.IsMain = false;
+                            //    newEmpAcc.Level = parentEmpAcc.Level + 1;
+                            //    newEmpAcc.Nature = 2; //depit
+                            //    newEmpAcc.Halala = true;
+                            //    newEmpAcc.NameAr = " حساب راتب للموظف " + "  " + emp.EmployeeNameAr;
+                            //    newEmpAcc.NameEn = emp.EmployeeNameEn + " " + "  Employee Salary Account ";
+                            //    newEmpAcc.Type = 2; //bugget
+                            //    newEmpAcc.Active = true;
+                            //    newEmpAcc.AddUser = UserId;
+                            //    newEmpAcc.BranchId = BranchId;
+                            //    newEmpAcc.AddDate = DateTime.Now;
+
+                            //    _accountsRepository.Add(newEmpAcc);
+                            //    parentEmpAcc.IsMain = true; // update main acc
+                            //    _uow.SaveChanges();
+                            //    emp.AccountIDs_Salary = newEmpAcc.AccountId;//_accountsRepository.GetMaxId() + 1;
+                            //    //var cutAcc = _accountsRepository.GetById(emp.AccountIDs);
+                            //    //if (cutAcc != null)
+                            //    //{
+                            //    //    EmpAccCode = cutAcc.Code;
+                            //    //}
+                            //}
+                            //else
+                            //{
+                            //    return new GeneralMessage { Result = false, Message = "خطأ في الحفظ, فشل في انشاء حساب راتب للموظف تأكد من انشاء حساب رئيسي لراتب الموظف وربطه بالفرع الحالي " };
+                            //}
+
+                            if (Branch != null && Branch.PurchaseDelayAccId != null)
+                            {
+                                var parentEmpAcc = _accountsRepository.GetById((int)Branch.PurchaseDelayAccId);
+                                var newEmpAcc = new Accounts();
+                                var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId).Count() + 1).ToString();
+                                if (int.Parse(substrCode.ToString()) < 10)
+                                    substrCode = "0000" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 100)
+                                    substrCode = "000" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 1000)
+                                    substrCode = "00" + substrCode;
+                                else if (int.Parse(substrCode.ToString()) < 10000)
+                                    substrCode = "0" + substrCode;
+
+                                var fullcode = parentEmpAcc.Code + substrCode;
+                                var checkcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.Code.Trim() == fullcode.Trim());
+                                if (checkcode.Count() != 0)
+                                {
+                                    var lastcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.ParentId == parentEmpAcc.AccountId).OrderByDescending(x => x.Code).FirstOrDefault().Code;
+                                    fullcode = (int.Parse(lastcode.ToString()) + 1).ToString();
+                                }
+                                newEmpAcc.Code = fullcode;
+
+                                var ValNewAccount = GetAccountCodeNewValue(parentEmpAcc.AccountId, 0);
+                                newEmpAcc.AccountCodeNew = ValNewAccount;
+                                // newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+
+                                //newEmpAcc.Code = parentEmpAcc.Code + substrCode;
+                                newEmpAcc.Classification = parentEmpAcc.Classification ?? 15;
+                                newEmpAcc.ParentId = parentEmpAcc.AccountId;
+                                newEmpAcc.IsMain = false;
+                                newEmpAcc.Level = parentEmpAcc.Level + 1;
+                                newEmpAcc.Nature = 1;
+                                newEmpAcc.Halala = true;
+                                newEmpAcc.NameAr = " حساب عهد للموظف " + "  " + emp.EmployeeNameAr;
+                                newEmpAcc.NameEn = emp.EmployeeNameEn + " " + "  Employee Custody Account ";
+                                newEmpAcc.Type = 2; //bugget
+                                newEmpAcc.Active = true;
+                                newEmpAcc.AddUser = UserId;
+                                newEmpAcc.BranchId = emp.BranchId.Value;
+                                newEmpAcc.AddDate = DateTime.Now;
+
+                                _TaamerProContext.Accounts.Add(newEmpAcc);
+                                parentEmpAcc.IsMain = true; // update main acc
+                                _TaamerProContext.SaveChanges();
+                                emp.AccountIDs_Custody = newEmpAcc.AccountId;//_accountsRepository.GetMaxId() + 1;
+                                //var cutAcc = _accountsRepository.GetById(emp.AccountIDs);
+                                //if (cutAcc != null)
+                                //{
+                                //    EmpAccCode = cutAcc.Code;
+                                //}
+                            }
+                            else
+                            {
+                                //-----------------------------------------------------------------------------------------------------------------
+                                string ActionDate9 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                                string ActionNote9 = "فشل في حفظ موظف";
+                               _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, "خطأ في الحفظ, فشل في انشاء حساب عهدة للموظف تأكد من انشاء حساب رئيسي لعهد الموظف وربطه بالفرع الحالي", "", "", ActionDate9, UserId, emp.BranchId.Value, ActionNote9, 0);
+                                //-----------------------------------------------------------------------------------------------------------------
+
+                                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "خطأ في الحفظ, فشل في انشاء حساب عهدة للموظف تأكد من انشاء حساب رئيسي لعهد الموظف وربطه بالفرع الحالي " };
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            //-----------------------------------------------------------------------------------------------------------------
+                            string ActionDate10 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            string ActionNote10 = "فشل في حفظ موظف";
+                           _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate10, UserId, emp.BranchId.Value, ActionNote10, 0);
+                            //-----------------------------------------------------------------------------------------------------------------
+
+                            return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedFailed };
+                        }
+                    }
+                    _TaamerProContext.Employees.Add(emp);
+                    _TaamerProContext.SaveChanges();
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "اضافة موظف جديد";
+                   _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, emp.BranchId.Value, ActionNote, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = emp.EmployeeId, ReturnedStr = EmpAccCode };
+                }
+                else
+                {
+                    var empUpdated = _employeeRepository.GetById(emp.EmployeeId);
+                    var SaveNationalDoc = _employeeRepository.GetById(emp.EmployeeId);
+
+                    if (empUpdated != null)
+                    {
+                        empUpdated.EmployeeNo = emp.EmployeeNo;
+                        empUpdated.Email = emp.Email;
+                        empUpdated.Mobile = emp.Mobile;
+                        empUpdated.Address = emp.Address;
+                        empUpdated.EducationalQualification = emp.EducationalQualification;
+                        empUpdated.BirthDate = emp.BirthDate;
+                        empUpdated.BirthHijriDate = emp.BirthHijriDate;
+                        empUpdated.BirthPlace = emp.BirthPlace;
+                        empUpdated.MaritalStatus = emp.MaritalStatus;
+                        empUpdated.ChildrenNo = emp.ChildrenNo;
+                        empUpdated.Gender = emp.Gender;
+                        empUpdated.NationalityId = emp.NationalityId;
+                        empUpdated.ReligionId = emp.ReligionId;
+                        empUpdated.UserId = emp.UserId;
+                        empUpdated.JobId = emp.JobId;
+                        empUpdated.PostalCode = emp.PostalCode;
+                        if (emp.PhotoUrl != null)
+                        {
+                            empUpdated.PhotoUrl = emp.PhotoUrl;
+                        }
+                        empUpdated.DepartmentId = emp.DepartmentId;
+                        empUpdated.DeppID = emp.DeppID;
+                        empUpdated.Telephone = emp.Telephone;
+                        empUpdated.Mailbox = emp.Mailbox;
+                        empUpdated.UpdateUser = UserId;
+                        empUpdated.UpdateDate = DateTime.Now;
+                        empUpdated.DirectManager = emp.DirectManager;
+                        empUpdated.Active = false;
+                        empUpdated.Age=emp.Age;
+                        //empUpdated.Taamen = emp.Taamen;
+                        if (empUpdated.EmployeeNameAr != emp.EmployeeNameAr)
+                        {
+                            var cutAcc = _accountsRepository.GetById((int)empUpdated.AccountId);
+                            if (cutAcc != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc.BranchId = emp.BranchId ?? 1;
+                                cutAcc.NameAr = "حساب الموظف" + "  " + emp.EmployeeNameAr;
+                                cutAcc.NameEn = emp.EmployeeNameEn + " " + "Employee Account";
+                            }
+
+                            var cutAcc_s = _accountsRepository.GetById((int)empUpdated.AccountIDs);
+                            if (cutAcc_s != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc_s.BranchId = emp.BranchId ?? 1;
+                                cutAcc_s.NameAr = "حساب السلف للموظف" + "  " + emp.EmployeeNameAr;
+                                cutAcc_s.NameEn = emp.EmployeeNameEn + " " + "Employee Loan Account";
+                            }
+
+                            var cutAcc_c = _accountsRepository.GetById((int)empUpdated.AccountIDs_Custody);
+                            if (cutAcc_c != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc_c.BranchId = emp.BranchId ?? 1;
+                                cutAcc_c.NameAr = "حساب عهد للموظف" + "  " + emp.EmployeeNameAr;
+                                cutAcc_c.NameEn = emp.EmployeeNameEn + " " + "Employee Custody Account";
+                            }
+                        }
+                        else if (empUpdated.EmployeeNameEn != emp.EmployeeNameEn)
+                        {
+                            var cutAcc = _accountsRepository.GetById((int)empUpdated.AccountId);
+                            if (cutAcc != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc.BranchId = emp.BranchId ?? 1;
+                                cutAcc.NameAr = "حساب الموظف" + "  " + emp.EmployeeNameAr;
+                                cutAcc.NameEn = emp.EmployeeNameEn + " " + "Employee Account";
+                            }
+
+                            var cutAcc_s = _accountsRepository.GetById((int)empUpdated.AccountIDs);
+                            if (cutAcc_s != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc_s.BranchId = emp.BranchId ?? 1;
+                                cutAcc_s.NameAr = "حساب السلف للموظف" + "  " + emp.EmployeeNameAr;
+                                cutAcc_s.NameEn = emp.EmployeeNameEn + " " + "Employee Loan Account";
+                            }
+
+                            var cutAcc_c = _accountsRepository.GetById((int)empUpdated.AccountIDs_Custody);
+                            if (cutAcc_c != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc_c.BranchId = emp.BranchId ?? 1;
+                                cutAcc_c.NameAr = "حساب عهد للموظف" + "  " + emp.EmployeeNameAr;
+                                cutAcc_c.NameEn = emp.EmployeeNameEn + " " + "Employee Custody Account";
+                            }
+                        }
+                        else
+                        {
+
+                        }
+
+                        /////////////////////////////////////////////////
+                        if (empUpdated.BranchId != emp.BranchId)
+                        {
+                            var cutAcc = _accountsRepository.GetById((int)empUpdated.AccountId);
+                            if (cutAcc != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc.BranchId = emp.BranchId ?? 1;
+                                
+                            }
+
+                            var cutAcc_s = _accountsRepository.GetById((int)empUpdated.AccountIDs);
+                            if (cutAcc_s != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc_s.BranchId = emp.BranchId ?? 1;
+                            }
+
+                            var cutAcc_c = _accountsRepository.GetById((int)empUpdated.AccountIDs_Custody);
+                            if (cutAcc_c != null)
+                            {
+                                //customerAccCode = Convert.ToInt32(cutAcc.Code);
+                                cutAcc_c.BranchId = emp.BranchId ?? 1;
+                            }
+                        }
+                        ///////////////////////////////////////////
+                        empUpdated.EmployeeNameAr = emp.EmployeeNameAr;
+                        empUpdated.EmployeeNameEn = emp.EmployeeNameEn;
+
+                        empUpdated.BranchId = emp.BranchId;
+
+
+                        SaveNationalDoc.NationalId = emp.NationalId;
+                        SaveNationalDoc.NationalIdSource = emp.NationalIdSource;
+                        SaveNationalDoc.NationalIdDate = emp.NationalIdDate;
+                        SaveNationalDoc.NationalIdHijriDate = emp.NationalIdHijriDate;
+                        SaveNationalDoc.NationalIdEndDate = emp.NationalIdEndDate;
+                        SaveNationalDoc.NationalIdEndHijriDate = emp.NationalIdEndHijriDate;
+                    }
+                    _TaamerProContext.SaveChanges();
+
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = " تعديل موظف رقم " + emp.EmployeeId;
+                   _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 2, Resources.General_EditedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_EditedSuccessfully, ReturnedParm = emp.EmployeeId, ReturnedStr = EmpAccCode };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ موظف";
+               _SystemAction.SaveAction("SaveEmployee", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
+
+        public GeneralMessage SaveEmpBouns(int EmpId, int Bouns, int User, string Lang, int BranchId)
+        {
+            try
+            {
+                var Emp = _employeeRepository.GetMatching(x => x.EmployeeId == EmpId && !x.IsDeleted && !string.IsNullOrEmpty(x.WorkStartDate)).FirstOrDefault();
+                if (Emp != null)
+                {
+
+                    var Payroll = _payrollMarchesRepository.GetPayrollMarches(EmpId, DateTime.Now.Month).Result;
+
+                    if (Payroll != null && Payroll.PostDate.HasValue)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote = "فشل في تعديل مسير الرواتب (العلاوة)) ";
+                       _SystemAction.SaveAction("SaveEmpBouns", "EmployeeService", 2, Resources.Posted_payroll_cannot_be_modified, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+
+                        return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.Posted_payroll_cannot_be_modified };
+                    }
+
+                    Emp.Bonus = Bouns;
+                    Emp.UpdateDate = DateTime.Now;
+                    Emp.UpdateUser = User;
+
+                    //Payroll.Bonus = Bouns;
+                    //Payroll.UpdatedDate = DateTime.Now;
+                    //Payroll.UpdateUser = User;
+
+                    _TaamerProContext.SaveChanges();
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = "اضافة بونص موظف جديد";
+                   _SystemAction.SaveAction("SaveEmpBouns", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate2, User, BranchId, ActionNote2, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "Resources.General_SavedSuccessfully" };
+                }
+                else
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في حفظ بونص موظف";
+                   _SystemAction.SaveAction("SaveEmpBouns", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "Resources.General_SavedFailed" };
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ بونص موظف";
+               _SystemAction.SaveAction("SaveEmpBouns", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage() { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "Resources.General_SavedFailed" };
+            }
+        }
+        
+        public GeneralMessage CheckifCodeIsExist(string empCode, int UserId, int BranchId)
+        {
+            try
+            {
+                var codeExist = _employeeRepository.GetMatching(s => s.IsDeleted == false && string.IsNullOrEmpty(s.EndWorkDate) && s.EmployeeNo == empCode).FirstOrDefault();
+                if (codeExist != null)
+                {
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "رقم الموظف موجود من قبل" };
+                }
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = "رقم وظيفي ليس موجود من قبل" };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "فشل في مراجعة الرقم الوظيفي" };
+            }
+        }
+
+        public async Task<int> GenerateNextEmpNumber(int BranchId)
+        {
+            return await _employeeRepository.GenerateNextEmpNumber(BranchId);
+        }
+        public GeneralMessage SaveOfficialDocuments(Employees OffDoc, int UserId, int BranchId, string lang)
+        {
+            try
+            {
+                var EmpPass = _employeeRepository.SearchEmployeesOfPass(OffDoc.PassportNo, lang, BranchId, OffDoc.EmployeeId).Result;
+                var contractnum = _TaamerProContext.EmpContract.Where(x => x.IsDeleted == false && x.ContractCode == OffDoc.ContractNo && x.EmpId !=OffDoc.EmployeeId).FirstOrDefault();
+                if(contractnum !=null)
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = "فشل في حفظ الاوراق الرسمية للموظف";
+                    _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, "قم بتغيير رقم العقد لانه موجود بالفعل", "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "قم بتغيير رقم العقد لانه موجود بالفعل" };
+
+                }
+                //var EmpNational = _employeeRepository.SearchEmployeesOfNational(OffDoc.NationalId, lang, BranchId, OffDoc.EmployeeId);
+                var SaveOffDoc = _employeeRepository.GetById(OffDoc.EmployeeId);
+                if (EmpPass != 0 && !string.IsNullOrEmpty(OffDoc.PassportNo))
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = "فشل في حفظ الاوراق الرسمية للموظف";
+                   _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, "قم بتغيير رقم جواز السفر لانه موجود بالفعل", "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "قم بتغيير رقم جواز السفر لانه موجود بالفعل" };
+                }
+                //else if (EmpNational != 0)
+                //{
+                //    return new GeneralMessage { Result = false, Message = "قم بتغيير رقم الاقامه لانه موجود بالفعل" };
+                //}
+                else
+                {
+                    if (SaveOffDoc != null)
+                    {
+                        if (SaveOffDoc.Bonus != OffDoc.Bonus)
+                        {
+                            if ((SaveOffDoc.Bonus != null && OffDoc.Bonus != 0) && (SaveOffDoc.Bonus != 0 && OffDoc.Bonus != null))
+                            {
+
+                                var Payroll = _payrollMarchesRepository.GetPayrollMarches(OffDoc.EmployeeId, DateTime.Now.Month).Result;
+                                if (Payroll != null && Payroll.PostDate.HasValue)
+                                {
+                                    //-----------------------------------------------------------------------------------------------------------------
+                                    string ActionDate3 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                                    string ActionNote3 = "فشل في تعديل مسير الرواتب (البدلات)) ";
+                                   _SystemAction.SaveAction("UpdatePayrollWithAllowances", "AllowanceService", 2, Resources.Posted_payroll_cannot_be_modified, "", "", ActionDate3, UserId, BranchId, ActionNote3, 0);
+                                    //-----------------------------------------------------------------------------------------------------------------
+                                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.Posted_payroll_cannot_be_modified };
+                                }
+                            }
+                        }
+                        //SaveOffDoc.NationalId = OffDoc.NationalId;
+                        //SaveOffDoc.NationalIdSource = OffDoc.NationalIdSource;
+                        //SaveOffDoc.NationalIdDate = OffDoc.NationalIdDate;
+                        //SaveOffDoc.NationalIdHijriDate = OffDoc.NationalIdHijriDate;
+                        //SaveOffDoc.NationalIdEndDate = OffDoc.NationalIdEndDate;
+                        //SaveOffDoc.NationalIdEndHijriDate = OffDoc.NationalIdEndHijriDate;
+
+                        SaveOffDoc.PassportNo = OffDoc.PassportNo;
+                        SaveOffDoc.PassportSource = OffDoc.PassportSource;
+                        SaveOffDoc.PassportNoDate = OffDoc.PassportNoDate;
+                        SaveOffDoc.PassportNoHijriDate = OffDoc.PassportNoHijriDate;
+                        SaveOffDoc.PassportEndDate = OffDoc.PassportEndDate;
+                        SaveOffDoc.PassportEndHijriDate = OffDoc.PassportEndHijriDate;
+                        SaveOffDoc.ContractNo = OffDoc.ContractNo;
+                        SaveOffDoc.ContractSource = OffDoc.ContractSource;
+                        if (OffDoc.BeginWork == "1")
+                        {
+                            SaveOffDoc.WorkStartDate = OffDoc.ContractStartDate;
+                            var employ = _TaamerProContext.Employees.Where(x => x.EmployeeId == SaveOffDoc.EmployeeId).FirstOrDefault();
+                            if(employ != null && employ.Email != null)
+                            {
+                             var issent= sendemployeemail(employ);
+                            }
+                        }
+                        SaveOffDoc.ContractStartHijriDate = OffDoc.ContractStartHijriDate;
+                        SaveOffDoc.ContractStartDate = OffDoc.ContractStartDate;
+                        SaveOffDoc.ContractStartHijriDate = OffDoc.ContractStartHijriDate;
+                        SaveOffDoc.ContractEndDate = OffDoc.ContractEndDate;
+                        SaveOffDoc.ContractEndHijriDate = OffDoc.ContractEndHijriDate;
+
+                        SaveOffDoc.MedicalNo = OffDoc.MedicalNo;
+                        SaveOffDoc.MedicalSource = OffDoc.MedicalSource;
+                        SaveOffDoc.MedicalStartDate = OffDoc.MedicalStartDate;
+                        SaveOffDoc.MedicalStartHijriDate = OffDoc.MedicalStartHijriDate;
+                        SaveOffDoc.MedicalEndDate = OffDoc.MedicalEndDate;
+                        SaveOffDoc.MedicalEndHijriDate = OffDoc.MedicalEndHijriDate;
+
+                        SaveOffDoc.LicenceNo = OffDoc.LicenceNo;
+                        SaveOffDoc.LiscenseSourceId = OffDoc.LiscenseSourceId;
+                        SaveOffDoc.LicenceStartDate = OffDoc.LicenceStartDate;
+                        SaveOffDoc.LicenceStartHijriDate = OffDoc.LicenceStartHijriDate;
+                        SaveOffDoc.LicenceEndDate = OffDoc.LicenceEndDate;
+                        SaveOffDoc.LicenceEndHijriDate = OffDoc.LicenceEndHijriDate;
+                        SaveOffDoc.DawamId = OffDoc.DawamId;
+                        SaveOffDoc.TimeDurationLate = OffDoc.TimeDurationLate;
+                        SaveOffDoc.LogoutDuration = OffDoc.LogoutDuration;
+                        SaveOffDoc.AfterLogoutTime = OffDoc.AfterLogoutTime;
+                        SaveOffDoc.Salary = OffDoc.Salary;
+                        SaveOffDoc.Bonus = OffDoc.Bonus;
+                        SaveOffDoc.VacationsCount = OffDoc.VacationsCount;
+                        SaveOffDoc.VacationEndCount = OffDoc.VacationEndCount;
+                        SaveOffDoc.EarlyLogin = OffDoc.EarlyLogin;
+                        SaveOffDoc.Allowances = OffDoc.Allowances;
+                        SaveOffDoc.OtherAllownces=OffDoc.OtherAllownces;
+
+                        //SaveOffDoc.WorkEndDate = OffDoc.WorkEndDate;
+                        //SaveOffDoc.WorkEndHijriDate = OffDoc.WorkEndHijriDate;
+
+                        if (SaveOffDoc.QuaContract != null && SaveOffDoc.ContractStartDate != null)
+                        {
+                            EmpContract? Updated = _TaamerProContext.EmpContract.Where(s => s.EmpId == SaveOffDoc.EmployeeId && s.IsDeleted == false).FirstOrDefault();
+                            if (Updated != null)
+                            {
+                                Updated.StartDatetxt = SaveOffDoc.ContractStartDate;
+                                Updated.EndDatetxt = SaveOffDoc.ContractEndDate;
+                                Updated.ContractCode = SaveOffDoc.ContractNo;
+                            }
+                            //var employ = _TaamerProContext.Employees.Where(x => x.EmployeeId == SaveOffDoc.EmployeeId).FirstOrDefault();
+                            //if (employ != null && employ.Email !=null)
+                            //{
+                            //    var issent = sendemployeemail(employ);
+                            //}
+
+                        }
+
+                        SaveOffDoc.BankId = OffDoc.BankId;
+                        SaveOffDoc.BankCardNo = OffDoc.BankCardNo;
+                        if (SaveOffDoc.NationalityId == 3)
+                        {
+                            SaveOffDoc.Taamen = "9.75";
+                        }
+
+                        SaveOffDoc.AddUser = UserId;
+                        SaveOffDoc.AddDate = DateTime.Now;
+
+                        var emp = _employeeRepository.GetById(SaveOffDoc.EmployeeId);
+                        if (emp.UserId != null)
+                        {
+                            var user = _UserRepository.GetMatching(s => s.IsDeleted == false && s.UserId == emp.UserId);
+                            if (user.Count() > 0)
+                            {
+                                user.FirstOrDefault().TimeId = OffDoc.DawamId;
+                            }
+                        }
+
+                    }
+                }
+                _TaamerProContext.SaveChanges();
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "اضافة اوراق رسمية للموظف";
+               _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+            }
+            catch (Exception)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ الاوراق الرسمية للموظف";
+               _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
+
+        public bool sendemployeemail(Employees EmployeeUpdated)
+        {
+            bool IsSent=false;
+            string OrgName = _organizationsService.GetBranchOrganization().Result.NameAr;
+            string DepartmentNameAr = "";
+            Department? DepName = _TaamerProContext.Department.Where(s => s.DepartmentId == EmployeeUpdated.DepartmentId).FirstOrDefault();
+            if (DepName != null)
+            {
+                DepartmentNameAr = DepName.DepartmentNameAr;
+            }
+
+            //string BranchName = _BranchRepository.GetById(EmployeeUpdated.BranchId).NameAr;
+            string NameAr = "";
+            Branch? BranchName = _TaamerProContext.Branch.Where(s => s.BranchId == EmployeeUpdated.BranchId).FirstOrDefault();
+            var job = _TaamerProContext.Job.FirstOrDefault(x => x.JobId == EmployeeUpdated.JobId);
+            if (BranchName != null)
+            {
+                NameAr = BranchName.NameAr;
+            }
+            string htmlBody = @"<!DOCTYPE html>
+                                    <html>
+
+                                    <head></head>
+
+                                    <body style='direction: rtl;'>
+                                        <p> السيد /ة " +
+                                      EmployeeUpdated.EmployeeNameAr
+                                      +
+                                      @" المحترم</p>
+                                        <p>السلام عليكم ورحمة الله وبركاته</p>
+                                        <p>
+                                            يسر " +
+                                          OrgName
+                                          +
+                                          @" أن يعبر عن سعادته بانضمامكم إليه ، ونسال
+                                            الله لك التوفيق والنجاح
+                                        </p> 
+                                        <table style=' border: 1px solid black; border-collapse: collapse;font-size: 11px;'>
+                                            <thead>
+                                            <th  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>الموظف</th>
+                                            <th  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>الوظيفة</th>
+                                            <th  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>القسم</th>
+                                            <th  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>الفرع</th>
+                                            <th  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>تاريخ المباشرة</th>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>" + EmployeeUpdated.EmployeeNameAr + @"</td>
+                                              <td  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>" + job.JobNameAr + @"</td>
+                                              <td  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>" + DepartmentNameAr + @"</td>
+                                              <td  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>" + NameAr + @"</td>
+                                              <td  style=' border: 1px solid black; border-collapse: collapse;width: 150px;'>" + EmployeeUpdated.WorkStartDate + @"</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+
+                                        <p>
+                                            مع تحيات قسم الموارد البشرية
+                                        </p>
+                                    </body>
+                                    </html>";
+
+            //Mail
+            if (EmployeeUpdated.Email != null && EmployeeUpdated.Email != "")
+            {
+                IsSent = _customerMailService.SendMail_SysNotification((int)EmployeeUpdated.BranchId, 0, 0, Resources.ResourceManager.GetString("Con_StartWork", CultureInfo.CreateSpecificCulture("ar")), htmlBody, true, EmployeeUpdated.Email);
+            }
+            return IsSent;
+        }
+
+        public  GeneralMessage Savequacontract(int EmpId,string quacontract, int UserId, int BranchId,int yearid,string lang)
+        {
+            try
+            {
+                var empqua = _employeeRepository.GetById(EmpId);
+        
+               
+                    if (empqua != null)
+                    {
+                    empqua.QuaContract = quacontract;
+                   
+                    //var contractno = _empContractRepository.GenerateNextEmpContractNumber(BranchId).Result;
+                    //empqua.ContractNo = contractno.ToString();
+                    _TaamerProContext.SaveChanges();
+
+
+                    EmpContract contracts = new EmpContract()
+                    {
+                        EmpId = EmpId,
+                        AddDate = DateTime.Now,
+                        AddUser = UserId,
+                        BranchId = BranchId,
+                        StartDatetxt = empqua.ContractStartDate,
+                        EndDatetxt = empqua.ContractEndDate,
+                        StartWorkDate = empqua.ContractStartDate,
+                        FreelanceAmount = empqua.Salary,
+                        ContractCode = empqua.ContractNo.ToString(),
+                        ContractSource = 1,
+                        Durationofannualleave=empqua.VacationEndCount.Value,
+                        
+
+                    };
+                   var res= SaveEmpContract(contracts,UserId, BranchId, yearid, lang);
+
+
+                      
+
+                    }
+                
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "اضافة اوراق رسمية للموظف";
+                _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully,ReturnedParm= EmpId };
+            }
+            catch (Exception)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ الاوراق الرسمية للموظف";
+                _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
+        public GeneralMessage SaveEmpContract(EmpContract data, int UserId, int BranchId, int? Year, string lang)
+        {
+            int Bra = Convert.ToInt32(_employeeRepository.GetEmployeeById(data.EmpId, lang).Result.BranchId);
+            int Nat = Convert.ToInt32(_employeeRepository.GetEmployeeById(data.EmpId, lang).Result.NationalityId);
+            int? branchid = _BranchesRepository.GetAllBranches(lang).Result.Where(w => w.BranchId == Bra).Select(s => s.BranchId).FirstOrDefault();
+            int? NationalityId = _NationalityRepository.GetAllNationalitiesById(Nat).Result.Select(s => s.NationalityId).FirstOrDefault();
+            int? orgId = _BranchesRepository.GetAllBranches(lang).Result.Where(w => w.BranchId == Bra).Select(s => s.OrganizationId).FirstOrDefault();
+            if (branchid <= 0)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ عقد موظف";
+                _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.MC_EnterBranchForEachEmp, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.MC_EnterBranchForEachEmp };
+            }
+            if (NationalityId <= 0)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ عقد موظف";
+                _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.MC_EnternationalityForEachEmp, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.MC_EnternationalityForEachEmp };
+            }
+
+            var EmpContract = _TaamerProContext.EmpContract.Where(s => s.IsDeleted == false && data.ContractId == 0 && s.EmpId == data.EmpId).FirstOrDefault();
+            if (EmpContract != null)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ عقد موظف";
+                _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1,  Resources.MC_EmpContractCodeExist, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.MC_EmpContractAlreadyExists };
+            }
+
+            //  var codeExist = _empContractRepository.GetMatching(s => s.IsDeleted == false && s.ContractId != data.ContractId && s.ContractCode == data.ContractCode).FirstOrDefault();
+            var codeExist = _TaamerProContext.EmpContract.Where(s => s.IsDeleted == false && s.ContractId != data.ContractId && s.ContractCode == data.ContractCode).FirstOrDefault();
+
+
+            if (codeExist != null)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ عقد موظف";
+                _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.MC_EmpContractCodeExist, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.MC_EmpContractCodeExist };
+            }
+
+            try
+            {
+
+                if (Year == null)
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في حفظ عقد موظف";
+                    _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.choosefinYear, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.choosefinYear };
+                }
+                if (data.ContractId == 0)
+                {
+
+                    data.AddUser = UserId;
+                    data.AddDate = DateTime.Now;
+                    data.IsDeleted = false;
+                    data.BranchId = Convert.ToInt32(branchid);
+                    data.NationalityId = Convert.ToInt32(NationalityId);
+                    data.OrgId = Convert.ToInt32(orgId);
+                    _TaamerProContext.EmpContract.Add(data);
+                    //-----------------------------------------------------
+                    // var EmployeeUpdated = _EmpRepository.GetById(data.EmpId);
+                    Employees? EmployeeUpdated = _TaamerProContext.Employees.Where(s => s.EmployeeId == data.EmpId).FirstOrDefault();
+
+                    EmployeeUpdated.ContractNo = data.ContractCode;
+                    EmployeeUpdated.ContractStartDate = data.StartDatetxt;
+                    EmployeeUpdated.ContractEndDate = data.EndDatetxt;
+                    EmployeeUpdated.Salary = data.FreelanceAmount;
+                    //EmployeeUpdated.VacationsCount = data.Durationofannualleave;
+                    //-------------------------------------------------------
+                    try
+                    {
+                        var ObjList = new List<object>();
+                        foreach (var item in data.EmpContractDetails.ToList())
+                        {
+
+                            ObjList.Add(new { item.ContractId });
+                            item.ContractId = data.ContractId;
+                            item.SerialId = item.SerialId;
+                            item.Clause = item.Clause;
+                            item.AddDate = DateTime.Now;
+                            item.AddUser = UserId;
+                            item.IsDeleted = false;
+                            _TaamerProContext.EmpContractDetail.Add(item);
+                        }
+                    }
+                    catch
+                    {
+                        //string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        //string ActionNote = "فشل في حفظ عقد موظف";
+                        // _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                        ////-----------------------------------------------------------------------------------------------------------------
+
+                        //return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest,ReasonPhrase = Resources.General_SavedFailed};
+                    }
+
+                    _TaamerProContext.SaveChanges();
+                    //To Make or update payrolls
+                    //_employeesService.GetAllEmployeesSearch( new EmployeesVM() { IsSearch= true, MonthNo = DateTime.Now.Month},lang, UserId, branchid.Value, Con);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "اضافة عقد موظف جديد";
+                    _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+
+
+                }
+                else
+                {
+                    // var Updated = _empContractRepository.GetById(data.ContractId);
+                    EmpContract? Updated = _TaamerProContext.EmpContract.Where(s => s.ContractId == data.ContractId).FirstOrDefault();
+
+                    if (Updated != null)
+                    {
+                        Updated.CompanyRepresentativeId = data.CompanyRepresentativeId;
+                        Updated.Compensation = data.Compensation;
+                        Updated.CompensationBothParty = data.CompensationBothParty;
+                        Updated.ContTypeId = data.ContTypeId;
+                        Updated.ContDuration = data.ContDuration;
+                        Updated.ContractTerminationNotice = data.ContractTerminationNotice;
+                        Updated.Dailyworkinghours = data.Dailyworkinghours;
+                        Updated.Durationofannualleave = data.Durationofannualleave;
+
+                        Updated.EndDatetxt = data.EndDatetxt;
+                        Updated.Firstpartycompensation = data.Firstpartycompensation;
+                        Updated.FreelanceAmount = data.FreelanceAmount;
+                        Updated.HijriDate = data.HijriDate;
+                        Updated.NotTodivulgeSecrets = data.NotTodivulgeSecrets;
+                        Updated.NotTodivulgeSecretsDuration = data.NotTodivulgeSecretsDuration;
+                        Updated.Paycase = data.Paycase;
+                        Updated.PerSe = data.PerSe;
+                        Updated.ProbationDuration = data.ProbationDuration;
+                        Updated.ProbationTypeId = data.ProbationTypeId;
+                        Updated.Restrictedmode = data.Restrictedmode;
+                        Updated.RestrictionDuration = data.RestrictionDuration;
+                        Updated.Secondpartycompensation = data.Secondpartycompensation;
+                        Updated.SecretsIdentifyplaces = data.SecretsIdentifyplaces;
+                        Updated.SecretsWithregardtowork = data.SecretsWithregardtowork;
+                        Updated.StartDatetxt = data.StartDatetxt;
+                        Updated.Withregardtowork = data.Withregardtowork;
+                        Updated.Workingdaysperweek = data.Workingdaysperweek;
+                        Updated.Workinghoursperweek = data.Workinghoursperweek;
+                        Updated.DailyEmpCost = data.DailyEmpCost;
+
+                        Updated.UpdateDate = DateTime.Now;
+                        Updated.UpdateUser = UserId;
+
+                        //-----------------------------------------------------
+                        //var EmployeeUpdated = _EmpRepository.GetById(data.EmpId);
+                        Employees? EmployeeUpdated = _TaamerProContext.Employees.Where(s => s.EmployeeId == data.EmpId).FirstOrDefault();
+
+                        //if (Updated.EmpId != data.EmpId)
+                        //{
+                        //    var oldEmp = _EmpRepository.GetById(data.EmpId);
+                        //    oldEmp.ContractNo = null;
+                        //    oldEmp.ContractStartDate = null;
+                        //    oldEmp.ContractEndDate = null;
+                        //    oldEmp.Salary = null;
+                        //}
+
+                        //Updated.EmpId = data.EmpId;
+                        Updated.ContractCode = data.ContractCode;
+                        EmployeeUpdated.ContractNo = data.ContractCode;
+                        EmployeeUpdated.ContractStartDate = data.StartDatetxt;
+                        EmployeeUpdated.ContractEndDate = data.EndDatetxt;
+                        EmployeeUpdated.Salary = data.FreelanceAmount;
+                        //EmployeeUpdated.VacationsCount = data.Durationofannualleave;
+                    }
+
+                    try
+                    {
+                        //delete existing details 
+                        if (Updated.EmpContractDetails != null)
+                        {
+                            _TaamerProContext.EmpContractDetail.RemoveRange(Updated.EmpContractDetails.ToList());
+                        }
+                        try
+                        {
+                            // add new details
+                            var ObjList = new List<object>();
+                            foreach (var item in data.EmpContractDetails.ToList())
+                            {
+
+                                ObjList.Add(new { item.ContractId });
+                                item.ContractId = data.ContractId;
+                                item.SerialId = item.SerialId;
+                                item.Clause = item.Clause;
+                                item.AddUser = UserId;
+                                item.AddDate = DateTime.Now;
+                                item.IsDeleted = false;
+                                _TaamerProContext.EmpContractDetail.Add(item);
+                            }
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ////-----------------------------------------------------------------------------------------------------------------
+                            //string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            //string ActionNote = "فشل في حفظ عقد موظف";
+                            // _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                            ////-----------------------------------------------------------------------------------------------------------------
+
+                            //return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest,ReasonPhrase = Resources.General_SavedFailed};
+                        }
+                        _TaamerProContext.SaveChanges();
+
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote = " تعديل عقد موظف رقم " + data.ContractId;
+                        _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 2, Resources.General_EditedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                        //-----------------------------------------------------------------------------------------------------------------
+
+                        return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote = "فشل في حفظ عقد موظف";
+                        _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+
+                        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ عقد موظف";
+                _SystemAction.SaveAction("SaveEmpContract", "EmpContractService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+
+
+
+        }
+
+
+        public GeneralMessage DeleteEmployee(int EmpId, int UserId, int BranchId)
+        {
+            try
+            {
+                Employees emp = _employeeRepository.GetById(EmpId);
+                var empcon = _TaamerProContext.EmpContract.Where(s => s.IsDeleted == false && s.CompanyRepresentativeId == EmpId);
+                if (empcon.Count() > 0)
+                {
+                    string ActionDate1 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote1 = " فشل في حذف موظف رقم " + EmpId; ;
+                   _SystemAction.SaveAction("DeleteEmployee", "EmployeeService", 3, Resources.General_DeletedFailed, "", "", ActionDate1, UserId, BranchId, ActionNote1, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.establishment_in_contracts };
+                }
+                string today = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                if ((!string.IsNullOrEmpty(emp.ContractStartDate) && string.IsNullOrEmpty(emp.ContractEndDate)) || (!string.IsNullOrEmpty(emp.ContractStartDate) && (DateTime.ParseExact(emp.ContractEndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture) >= DateTime.ParseExact(today, "yyyy-MM-dd", CultureInfo.InvariantCulture))))
+
+                //if (!string.IsNullOrEmpty(emp.ContractEndDate) && (DateTime.ParseExact(emp.ContractEndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture) >= DateTime.ParseExact(today, "yyyy-MM-dd", CultureInfo.InvariantCulture)))
+                {
+                    string ActionDate1 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote1 = " فشل في حذف موظف رقم " + EmpId; ;
+                    _SystemAction.SaveAction("DeleteEmployee", "EmployeeService", 3, Resources.General_DeletedFailed, "", "", ActionDate1, UserId, BranchId, ActionNote1, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.The_employee_cannot_be_deleted_for_contiouns_in_working };
+
+                }
+
+
+
+
+                var EmployeeUpdated = _employeeRepository.GetById(EmpId);
+                //check Loans, Tasks and Projects
+                if(EmployeeUpdated.Loans != null) { 
+                //1: loans
+                var loans = EmployeeUpdated.Loans.Where(x => !x.IsDeleted).ToList();
+                int LoansCount = 0;
+                DateTime Today = DateTime.Now.Date;
+                foreach (var loan in loans)
+                {
+                    if (loan.LoanDetails.Count > 0)
+                    {
+                        DateTime MaxDate = loan.LoanDetails.Select(x => x.Date.HasValue ? x.Date.Value : DateTime.MinValue).Max();
+                        if (MaxDate.Year >= Today.Year && MaxDate.Month >= Today.Month)
+                            LoansCount++;
+                    }
+                }
+                if (LoansCount > 0)
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = "فشل في حذف الموظف";
+                    _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, "لا يمكن فذف الموظف بسبب وجود سلف", "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() {StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.contractCannotDeletedDueAdvance };
+
+                }
+                }
+                //2: Custody
+                var CustodyCount = _CustodyRepository.GetMatching(x => !x.IsDeleted && x.EmployeeId == EmployeeUpdated.EmployeeId && x.Status == false).Count();
+                if (CustodyCount > 0)
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate3 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote3 = "فشل في حذف الموظف";
+                    _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, Resources.General_SavedFailed, "", "", ActionDate3, UserId, BranchId, ActionNote3, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        ReasonPhrase = "لا يمكن حذف الموظف بسبب وجود عُهد"
+                    };
+                }
+
+
+                // 3: Tasks, projects,workOrders
+                if (EmployeeUpdated.UserId.HasValue && EmployeeUpdated.UserId !=0)
+                {
+                    var vUser = _UserRepository.GetById(EmployeeUpdated.UserId.Value);
+                    int UserId2 = vUser.UserId;
+                    var UserF = _UserRepository.GetMatching(s => s.IsDeleted == false && s.IsAdmin == true && s.UserId == UserId2);
+                    if (UserF != null && UserF.Count() > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate4 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote4 = "فشل في حذف الموظف";
+                        _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, "لا يمكنك إيقاف حساب الادمن", "", "", ActionDate4, UserId2, BranchId, ActionNote4, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage {StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.cannotDeactivateAdminAccount };
+                    }
+
+                    var SettingProjUser = _TaamerProContext.Settings.Where(s => s.IsDeleted == false && s.Type == 3 && s.UserId == UserId2);
+                    if (SettingProjUser != null && SettingProjUser.Count() > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate5 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote5 = "فشل في حذف الموظف";
+                        _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, "المستخدم موجود علي  سير مشروع لا يمكن إيقاف حسابه", "", "", ActionDate5, UserId2, BranchId, ActionNote5, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage {StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.account_cannot_be_suspended };
+                    }
+                    var userTasks = _TaamerProContext.ProjectPhasesTasks.Where(s => s.IsDeleted == false /*&& s.Project.StopProjectType != 1 */&& s.UserId == UserId2 && s.Type == 3 && s.Status != 4 && s.IsMerig == -1).Where(x => x.Project.StopProjectType != 1);
+                    if (userTasks.Count() > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate6 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote6 = "فشل في حذف الموظف";
+                        _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, "لا يمكن حذف الموظف بسبب وجود مهام", "", "", ActionDate6, UserId2, BranchId, ActionNote6, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            ReasonPhrase = "لا يمكن حذف الموظف بسبب وجود مهام " //Resources.userHave + userTasks + Resources.userTasks 
+                        };
+                    }
+                    var userProject = _TaamerProContext.Project.Where(s => s.IsDeleted == false && s.MangerId == UserId && s.Status != 1).Count();
+                    if (userProject > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate7 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote7 = "فشل في حذف الموظف";
+                       _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, "لا يمكن حذف الموظف بسبب وجود مشاريع", "", "", ActionDate7, UserId2, BranchId, ActionNote7, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            ReasonPhrase = "لا يمكن حذف الموظف بسبب وجود مشاريع"
+                            //Resources.userHave + userProject + Resources.UserProjects 
+                        };
+                    }
+                    var userWorkOrder = _TaamerProContext.WorkOrders.Where(s => s.IsDeleted == false && (s.ExecutiveEng == UserId2 || s.ResponsibleEng == UserId2) && (s.WOStatus == 1 || s.WOStatus == 2)).Count();
+                    if (userWorkOrder > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate8 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote8 = "فشل في حذفالموظف";
+                       _SystemAction.SaveAction("EndWorkforAnEmployee", "EmpContractService", 1, "لا يمكن حذف الموظف بسبب وجود أوامر عمل", "", "", ActionDate8, UserId2, BranchId, ActionNote8, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            ReasonPhrase = "لا يمكن حذفالموظف بسبب وجود أوامر عمل"
+                            //Resources.userHave + userWorkOrder + Resources.userWorkOrder 
+                        };
+                    }
+
+
+                }
+                //emp account
+
+                if (emp.AccountId != null)
+                {
+                    var AccTrans = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && s.AccountId == (emp.AccountId));
+                    if (AccTrans != null && AccTrans.Count() > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote2 = "فشل في حذف الحساب";
+                        _SystemAction.SaveAction("DeleteAccount", "AccountsService", 1, Resources.Cannot_Delete_Emp_Financial_Transactions_Message_Error, "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage {StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.Cannot_Delete_Emp_Financial_Transactions_Message_Error };
+                    }
+                    else
+                    {
+                        Accounts account = _accountsRepository.GetById((int)emp.AccountId);
+                        account.IsDeleted = true;
+                        account.DeleteDate = DateTime.Now;
+                        account.DeleteUser = UserId;
+                    }
+                }
+
+                if (emp.AccountIDs != null)
+                {
+                    var AccTrans = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && s.AccountId == (emp.AccountIDs));
+                    if (AccTrans != null && AccTrans.Count() > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote2 = "فشل في حذف الحساب";
+                       _SystemAction.SaveAction("DeleteAccount", "AccountsService", 1, Resources.Cannot_Delete_Emp_Financial_Transactions_Message_Error, "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.Cannot_Delete_Emp_Financial_Transactions_Message_Error };
+                    }
+                    else
+                    {
+                        Accounts loanaccount = _accountsRepository.GetById((int)emp.AccountIDs);
+                        loanaccount.IsDeleted = true;
+                        loanaccount.DeleteDate = DateTime.Now;
+                        loanaccount.DeleteUser = UserId;
+                    }
+                }
+
+
+                if (emp.AccountIDs_Custody != null)
+                {
+                    var AccTrans = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && s.AccountId == (emp.AccountIDs_Custody));
+                    if (AccTrans != null && AccTrans.Count() > 0)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote2 = "فشل في حذف الحساب";
+                       _SystemAction.SaveAction("DeleteAccount", "AccountsService", 1, Resources.Cannot_Delete_Emp_Financial_Transactions_Message_Error, "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.Cannot_Delete_Emp_Financial_Transactions_Message_Error };
+                    }
+                    else
+                    {
+                        Accounts custoday = _accountsRepository.GetById((int)emp.AccountIDs_Custody);
+                        custoday.IsDeleted = true;
+                        custoday.DeleteDate = DateTime.Now;
+                        custoday.DeleteUser = UserId;
+                    }
+                }
+
+                emp.IsDeleted = true;
+                emp.DeleteDate = DateTime.Now;
+                emp.DeleteUser = UserId;
+                _TaamerProContext.SaveChanges();
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = " حذف موظف رقم " + EmpId;
+                _SystemAction.SaveAction("DeleteEmployee", "EmployeeService", 3, Resources.General_DeletedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage {StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_DeletedSuccessfully };
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = " فشل في حذف موظف رقم " + EmpId; ;
+                _SystemAction.SaveAction("DeleteEmployee", "EmployeeService", 3, Resources.General_DeletedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage {StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_DeletedFailed };
+            }
+        }
+
+
+        public GeneralMessage RemoveEmployee(int EmpId, int UserId, int BranchId)
+        {
+            try
+            {
+                var emp = _TaamerProContext.Employees.Where(x => x.EmployeeId == EmpId).FirstOrDefault();
+
+
+                _TaamerProContext.Remove(emp);
+                _TaamerProContext.SaveChanges();
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = " حذف موظف رقم " + EmpId;
+                _SystemAction.SaveAction("DeleteEmployee", "EmployeeService", 3, Resources.General_DeletedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_DeletedSuccessfully };
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = " فشل في حذف موظف رقم " + EmpId; ;
+                _SystemAction.SaveAction("DeleteEmployee", "EmployeeService", 3, Resources.General_DeletedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_DeletedFailed };
+            }
+        }
+
+
+        public IEnumerable<NodeVM> FillEmployeeSelect(string lang, int BranchId, bool IsNewContract, int? EmpId)
+        {
+            if (EmpId.HasValue)
+                return _employeeRepository.GetAllEmployees(lang, BranchId).Result.Where(x => x.EmployeeId == EmpId.Value || (IsNewContract ? x.ContractNo == null : true)).Select(s => new NodeVM()
+                {
+                    Id = s.EmployeeId,
+                    Name = s.EmployeeName
+                });
+            else
+                return _employeeRepository.GetAllEmployees(lang, BranchId).Result.Where(x => IsNewContract ? x.ContractNo == null : true).Select(s => new NodeVM()
+                {
+                    Id = s.EmployeeId,
+                    Name = s.EmployeeName
+                });
+        }
+        public IEnumerable<object> FillSelectEmployee(string lang, int BranchId)
+        {
+            return _employeeRepository.FillAllEmployees(lang, BranchId).Result.Select(s => new
+            {
+                Id = s.EmployeeId,
+                Name = s.EmployeeName
+            });
+        }
+        public IEnumerable<object> FillSelectEmployeeWorkers(string lang, int BranchId)
+        {
+            return _employeeRepository.FillSelectEmployeeWorkers(lang, BranchId).Result.Select(s => new
+            {
+                Id = s.EmployeeId,
+                Name = s.EmployeeName
+            });
+        }
+        public IEnumerable<object> FillEmpAppraisSelect(string lang, int BranchId, int UserId)
+        {
+            var CurrentEmp = _employeeRepository.GetMatching(s => s.IsDeleted == false && s.UserId == UserId).FirstOrDefault();
+            List<int> EmpIdsInts = new List<int>();
+            if (CurrentEmp != null)
+            {
+                EmpIdsInts = _TaamerProContext.EmpStructure.Where(s => s.IsDeleted == false && s.BranchId == BranchId && s.ManagerId == CurrentEmp.EmployeeId).Select(e => e.EmpId).ToList();
+            }
+            var empstructuer = _employeeRepository.GetMatching(s => s.IsDeleted == false && s.BranchId == BranchId && EmpIdsInts.Contains(s.EmployeeId));
+            return empstructuer.Select(s => new
+            {
+                Id = s.EmployeeId,
+                Name = lang == "ltr" ? s.EmployeeNameEn : s.EmployeeNameAr,
+            });
+        }
+        public async Task<EmployeesVM> GetEmployeeById(int EmpId, string lang)
+        {
+            return await _employeeRepository.GetEmployeeById(EmpId, lang);
+        }
+        public async Task<EmployeesVM> GetEmployeeById_d(int EmpId, string lang)
+        {
+            return await _employeeRepository.GetEmployeeById_d(EmpId, lang);
+        }
+        public async Task<IEnumerable<EmployeesVM>> SearchEmployees(EmployeesVM EmployeesSearch, string lang, int BranchId)
+        {
+            var employees =await _employeeRepository.SearchEmployees(EmployeesSearch, lang, BranchId);
+            return employees.ToList();
+        }
+        public async Task<IEnumerable<EmployeesVM>> SearchArchiveEmployees(EmployeesVM EmployeesSearch, string lang, int BranchId)
+        {
+            var employees =await _employeeRepository.SearchArchiveEmployees(EmployeesSearch, lang, BranchId);
+            return employees.ToList();
+        }
+        public async Task<EmployeesVM> GetEmployeeInfo(int EmployeeId, string lang, int BranchId)
+        {
+            var employees =await _employeeRepository.GetEmployeeInfo(EmployeeId, lang, BranchId);
+            return employees;
+        }
+        public Object GetEmployeeStatistics()
+        {
+            var obj = _employeeRepository.GetEmployeeStatistics();
+            return obj;
+        }
+        public async Task<IEnumerable<rptGetResdencesAboutToExpireVM>> GetResDencesAbouutToExpire(string Con)
+        {
+            var employees = await _employeeRepository.GetResDencesAbouutToExpire(Con, null);
+            return employees.ToList();
+        }
+        public async Task<IEnumerable< rptGetResdencesAboutToExpireVM>> GetResDencesAbouutToExpire(string Con,int? DepartmectId)
+        {
+            var employees =await _employeeRepository.GetResDencesAbouutToExpire(Con, DepartmectId);
+            return employees.ToList();
+        }
+
+        public async Task<IEnumerable< rptGetResdencesExpiredVM>> GetResDencesExpired(string Con)
+        {
+            var employees =await _employeeRepository.GetResDencesExpired(Con,null);
+            return employees.ToList();
+        }
+        public async Task<IEnumerable<rptGetResdencesExpiredVM>> GetResDencesExpired(string Con, int? DepartmectId)
+        {
+            var employees = await _employeeRepository.GetResDencesExpired(Con, DepartmectId);
+            return employees.ToList();
+        }
+
+        public async Task<IEnumerable< rptGetOfficialDocsAboutToExpire>> GetOfficialDocsAboutToExpire(string Con)
+        {
+            var employees = await _employeeRepository.GetOfficialDocsAboutToExpire(Con,null);
+            return employees.ToList();
+        }
+
+        public async Task<IEnumerable<rptGetOfficialDocsAboutToExpire>> GetOfficialDocsAboutToExpire(string Con, int? DepartmectId)
+        {
+            var employees = await _employeeRepository.GetOfficialDocsAboutToExpire(Con, DepartmectId);
+            return employees.ToList();
+        }
+
+        public async Task<IEnumerable< rptGetOfficialDocsExpiredVM>> GetOfficialDocsExpired(string Con)
+        {
+            var employees =await _employeeRepository.GetOfficialDocsExpired(Con,null);
+            return employees.ToList();
+        }
+        public async Task<IEnumerable<rptGetOfficialDocsExpiredVM>> GetOfficialDocsExpired(string Con, int? DepartmectId)
+        {
+            var employees = await _employeeRepository.GetOfficialDocsExpired(Con, DepartmectId);
+            return employees.ToList();
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetEmployeeWithoutContract( int? DepartmectId, string lang)
+        {
+            var employees = await _employeeRepository.GetEmployeeWithoutContract(DepartmectId, lang);
+            return employees.ToList();
+        }
+
+        public async Task<IEnumerable<EmployeesVM>> GetEmployeeWithoutContract(int? DepartmectId, string lang,string? Searchtext)
+        {
+            var employees = await _employeeRepository.GetEmployeeWithoutContract(DepartmectId, lang, Searchtext);
+            return employees.ToList();
+        }
+
+        //public IEnumerable<EmployeesVM> GetAllEmployeesByDepId(int empId)
+        //{
+        //    var employees = _employeeRepository.GetAllEmployeesByDeptId(empId).ToList();
+        //    return employees;
+        //}
+        //public GeneralMessage CreateUser (Employees emoloyee)
+        //{
+        //    try
+        //    {
+        //        var emp = _employeeRepository.GetById(emoloyee.EmployeeId);
+        //        if (emp != null)
+        //        {
+        //           emp.UserName = emoloyee.UserName;
+        //           emp.Password = EncryptValue(emoloyee.Password);
+        //           emp.IsUser = true;
+        //         }
+        //        _uow.SaveChanges();
+        //        return new GeneralMessage { Result = true, Message = " تم الحفظ بنجاح" };
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new GeneralMessage { Result = false, Message = Resources.General_SavedFailed };
+        //    }
+        //}
+        //public bool ValidateUserPassword(string UserName, string Password)
+        //{
+        //    var user = _employeeRepository.GetMatching(s => s.UserName == UserName && s.IsDeleted == false && s.IsUser == true && DecryptValue(s.Password) == Password.Trim() ).FirstOrDefault();
+        //    if (user != null)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        //public EmployeesVM GetUser(string username)
+        //{
+        //    var user = _employeeRepository.GetMatching(s => s.UserName == username && s.IsDeleted == false && s.IsUser == true).FirstOrDefault();
+        //    return new EmployeesVM {EmployeeName = user.EmployeeName , UserName = user.UserName , ImageUrl = user.ImageUrl};
+        //}
+        //private string EncryptValue(string value)
+        //{
+        //    string hash = "f0xle@rn";
+        //    byte[] data =Encoding.UTF8.GetBytes(value);
+        //    using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+        //    {
+        //        byte[] keys = md5.ComputeHash(Encoding.UTF8.GetBytes(hash));
+        //        using (TripleDESCryptoServiceProvider tripDesc = new TripleDESCryptoServiceProvider() { Key = keys , Mode = CipherMode.ECB , Padding = PaddingMode.PKCS7})
+        //        {
+        //            ICryptoTransform cryptoTransform = tripDesc.CreateEncryptor();
+        //            byte[] result = cryptoTransform.TransformFinalBlock(data, 0, data.Length);
+        //            return Convert.ToBase64String(result, 0 , result.Length);
+        //        }
+        //    } 
+        //}
+        //private string DecryptValue(string value)
+        //{
+        //    string hash = "f0xle@rn";
+        //    byte[] data = Convert.FromBase64String(value); ;
+        //    using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+        //    {
+        //        byte[] keys = md5.ComputeHash(Encoding.UTF8.GetBytes(hash));
+        //        using (TripleDESCryptoServiceProvider tripDesc = new TripleDESCryptoServiceProvider() { Key = keys, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 })
+        //        {
+        //            ICryptoTransform cryptoTransform = tripDesc.CreateDecryptor();
+        //            byte[] result = cryptoTransform.TransformFinalBlock(data, 0, data.Length);
+        //            return Encoding.UTF8.GetString(result);
+        //        }
+        //    }
+        //}
+
+        public IEnumerable< rptGetEmpLoans> GetEmpLoans(string Con)
+        {
+            try
+            {
+                List< rptGetEmpLoans> lmd = new List< rptGetEmpLoans>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "rptGetEmpLoans";
+                        command.Connection = con;
+
+
+                        con.Open();
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            lmd.Add(new  rptGetEmpLoans
+                            {
+                                LoanID = (dr[0]).ToString(),
+                                date = dr[1].ToString(),
+                                Amount = dr[2].ToString(),
+                                MonthNo = dr[3].ToString(),
+                                NameAr = dr[4].ToString(),
+                                Payed = dr[5].ToString(),
+
+                            });
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception)
+            {
+                List< rptGetEmpLoans> lmd = new List< rptGetEmpLoans>();
+                return lmd;
+            }
+        }
+
+        public IEnumerable< rptGetEmpContractsAboutToExpireVM> GetEmpContractsAboutToExpire(string Con)
+        {
+            try
+            {
+                List< rptGetEmpContractsAboutToExpireVM> lmd = new List< rptGetEmpContractsAboutToExpireVM>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "rptGetEmpContractsAboutToExpire";
+                        command.Connection = con;
+                        //fthis
+
+                        con.Open();
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            lmd.Add(new  rptGetEmpContractsAboutToExpireVM
+                            {
+                                ContractNo = dr[0].ToString(),
+                                NameAr = dr[1].ToString(),
+                                Nationality = dr[2].ToString(),
+                                Department = dr[3].ToString(),
+                                Branch = dr[4].ToString(),
+                                ContractEndDate = dr[5].ToString(),
+                            });
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception)
+            {
+                List<rptGetEmpContractsAboutToExpireVM> lmd = new List< rptGetEmpContractsAboutToExpireVM>();
+                return lmd;
+            }
+        }
+
+
+        public IEnumerable<rptGetEmpContractsAboutToExpireVM> GetEmpContractsAboutToExpire(string Con, int? DepartmentID)
+        {
+            try
+            {
+                List<rptGetEmpContractsAboutToExpireVM> lmd = new List<rptGetEmpContractsAboutToExpireVM>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("@DepartmentID", DepartmentID));
+                        command.CommandText = "rptGetEmpContractsAboutToExpire";
+                        command.Connection = con;
+                        //fthis
+
+                        con.Open();
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            lmd.Add(new rptGetEmpContractsAboutToExpireVM
+                            {
+                                ContractNo = dr[0].ToString(),
+                                NameAr = dr[1].ToString(),
+                                Nationality = dr[2].ToString(),
+                                Department = dr[3].ToString(),
+                                Branch = dr[4].ToString(),
+                                ContractEndDate = dr[5].ToString(),
+                                JobName = dr[6].ToString(),
+                                Salary = dr[7].ToString(),
+                                Duration = (Convert.ToInt32(dr[8].ToString()) < 0) ? "-" : (Convert.ToInt32(dr[8].ToString()) < 30) ? Convert.ToInt32(dr[8].ToString()) + " يوم " : (Convert.ToInt32(dr[8].ToString()) == 30) ? Convert.ToInt32(dr[8].ToString()) / 30 + " شهر " : (Convert.ToInt32(dr[8].ToString()) > 30) ? ((Convert.ToInt32(dr[8].ToString()) / 30) + " شهر " + (Convert.ToInt32(dr[8].ToString()) % 30) + " يوم  ") : "",
+
+
+                            });
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception)
+            {
+                List<rptGetEmpContractsAboutToExpireVM> lmd = new List<rptGetEmpContractsAboutToExpireVM>();
+                return lmd;
+            }
+        }
+
+        public IEnumerable<rptGetEmpContractsAboutToExpireVM> GetEmpContractsExpired(string Con, int? DepartmentID)
+        {
+            try
+            {
+                List<rptGetEmpContractsAboutToExpireVM> lmd = new List<rptGetEmpContractsAboutToExpireVM>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("@DepartmentID", DepartmentID));
+                        command.CommandText = "rptGetEmpContractsExpired";
+                        command.Connection = con;
+                        //fthis
+
+                        con.Open();
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            lmd.Add(new rptGetEmpContractsAboutToExpireVM
+                            {
+                                ContractNo = dr[0].ToString(),
+                                NameAr = dr[1].ToString(),
+                                Nationality = dr[2].ToString(),
+                                Department = dr[3].ToString(),
+                                Branch = dr[4].ToString(),
+                                ContractEndDate = dr[5].ToString(),
+                           
+                                JobName = dr[6].ToString(),
+                                Salary = dr[7].ToString(),
+                                Duration = (Convert.ToInt32(dr[8].ToString()) < 0)? "-":(Convert.ToInt32(dr[8].ToString()) < 30) ? Convert.ToInt32(dr[8].ToString()) + " يوم " : (Convert.ToInt32(dr[8].ToString()) == 30) ? Convert.ToInt32(dr[8].ToString()) / 30 + " شهر " : (Convert.ToInt32(dr[8].ToString()) > 30) ? ((Convert.ToInt32(dr[8].ToString()) / 30) + " شهر " + (Convert.ToInt32(dr[8].ToString()) % 30) + " يوم  ") : "",
+
+                            });
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception)
+            {
+                List<rptGetEmpContractsAboutToExpireVM> lmd = new List<rptGetEmpContractsAboutToExpireVM>();
+                return lmd;
+            }
+        }
+
+
+        public GeneralMessage DeleteQuacontractDetails(int EmployeeId)
+        {
+            try
+            {
+                var emp = _employeeRepository.GetById(EmployeeId);
+
+
+                if (emp != null)
+                {
+                    emp.QuaContract = null;
+                    emp.ContractStartDate = null;
+                    emp.ContractEndDate = null;
+                    emp.ContractStartHijriDate = null;
+                    emp.ContractNo = null;
+                    emp.ContractEndCount = null;
+                    emp.ContractEndHijriDate = null;
+                    emp.WorkStartDate = null;
+                    emp.Allowances= null;
+                    emp.VacationsCount = null;
+                    
+
+
+                    _TaamerProContext.SaveChanges();
+
+                }
+
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "اضافة اوراق رسمية للموظف";
+                _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, 1, 1, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully};
+            }
+            catch (Exception)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ الاوراق الرسمية للموظف";
+                _SystemAction.SaveAction("SaveOfficialDocuments", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, 1, 1, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
+
+
+
+    }
+}

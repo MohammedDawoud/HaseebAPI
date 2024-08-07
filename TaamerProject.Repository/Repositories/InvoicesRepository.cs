@@ -734,7 +734,7 @@ namespace TaamerProject.Repository.Repositories
                 SupplierId = x.SupplierId,
                 CostCenterId = x.CostCenterId,
                 PageInsert = x.PageInsert,
-                InvoiceRetId = x.InvoiceRetId ?? "000000",
+                InvoiceRetId = x.InvoiceRetId ?? "000000", 
                 DunCalc = x.DunCalc ?? false,
                 VoucherAdjustment = x.VoucherAdjustment ?? false,
 

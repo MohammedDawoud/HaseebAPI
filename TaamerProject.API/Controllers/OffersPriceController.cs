@@ -92,13 +92,17 @@ namespace TaamerProject.API.Controllers
         [HttpGet("GetOfferconditionconst")]
         public ActionResult GetOfferconditionconst()
             {
-                var offers = _offerpriceconditionService.GetOfferconditionconst().Result.ToList();
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            var offers = _offerpriceconditionService.GetOfferconditionconst(_globalshared.BranchId_G).Result.ToList();
                 return Ok(offers.ToList() );
             }
         [HttpGet("GetAllCustomerPaymentsconst")]
         public ActionResult GetAllCustomerPaymentsconst()
             {
-                var offers = _customerPaymentsService.GetAllCustomerPaymentsconst().Result.ToList();
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            var offers = _customerPaymentsService.GetAllCustomerPaymentsconst(_globalshared.BranchId_G).Result.ToList();
                 return Ok(offers.ToList() );
             }
         [HttpGet("GetOfferConditionbyid")]

@@ -549,12 +549,11 @@ namespace TaamerProject.Service.Services
 
                         foreach (var item in offerprice.CustomerPayments.ToList())
                         {
+                            item.BranchId = BranchId;
                             item.OfferId = offer.OffersPricesId;
                             item.AddUser = UserId;
                             item.AddDate = DateTime.Now;
-
                             _TaamerProContext.CustomerPayments.Add(item);
-
 
                         }
 
@@ -573,6 +572,7 @@ namespace TaamerProject.Service.Services
                         }
                         foreach (var item in offerprice.OffersConditions)
                         {
+                            item.BranchId = BranchId;
                             item.AddUser = UserId;
                             item.AddDate = DateTime.Now;
                             item.OfferId = offer.OffersPricesId;
@@ -717,6 +717,7 @@ namespace TaamerProject.Service.Services
                         }
                         foreach (var item in offerprice.CustomerPayments.ToList())
                         {
+                            item.BranchId = BranchId;
                             item.OfferId = offerprice.OffersPricesId;
                             item.AddUser = UserId;
                             item.AddDate = DateTime.Now;
@@ -740,6 +741,7 @@ namespace TaamerProject.Service.Services
                         }
                         foreach (var item in offerprice.OffersConditions)
                         {
+                            item.BranchId = BranchId;
                             item.AddUser = UserId;
                             item.AddDate = DateTime.Now;
                             item.OfferId = offerprice.OffersPricesId;
@@ -752,6 +754,8 @@ namespace TaamerProject.Service.Services
                     {
                         foreach (var item in offerprice.OfferService)
                         {
+                            item.BranchId = BranchId;
+
                             item.AddUser = UserId;
                             item.AddDate = DateTime.Now;
                             item.OfferId = offerprice.OffersPricesId;

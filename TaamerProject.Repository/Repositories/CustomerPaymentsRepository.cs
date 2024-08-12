@@ -140,9 +140,9 @@ namespace TaamerProject.Repository.Repositories
         }
 
 
-        public async Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst()
+        public async Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst(int BranchId)
         {
-            var customerPayments = _TaamerProContext.CustomerPayments.Where(s => s.IsDeleted == false && s.Isconst == 1 && s.IsCanceled != true).Select(x => new CustomerPaymentsVM
+            var customerPayments = _TaamerProContext.CustomerPayments.Where(s => s.IsDeleted == false && s.BranchId== BranchId && s.Isconst == 1 && s.IsCanceled != true).Select(x => new CustomerPaymentsVM
             {
                 PaymentId = x.PaymentId,
                 PaymentNo = x.PaymentNo,

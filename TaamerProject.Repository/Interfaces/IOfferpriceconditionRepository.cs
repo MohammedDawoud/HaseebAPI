@@ -12,6 +12,6 @@ namespace TaamerProject.Repository.Interfaces
 
         Task<IEnumerable<OffersConditionsVM>> GetOfferconditionByid(int offerid);
         Task<IEnumerable<OffersConditionsVM>> GetOfferconditionBytxt(string OfferConditiontxt);
-        Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst();
+        Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst(int BranchId);
     }
 }

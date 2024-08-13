@@ -6037,7 +6037,7 @@ namespace TaamerProject.Repository.Repositories
 
 
                             lmd.TotalPaid = Convert.ToDecimal((dr[0]));
-                            lmd.DiscountPaid = Convert.ToDecimal(dr[1].ToString();
+                            lmd.DiscountPaid = Convert.ToDecimal(dr[1].ToString());
                             lmd.TotalPaidafterdiscount = Convert.ToDecimal(dr[2].ToString());
                             lmd.TotalPaidEarnings = Convert.ToDecimal(dr[3].ToString());
                             lmd.TotalMardod = Convert.ToDecimal(dr[4].ToString());

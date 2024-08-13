@@ -39,9 +39,9 @@ namespace TaamerProject.Service.Services
         }
 
 
-        public async Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst()
+        public async Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst(int BranchId)
         {
-            var offers = await _offerpriceconditionRepository.GetOfferconditionconst();
+            var offers = await _offerpriceconditionRepository.GetOfferconditionconst(BranchId);
             return offers;
         }
     }

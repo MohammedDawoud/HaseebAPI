@@ -12,6 +12,6 @@ namespace TaamerProject.Service.Interfaces
         Task<IEnumerable<OffersConditionsVM>> GetOfferconditionByid(int offerid);
 
         Task<IEnumerable<OffersConditionsVM>> GetOfferconditionByid(string offercontxt);
-        Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst();
+        Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst(int BranchId);
     }
 }

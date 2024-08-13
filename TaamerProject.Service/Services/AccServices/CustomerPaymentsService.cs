@@ -61,7 +61,7 @@ namespace TaamerProject.Service.Services
             var customerPayments = await _CustomerPaymentsRepository.GetAllCustomerPaymentsbyamounttxt(amount, txt);
             return customerPayments;
         }
-        public async Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst()
+        public async Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst(int BranchId)
         {
             var customerPayments = await _CustomerPaymentsRepository.GetAllCustomerPaymentsconst();
             return customerPayments;

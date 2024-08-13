@@ -14,6 +14,6 @@ namespace TaamerProject.Repository.Interfaces
 
         Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsbyofferis(int offerid);
         Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsbyamounttxt(decimal amount, string amounttxt);
-        Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst();
+        Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst(int BranchId);
     }
 }

@@ -24,6 +24,6 @@ namespace TaamerProject.Service.Interfaces
         Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsboffer(int offerid);
 
         Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsbyamonttxt(decimal amount, string txt);
-        Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst();
+        Task<IEnumerable<CustomerPaymentsVM>> GetAllCustomerPaymentsconst(int BranchId);
     }
 }

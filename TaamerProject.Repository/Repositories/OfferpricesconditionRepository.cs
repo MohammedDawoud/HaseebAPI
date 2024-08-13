@@ -57,9 +57,9 @@ namespace TaamerProject.Repository.Repositories
 
         }
 
-        public async Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst()
+        public async Task<IEnumerable<OffersConditionsVM>> GetOfferconditionconst(int BranchId)
         {
-            var Offers = _TaamerProContext.OffersConditions.Where(s => s.IsDeleted == false && s.Isconst == 1).Select(x => new OffersConditionsVM
+            var Offers = _TaamerProContext.OffersConditions.Where(s => s.IsDeleted == false && s.BranchId == BranchId && s.Isconst == 1).Select(x => new OffersConditionsVM
             {
                 OffersConditionsId = x.OffersConditionsId,
                 BranchId = x.BranchId,

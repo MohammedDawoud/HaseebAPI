@@ -91,6 +91,7 @@ namespace TaamerProject.Repository.Interfaces
 
         Task<IEnumerable<MonthlyPaymentsandEarns>> GetMonthlypaymentsandearns_ًWithDayes(int? Paytype, string startDate, string EndDate, int BranchId, string Con);
         Task<IEnumerable<MonthlyPaymentsandEarns>> GetyearlyInvoicesWithDetails_ByYear(int? Paytype, int YearId, int BranchId, string Con);
+        Task<DelegatesVM> GetDelegates(int? UserId, string startDate, string EndDate, int BranchId, string Con);
 
     }
 }

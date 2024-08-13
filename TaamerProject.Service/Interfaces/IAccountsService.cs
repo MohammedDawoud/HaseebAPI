@@ -126,6 +126,7 @@ namespace TaamerProject.Service.Interfaces
 
         Task<IEnumerable<MonthlyPaymentsandEarns>> GetyearlyInvoicesWithDetails_ByYear(int? paytype, int Year, int BranchId, string Con);
         Task<IEnumerable<MonthlyPaymentsandEarns>> GetMonthlypaymentsandearns_ًWithDayes(int? paytype, string startdate, string Enddate, int BranchId, string Con);
+        Task<DelegatesVM> GetDelegates(int? UserId, string startdate, string Enddate, int BranchId, string Con);
 
     }
 }

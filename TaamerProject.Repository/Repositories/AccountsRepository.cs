@@ -5940,6 +5940,132 @@ namespace TaamerProject.Repository.Repositories
         }
 
 
+
+              public async Task<DelegatesVM> GetDelegates(int? UserId, string startDate,string EndDate, int BranchId, string Con)
+               {
+            try
+            {
+                DelegatesVM lmd = new DelegatesVM();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "Delegates";
+                        command.Connection = con;
+
+                        command.Parameters.Add(new SqlParameter("@StartDate", startDate));
+                        command.Parameters.Add(new SqlParameter("@EndDate", EndDate));
+
+                        if (UserId == 0 || UserId == null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@UserId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@UserId", UserId));
+                        }
+
+                        if (BranchId == 0 || BranchId == null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        }
+
+
+
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        DataTable dt2 = new DataTable();
+                        DataTable dt3 = new DataTable();
+
+                        dt = ds.Tables[0];
+                        dt2 = ds.Tables[1];
+                        dt3 = ds.Tables[2];
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            lmd.InvoicePaid.Add(new Invoice
+                            {
+
+                                InvoiceId = Convert.ToInt32((dr[0]).ToString()),
+                                CustomerName = dr[1].ToString(),
+                                InvoiceNumber = dr[2].ToString(),
+                                PayType = dr[3].ToString(),
+                                Date = dr[4].ToString(),
+                                Notes = dr[5].ToString(),
+                                InvoiceValue = Convert.ToDecimal(dr[6]),
+                                DiscountValue = Convert.ToDecimal(dr[7]),
+                                TotalValue = Convert.ToDecimal(dr[8]),
+                                PaidValue = Convert.ToDecimal(dr[9]),
+                                Remaining = Convert.ToDecimal(dr[10]),
+
+
+                            });
+                        }
+
+
+
+                        foreach (DataRow dr in dt2.Rows)
+                        {
+                            lmd.InvoiceMardod.Add(new Invoice
+                            {
+                                InvoiceId = Convert.ToInt32((dr[0]).ToString()),
+                                CustomerName = dr[1].ToString(),
+                                InvoiceNumber = dr[2].ToString(),
+                                PayType = dr[3].ToString(),
+                                Date = dr[4].ToString(),
+                                Notes = dr[5].ToString(),
+                                InvoiceValue = Convert.ToDecimal(dr[6]),
+                                DiscountValue = Convert.ToDecimal(dr[7]),
+                                TotalValue = Convert.ToDecimal(dr[8]),
+                                PaidValue = Convert.ToDecimal(dr[9]),
+                                Remaining = Convert.ToDecimal(dr[10]),
+
+
+                            });
+                        }
+                        foreach (DataRow dr in dt3.Rows)
+                        {
+
+
+                            lmd.TotalPaid = Convert.ToDecimal((dr[0]));
+                            lmd.DiscountPaid = Convert.ToDecimal(dr[1].ToString();
+                            lmd.TotalPaidafterdiscount = Convert.ToDecimal(dr[2].ToString());
+                            lmd.TotalPaidEarnings = Convert.ToDecimal(dr[3].ToString());
+                            lmd.TotalMardod = Convert.ToDecimal(dr[4].ToString());
+                            lmd.DiscountMardod = Convert.ToDecimal(dr[5].ToString());
+                            lmd.TotalMardodafterdiscount = Convert.ToDecimal(dr[6].ToString());
+                            lmd.TotalMardodEarnings = Convert.ToDecimal(dr[7].ToString());
+                            lmd.SumTotal = Convert.ToDecimal(dr[8].ToString());
+                            lmd.SumDiscount = Convert.ToDecimal(dr[9].ToString());
+                            lmd.SumTotalafterdiscount = Convert.ToDecimal(dr[10]);
+                            lmd.SumEarnings = Convert.ToDecimal(dr[11]);
+
+
+                          
+                        }
+
+
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception ex)
+            {
+                DelegatesVM lmd = new DelegatesVM();
+                return lmd;
+            }
+
+        }
+
         public async Task<IEnumerable<AccountStatmentVM>> GetFullAccountStatmentDGV(string FromDate, string ToDate, string AccountCode, string CCID, string Con, int BranchId, int YearId)
         {
             try

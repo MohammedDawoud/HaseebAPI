@@ -1443,6 +1443,19 @@ namespace TaamerProject.API.Controllers
 
         }
 
+        [HttpPost("GetDelegates")]
+        public IActionResult GetDelegates([FromForm] int? UserId, [FromForm] string? StartDate, [FromForm] string? EndDate)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+
+            var result = _accountsService.GetDelegates(UserId??_globalshared.UserId_G, StartDate, EndDate, _globalshared.BranchId_G, Con);
+            return Ok(result);
+
+
+        }
+
+
         [HttpPost("GetyearlyInvoicesWithDetails_ByYear")]
 
         public IActionResult GetyearlyInvoicesWithDetails_ByYear([FromForm] int? PayType, [FromForm] int Year)

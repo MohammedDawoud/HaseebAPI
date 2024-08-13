@@ -1003,13 +1003,22 @@ namespace TaamerProject.API.Controllers
 
         public IActionResult GetAllQuantities([FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] string? ServiceId, [FromForm] string? StorehouseId)
         {
-
-
             int serviceId = Convert.ToInt32(ServiceId ?? "0");
             int storehouseId = Convert.ToInt32(StorehouseId ?? "0");
 
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             var result = _accountsService.GetAllQuantities(FromDate ?? "", ToDate ?? "", serviceId, storehouseId, _globalshared.BranchId_G, _globalshared.Lang_G, Con, _globalshared.YearId_G);
+            return Ok(result);
+        }
+        [HttpPost("GetAllItemMovement")]
+
+        public IActionResult GetAllItemMovement([FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] string? ServiceId, [FromForm] string? StorehouseId)
+        {
+            int serviceId = Convert.ToInt32(ServiceId ?? "0");
+            int storehouseId = Convert.ToInt32(StorehouseId ?? "0");
+
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var result = _accountsService.GetAllItemMovement(FromDate ?? "", ToDate ?? "", serviceId, storehouseId, _globalshared.BranchId_G, _globalshared.Lang_G, Con, _globalshared.YearId_G);
             return Ok(result);
         }
 

@@ -2323,6 +2323,109 @@ namespace TaamerProject.Repository.Repositories
             }
 
         }
+        public async Task<IEnumerable<ItemMovementVM>> GetAllItemMovement(string FromDate, string ToDate, int ServiceId, int StorehouseId, int YearId, int BranchId, string lang, string Con)
+        {
+            try
+            {
+                List<ItemMovementVM> lmd = new List<ItemMovementVM>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GetAllItemMovement";
+                        command.Connection = con;
+                        if (FromDate == "")
+                        {
+                            command.Parameters.Add(new SqlParameter("@From", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@From", FromDate));
+                        }
+                        if (ToDate == "")
+                        {
+                            command.Parameters.Add(new SqlParameter("@to", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@to", ToDate));
+                        }
+
+                        if (ServiceId == 0)
+                        {
+                            command.Parameters.Add(new SqlParameter("@ServiceId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@ServiceId", ServiceId));
+                        }
+                        if (StorehouseId == 0)
+                        {
+                            command.Parameters.Add(new SqlParameter("@StorehouseId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@StorehouseId", StorehouseId));
+                        }
+                        command.Parameters.Add(new SqlParameter("@YearId", YearId));
+                        command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        decimal QtyCredit = 0;
+                        string Name = "";
+                        string TypeName = "";
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (Convert.ToInt32((dr["InvoiceId"]).ToString())==2)
+                            {
+                                Name = (dr["customername"]).ToString();
+                                TypeName = "سحب";
+                            }
+                            else
+                            {
+                                Name = (dr["suppliername"]).ToString();
+                                TypeName = "إيداع";
+                            }
+                            QtyCredit = Convert.ToDecimal(Convert.ToDecimal((dr["DebentureQty"]).ToString()) - Convert.ToDecimal((dr["Qty"]).ToString()));
+                            lmd.Add(new ItemMovementVM
+                            {
+                                InvoiceId = Convert.ToInt32((dr["InvoiceId"]).ToString()),
+                                InvoiceNumber = (dr["InvoiceNumber"]).ToString(),
+                                customername = (dr["customername"]).ToString(),
+                                suppliername = (dr["suppliername"]).ToString(),
+                                Name = Name,
+                                Date = (dr["Date"]).ToString(),
+                                Type = Convert.ToInt32((dr["Type"]).ToString()),
+                                TypeName = TypeName,
+                                DebentureQty = Convert.ToInt32((dr["DebentureQty"]).ToString()),
+                                Qty = Convert.ToDecimal((dr["Qty"]).ToString()),
+                                QtyCredit = QtyCredit,
+                                Amount = Convert.ToDecimal((dr["Amount"]).ToString()),
+                                TaxAmount = Convert.ToDecimal((dr["TaxAmount"]).ToString()),
+                                TotalAmount = Convert.ToDecimal((dr["TotalAmount"]).ToString()),
+                            });
+
+                        }
+                    }
+                }
+                return lmd;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                List<ItemMovementVM> lmd = new List<ItemMovementVM>();
+                return lmd;
+            }
+
+        }
 
 
         public async Task<IEnumerable<TrainBalanceVM>> GetTrailBalanceDGVNew2(string FromDate, string ToDate, int CCID, int YearId, int BranchId, string lang, string Con, int ZeroCheck, string AccountCode, string LVL, int FilteringType,string FilteringTypeStr,string AccountIds)

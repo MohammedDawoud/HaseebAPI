@@ -144,6 +144,23 @@ namespace TaamerProject.Models
         public decimal? qtyTotal { get; set; }
     }
 
+    public class ItemMovementVM
+    {
+        public int InvoiceId { get; set; }
+        public string? InvoiceNumber { get; set; }
+        public string? customername { get; set; }
+        public string? suppliername { get; set; }
+        public string? Name { get; set; }
+        public string? Date { get; set; }
+        public int? Type { get; set; }
+        public string? TypeName { get; set; }
+        public int? DebentureQty { get; set; }
+        public decimal? Qty { get; set; }
+        public decimal? QtyCredit { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? TaxAmount { get; set; }
+        public decimal? TotalAmount { get; set; }
+    }
     public class DetailsMonitorVM
     {
 

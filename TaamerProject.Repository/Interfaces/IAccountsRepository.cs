@@ -54,6 +54,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<IEnumerable<TrainBalanceVM>> GetTrailBalanceDGV(string FromDate, string ToDate, string CCID, string Con);
         Task<IEnumerable<TrainBalanceVM>> GetTrailBalanceDGVNew(string FromDate, string ToDate, int CCID, int YearId, int BranchId, string lang, string Con,int ZeroCheck, string AccountCode, string LVL, int FilteringType,string FilteringTypeStr,string AccountIds);
         Task<IEnumerable<QuantitieVM>> GetAllQuantities(string FromDate, string ToDate, int ServiceId, int StorehouseId, int YearId, int BranchId, string lang, string Con);
+        Task<IEnumerable<ItemMovementVM>> GetAllItemMovement(string FromDate, string ToDate, int ServiceId, int StorehouseId, int YearId, int BranchId, string lang, string Con);
 
         Task<IEnumerable<TrainBalanceVM>> GetTrailBalanceDGVNew2(string FromDate, string ToDate, int CCID, int YearId, int BranchId, string lang, string Con, int ZeroCheck, string AccountCode, string LVL, int FilteringType,string FilteringTypeStr,string AccountIds);
         Task<IEnumerable<DetailsMonitorVM>> GetDetailsMonitor(string FromDate, string ToDate, int CCID, int YearId, int BranchId, string lang, string Con, int FilteringType, string FilteringTypeStr, int AccountId,int Type, int Type2);

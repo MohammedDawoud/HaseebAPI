@@ -6049,6 +6049,8 @@ namespace TaamerProject.Repository.Repositories
             try
             {
                 DelegatesVM lmd = new DelegatesVM();
+                List<Invoice>? InvoicePaid = new List<Invoice>();
+                List<Invoice>? InvoiceMardod = new List<Invoice>();
                 using (SqlConnection con = new SqlConnection(Con))
                 {
                     using (SqlCommand command = new SqlCommand())
@@ -6095,7 +6097,7 @@ namespace TaamerProject.Repository.Repositories
 
                         foreach (DataRow dr in dt.Rows)
                         {
-                            lmd.InvoicePaid.Add(new Invoice
+                            InvoicePaid.Add(new Invoice
                             {
 
                                 InvoiceId = Convert.ToInt32((dr[0]).ToString()),
@@ -6103,7 +6105,7 @@ namespace TaamerProject.Repository.Repositories
                                 InvoiceNumber = dr[2].ToString(),
                                 PayType = dr[3].ToString(),
                                 Date = dr[4].ToString(),
-                                Notes = dr[5].ToString(),
+                                //Notes = dr[5].ToString(),
                                 InvoiceValue = Convert.ToDecimal(dr[6]),
                                 DiscountValue = Convert.ToDecimal(dr[7]),
                                 TotalValue = Convert.ToDecimal(dr[8]),
@@ -6118,18 +6120,18 @@ namespace TaamerProject.Repository.Repositories
 
                         foreach (DataRow dr in dt2.Rows)
                         {
-                            lmd.InvoiceMardod.Add(new Invoice
+                            InvoiceMardod.Add(new Invoice
                             {
                                 InvoiceId = Convert.ToInt32((dr[0]).ToString()),
                                 CustomerName = dr[1].ToString(),
                                 InvoiceNumber = dr[2].ToString(),
                                 PayType = dr[3].ToString(),
                                 Date = dr[4].ToString(),
-                                Notes = dr[5].ToString(),
-                                InvoiceValue = Convert.ToDecimal(dr[6]),
+                                //Notes = dr[5].ToString(),
+                                InvoiceValue = Convert.ToDecimal(dr[6]) ,
                                 DiscountValue = Convert.ToDecimal(dr[7]),
-                                TotalValue = Convert.ToDecimal(dr[8]),
-                                PaidValue = Convert.ToDecimal(dr[9]),
+                                TotalValue = Convert.ToDecimal(dr[8]) ,
+                                PaidValue = Convert.ToDecimal(dr[9]) ,
                                 Remaining = Convert.ToDecimal(dr[10]),
 
 
@@ -6143,7 +6145,7 @@ namespace TaamerProject.Repository.Repositories
                             lmd.DiscountPaid = Convert.ToDecimal(dr[1].ToString());
                             lmd.TotalPaidafterdiscount = Convert.ToDecimal(dr[2].ToString());
                             lmd.TotalPaidEarnings = Convert.ToDecimal(dr[3].ToString());
-                            lmd.TotalMardod = Convert.ToDecimal(dr[4].ToString());
+                            lmd.TotalMardod = Convert.ToDecimal(dr[4].ToString()) ;
                             lmd.DiscountMardod = Convert.ToDecimal(dr[5].ToString());
                             lmd.TotalMardodafterdiscount = Convert.ToDecimal(dr[6].ToString());
                             lmd.TotalMardodEarnings = Convert.ToDecimal(dr[7].ToString());
@@ -6151,14 +6153,11 @@ namespace TaamerProject.Repository.Repositories
                             lmd.SumDiscount = Convert.ToDecimal(dr[9].ToString());
                             lmd.SumTotalafterdiscount = Convert.ToDecimal(dr[10]);
                             lmd.SumEarnings = Convert.ToDecimal(dr[11]);
-
-
-                          
                         }
-
-
                     }
                 }
+                lmd.InvoicePaid = InvoicePaid;
+                lmd.InvoiceMardod = InvoiceMardod;
                 return lmd;
             }
             catch (Exception ex)

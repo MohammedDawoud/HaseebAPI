@@ -8,8 +8,8 @@ namespace Haseeb.Models.ViewModels
 {
     public class DelegatesVM
     {
-        public List<Invoice> InvoicePaid { get; set; }
-        public List<Invoice> InvoiceMardod { get; set; }
+        public List<Invoice>? InvoicePaid { get; set; }
+        public List<Invoice>? InvoiceMardod { get; set; }
         public decimal? TotalPaid { get; set; }
         public decimal? DiscountPaid { get; set; }
         public decimal? TotalPaidafterdiscount { get; set; }
@@ -29,11 +29,11 @@ namespace Haseeb.Models.ViewModels
     public class Invoice
     {
         public int InvoiceId { get; set; }
-        public string CustomerName { get; set; }
-        public string InvoiceNumber { get; set; }
-        public string PayType { get; set; }
-        public string Date { get; set; }
-        public string Notes { get; set; }
+        public string? CustomerName { get; set; }
+        public string? InvoiceNumber { get; set; }
+        public string? PayType { get; set; }
+        public string? Date { get; set; }
+        public string? Notes { get; set; }
         public decimal? InvoiceValue { get; set; }
         public decimal? DiscountValue { get; set; }
         public decimal? TotalValue { get; set; }

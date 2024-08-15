@@ -15,24 +15,24 @@ namespace TaamerProject.API.Helper
                     ///////////// home ////////////////////////////////////////////////////////////////////////////////////////////////
             new Privilege { Id = 15 , ParentId = null , Name = Resources.General_Home, Description = Resources.General_Home },
                    new Privilege { Id = 15010 , ParentId = 15 , Name =  Resources.General_Administration , Description = Resources.General_Administration},
-                     new Privilege { Id = 1510 , ParentId = 15010 , Name =  "متابعة التشغيل والمهام -Daily Operational Tasks", Description = "متابعة التشغيل والمهام -Daily Operational Tasks"},
-                            new Privilege { Id = 151011 , ParentId = 1510 , Name =  "Project timeline", Description = "Project timeline" },
-                            new Privilege { Id = 151012 , ParentId = 1510 , Name =  "Timeline of tasks", Description = "Timeline of tasks" },
-                            new Privilege { Id = 151013 , ParentId = 1510 , Name =  "Manegment tasks", Description = "Manegment tasks" },
+                   //  new Privilege { Id = 1510 , ParentId = 15010 , Name =  "متابعة التشغيل والمهام -Daily Operational Tasks", Description = "متابعة التشغيل والمهام -Daily Operational Tasks"},
+                   //         new Privilege { Id = 151011 , ParentId = 1510 , Name =  "Project timeline", Description = "Project timeline" },
+                   //         new Privilege { Id = 151012 , ParentId = 1510 , Name =  "Timeline of tasks", Description = "Timeline of tasks" },
+                   //         new Privilege { Id = 151013 , ParentId = 1510 , Name =  "Manegment tasks", Description = "Manegment tasks" },
                              
-                   new Privilege { Id = 1511 , ParentId = 15010 , Name =  "Project Flow-Up", Description = "Project Flow-Up" },
-                        new Privilege { Id = 151111 , ParentId = 1511 , Name =  "Pending", Description = "Pending" },
-                        new Privilege { Id = 151112 , ParentId = 1511 , Name =  "Natural", Description = "Natural" },
-                        new Privilege { Id = 151113 , ParentId = 1511 , Name =  "Stopped", Description = "Stopped" },
-                        new Privilege { Id = 151114 , ParentId = 1511 , Name =  "Late", Description = "Late" },
-                        new Privilege { Id = 151115 , ParentId = 1511 , Name =  "Without Contracts", Description = "Without Contracts" },
-                        new Privilege { Id = 151116 , ParentId = 1511 , Name =  "Uplouded", Description = "Uplouded" },
-                        new Privilege { Id = 151117 , ParentId = 1511 , Name =  "staff projects", Description = "staff projects" },
-                        new Privilege { Id = 151118 , ParentId = 1511 , Name =  "Project revenues and expenses", Description = "Project revenues and expenses" },
-                        new Privilege { Id = 151119 , ParentId = 1511 , Name =  "Oversight flights", Description = "Oversight flights" },
-                        new Privilege { Id = 151120 , ParentId = 1511 , Name =  "Project contracts", Description = "Project contracts" },
-                        new Privilege { Id = 151121 , ParentId = 1511 , Name =  "Tasks by project", Description = "Tasks by project" },
-                        new Privilege { Id = 151122 , ParentId = 1511 , Name =  "tasks for employees", Description = "tasks for employees" },
+                   //new Privilege { Id = 1511 , ParentId = 15010 , Name =  "Project Flow-Up", Description = "Project Flow-Up" },
+                   //     new Privilege { Id = 151111 , ParentId = 1511 , Name =  "Pending", Description = "Pending" },
+                   //     new Privilege { Id = 151112 , ParentId = 1511 , Name =  "Natural", Description = "Natural" },
+                   //     new Privilege { Id = 151113 , ParentId = 1511 , Name =  "Stopped", Description = "Stopped" },
+                   //     new Privilege { Id = 151114 , ParentId = 1511 , Name =  "Late", Description = "Late" },
+                   //     new Privilege { Id = 151115 , ParentId = 1511 , Name =  "Without Contracts", Description = "Without Contracts" },
+                   //     new Privilege { Id = 151116 , ParentId = 1511 , Name =  "Uplouded", Description = "Uplouded" },
+                   //     new Privilege { Id = 151117 , ParentId = 1511 , Name =  "staff projects", Description = "staff projects" },
+                   //     new Privilege { Id = 151118 , ParentId = 1511 , Name =  "Project revenues and expenses", Description = "Project revenues and expenses" },
+                   //     new Privilege { Id = 151119 , ParentId = 1511 , Name =  "Oversight flights", Description = "Oversight flights" },
+                   //     new Privilege { Id = 151120 , ParentId = 1511 , Name =  "Project contracts", Description = "Project contracts" },
+                   //     new Privilege { Id = 151121 , ParentId = 1511 , Name =  "Tasks by project", Description = "Tasks by project" },
+                   //     new Privilege { Id = 151122 , ParentId = 1511 , Name =  "tasks for employees", Description = "tasks for employees" },
 
                   new Privilege { Id = 1512 , ParentId = 15010 , Name =  "Financial Flow-Up", Description = "Financial Flow-Up" },
                        new Privilege { Id = 151211 , ParentId = 1512 , Name =  "TheIncome", Description = "TheIncome" },
@@ -188,29 +188,31 @@ namespace TaamerProject.API.Helper
                   
 
                   /////////// Communications /////////////////////////////////////////////////////////////////////////
-            new Privilege { Id = 10 , ParentId = null , Name =  Resources.General_AdministrativeCommunications , Description = Resources.General_AdministrativeCommunications},
-                   new Privilege { Id = 1010 , ParentId = 10 , Name =  @Resources.General_Outbox, Description = Resources.General_Outbox },
-                           new Privilege { Id = 101010 , ParentId = 1010 , Name =   @Resources.General_Add , Description = Resources.Contac_AddOutBox},
-                           new Privilege { Id = 101011 , ParentId = 1010 , Name =  @Resources.General_EditOutbox  , Description = Resources.General_EditOutbox},
-                           new Privilege { Id = 101012 , ParentId = 1010 , Name =  @Resources.General_DeleteOutbox  , Description = Resources.General_DeleteOutbox},
-                            new Privilege { Id = 101013 , ParentId = 1010 , Name =  @Resources.General_Show  , Description = Resources.General_Show},
+            //new Privilege { Id = 10 , ParentId = null , Name =  Resources.General_AdministrativeCommunications , Description = Resources.General_AdministrativeCommunications},
+            //       new Privilege { Id = 1010 , ParentId = 10 , Name =  @Resources.General_Outbox, Description = Resources.General_Outbox },
+            //               new Privilege { Id = 101010 , ParentId = 1010 , Name =   @Resources.General_Add , Description = Resources.Contac_AddOutBox},
+            //               new Privilege { Id = 101011 , ParentId = 1010 , Name =  @Resources.General_EditOutbox  , Description = Resources.General_EditOutbox},
+            //               new Privilege { Id = 101012 , ParentId = 1010 , Name =  @Resources.General_DeleteOutbox  , Description = Resources.General_DeleteOutbox},
+            //                new Privilege { Id = 101013 , ParentId = 1010 , Name =  @Resources.General_Show  , Description = Resources.General_Show},
 
 
-                   new Privilege { Id = 1011 , ParentId = 10 , Name =  Resources.Contac_Inbox, Description = Resources.Contac_Inbox },
-                           new Privilege { Id = 101110 , ParentId = 1011 , Name =   @Resources.General_Add , Description = Resources.Contac_AddInbox },
-                           new Privilege { Id = 101111 , ParentId = 1011 , Name =  @Resources.General_EditInbox , Description = Resources.General_EditInbox },
-                           new Privilege { Id = 101112 , ParentId = 1011 , Name =  @Resources.General_DeleteInbox , Description = Resources.General_DeleteInbox },
-                           new Privilege { Id = 101113 , ParentId = 1011 , Name =  @Resources.General_Show  , Description = Resources.General_Show},
+            //       new Privilege { Id = 1011 , ParentId = 10 , Name =  Resources.Contac_Inbox, Description = Resources.Contac_Inbox },
+            //               new Privilege { Id = 101110 , ParentId = 1011 , Name =   @Resources.General_Add , Description = Resources.Contac_AddInbox },
+            //               new Privilege { Id = 101111 , ParentId = 1011 , Name =  @Resources.General_EditInbox , Description = Resources.General_EditInbox },
+            //               new Privilege { Id = 101112 , ParentId = 1011 , Name =  @Resources.General_DeleteInbox , Description = Resources.General_DeleteInbox },
+            //               new Privilege { Id = 101113 , ParentId = 1011 , Name =  @Resources.General_Show  , Description = Resources.General_Show},
 
 
 
-                            new Privilege { Id = 1012 , ParentId = 10 , Name =  Resources.General_Search, Description = Resources.General_Search },
-                              new Privilege { Id = 101201 , ParentId = 1012 , Name =  Resources.General_OutInboxSearch, Description = Resources.General_OutInboxSearch },
-                              new Privilege { Id = 10120101 , ParentId = 101201 , Name =  Resources.General_Show, Description = Resources.General_Show },
-                               new Privilege { Id = 101201002 , ParentId = 101201 , Name =  Resources.General_Edit, Description = Resources.General_Edit },
+            //                new Privilege { Id = 1012 , ParentId = 10 , Name =  Resources.General_Search, Description = Resources.General_Search },
+            //                  new Privilege { Id = 101201 , ParentId = 1012 , Name =  Resources.General_OutInboxSearch, Description = Resources.General_OutInboxSearch },
+            //                  new Privilege { Id = 10120101 , ParentId = 101201 , Name =  Resources.General_Show, Description = Resources.General_Show },
+            //                   new Privilege { Id = 101201002 , ParentId = 101201 , Name =  Resources.General_Edit, Description = Resources.General_Edit },
 
-                              new Privilege { Id = 101202 , ParentId = 1012 , Name =  Resources.General_FilesSearch, Description = Resources.General_FilesSearch },
-                               new Privilege { Id = 10120201 , ParentId = 101202 , Name =  Resources.General_Show, Description = Resources.General_Show },
+            //                  new Privilege { Id = 101202 , ParentId = 1012 , Name =  Resources.General_FilesSearch, Description = Resources.General_FilesSearch },
+            //                   new Privilege { Id = 10120201 , ParentId = 101202 , Name =  Resources.General_Show, Description = Resources.General_Show },
+
+
                                 //new Privilege { Id = 10120202 , ParentId = 101202 , Name =  Resources.General_FilesSearch, Description = Resources.General_FilesSearch },
 
 
@@ -222,98 +224,98 @@ namespace TaamerProject.API.Helper
                          //new Privilege { Id = 18 , ParentId = null , Name = Resources.General_FollowUpDepartment , Description = Resources.General_FollowUpDepartment},
                          //   new Privilege { Id =  1810 , ParentId = 18 , Name =  Resources.General_ReceivingAndSending, Description = Resources.General_ReceivingAndSending },
                          //   new Privilege { Id =  1811 , ParentId = 18 , Name =  Resources.General_Search , Description = Resources.General_Search},
-             ///////////////////////////// projects /////////////////////////////////////////////////////
-            new Privilege { Id = 11 , ParentId = null , Name =  Resources.Pro_Projectmanagement, Description = Resources.Pro_Projectmanagement },
-                    new Privilege { Id = 1110 , ParentId = 11 , Name =  Resources.Pro_MainScreen , Description = Resources.Pro_MainScreen},
-                           //new Privilege { Id = 111010 , ParentId = 1110 , Name = Resources.Pro_AddProjectWithoutWizared , Description = Resources.Pro_AddProjectWithoutWizared},
-                           //new Privilege { Id = 111011 , ParentId = 1110 , Name = @Resources.General_Addagovernmentproject , Description = Resources.General_Addagovernmentproject},
-                           //new Privilege { Id = 111012 , ParentId = 1110 , Name =  Resources.Pro_WorkOrderProject , Description = Resources.Pro_WorkOrderProject},
-                           //new Privilege { Id = 111013 , ParentId = 1110 , Name =  Resources.Pro_Addrandomproject, Description = Resources.Pro_Addrandomproject },
-                           new Privilege { Id = 111014 , ParentId = 1110 , Name =  Resources.General_Edit , Description = Resources.General_Edit},
-                           new Privilege { Id = 111022 , ParentId = 1110 , Name =  Resources.General_FilesSearch , Description = Resources.General_FilesSearch},
-                           new Privilege { Id = 111023 , ParentId = 1110 , Name =  Resources.Pro_DownloadFiles , Description = Resources.Pro_DownloadFiles},
-                            new Privilege { Id = 111027 , ParentId = 1110 , Name =  "رفع ملف على مشروع" , Description =   "رفع ملف على مشروع"},
+            // ///////////////////////////// projects /////////////////////////////////////////////////////
+            //new Privilege { Id = 11 , ParentId = null , Name =  Resources.Pro_Projectmanagement, Description = Resources.Pro_Projectmanagement },
+            //        new Privilege { Id = 1110 , ParentId = 11 , Name =  Resources.Pro_MainScreen , Description = Resources.Pro_MainScreen},
+            //               //new Privilege { Id = 111010 , ParentId = 1110 , Name = Resources.Pro_AddProjectWithoutWizared , Description = Resources.Pro_AddProjectWithoutWizared},
+            //               //new Privilege { Id = 111011 , ParentId = 1110 , Name = @Resources.General_Addagovernmentproject , Description = Resources.General_Addagovernmentproject},
+            //               //new Privilege { Id = 111012 , ParentId = 1110 , Name =  Resources.Pro_WorkOrderProject , Description = Resources.Pro_WorkOrderProject},
+            //               //new Privilege { Id = 111013 , ParentId = 1110 , Name =  Resources.Pro_Addrandomproject, Description = Resources.Pro_Addrandomproject },
+            //               new Privilege { Id = 111014 , ParentId = 1110 , Name =  Resources.General_Edit , Description = Resources.General_Edit},
+            //               new Privilege { Id = 111022 , ParentId = 1110 , Name =  Resources.General_FilesSearch , Description = Resources.General_FilesSearch},
+            //               new Privilege { Id = 111023 , ParentId = 1110 , Name =  Resources.Pro_DownloadFiles , Description = Resources.Pro_DownloadFiles},
+            //                new Privilege { Id = 111027 , ParentId = 1110 , Name =  "رفع ملف على مشروع" , Description =   "رفع ملف على مشروع"},
 
-                           //new Privilege { Id = 111024 , ParentId = 1110 , Name =  Resources.Pro_Conversiontofollowing, Description = Resources.Pro_Conversiontofollowing },
-                                            new Privilege { Id = 111025 , ParentId = 1110 , Name =  Resources.General_Show , Description = Resources.General_Show},
+            //               //new Privilege { Id = 111024 , ParentId = 1110 , Name =  Resources.Pro_Conversiontofollowing, Description = Resources.Pro_Conversiontofollowing },
+            //                                new Privilege { Id = 111025 , ParentId = 1110 , Name =  Resources.General_Show , Description = Resources.General_Show},
 
-                           new Privilege { Id = 111026 , ParentId = 1110 , Name =  "انهاء مشروع" , Description =   "انهاء مشروع"},
-                           new Privilege { Id = 111028 , ParentId = 1110 , Name =  "المتابع الذكي ", Description =   "المتابع الذكي"},
+            //               new Privilege { Id = 111026 , ParentId = 1110 , Name =  "انهاء مشروع" , Description =   "انهاء مشروع"},
+            //               new Privilege { Id = 111028 , ParentId = 1110 , Name =  "المتابع الذكي ", Description =   "المتابع الذكي"},
 
 
-                     new Privilege { Id = 1111 , ParentId = 11 , Name =  Resources.General_EditProjectProgress , Description = Resources.General_EditProjectProgress},
-                           new Privilege { Id = 111110 , ParentId = 1111 , Name =  Resources.General_MainPhases , Description = Resources.Contac_OutInboxFiles},
-                                      new Privilege { Id = 11111010 , ParentId = 111110 , Name =   @Resources.General_Add , Description = Resources.General_AddMainPhases },
-                                      new Privilege { Id = 11111011 , ParentId = 111110 , Name =  @Resources.General_Delete  , Description = Resources.General_DeleteMainPhases},
-                                      new Privilege { Id = 11111012 , ParentId = 111110 , Name =  @Resources.General_Edit  , Description = Resources.General_EditMainPhases},
-                           new Privilege { Id = 111111 , ParentId = 1111 , Name = Resources.General_SubPhases, Description = Resources.General_SubPhases },
-                                      new Privilege { Id = 11111110 , ParentId = 111111 , Name =  @Resources.General_Add  , Description = Resources.General_AddSubPhases},
-                                      new Privilege { Id = 11111111 , ParentId = 111111 , Name = @Resources.General_Delete  , Description = Resources.General_DeleteSubPhases},
-                                      new Privilege { Id = 11111112 , ParentId = 111111 , Name =  @Resources.General_Edit  , Description = Resources.General_EditSubPhases},
-                           new Privilege { Id = 111112 , ParentId = 1111 , Name = @Resources.General_Tasks , Description = Resources.General_Tasks},
-                                      new Privilege { Id = 11111210 , ParentId = 111112 , Name =  @Resources.General_Add  , Description = Resources.General_AddTask},
-                                      new Privilege { Id = 11111211 , ParentId = 111112 , Name =  @Resources.General_Delete  , Description = Resources.General_DeleteTask},
-                                      new Privilege { Id = 11111212 , ParentId = 111112 , Name = @Resources.General_Edit , Description = Resources.General_EditTask },
-                                      new Privilege { Id = 11111213 , ParentId = 111112 , Name = @Resources.Merge , Description = Resources.Merge },
+            //         new Privilege { Id = 1111 , ParentId = 11 , Name =  Resources.General_EditProjectProgress , Description = Resources.General_EditProjectProgress},
+            //               new Privilege { Id = 111110 , ParentId = 1111 , Name =  Resources.General_MainPhases , Description = Resources.Contac_OutInboxFiles},
+            //                          new Privilege { Id = 11111010 , ParentId = 111110 , Name =   @Resources.General_Add , Description = Resources.General_AddMainPhases },
+            //                          new Privilege { Id = 11111011 , ParentId = 111110 , Name =  @Resources.General_Delete  , Description = Resources.General_DeleteMainPhases},
+            //                          new Privilege { Id = 11111012 , ParentId = 111110 , Name =  @Resources.General_Edit  , Description = Resources.General_EditMainPhases},
+            //               new Privilege { Id = 111111 , ParentId = 1111 , Name = Resources.General_SubPhases, Description = Resources.General_SubPhases },
+            //                          new Privilege { Id = 11111110 , ParentId = 111111 , Name =  @Resources.General_Add  , Description = Resources.General_AddSubPhases},
+            //                          new Privilege { Id = 11111111 , ParentId = 111111 , Name = @Resources.General_Delete  , Description = Resources.General_DeleteSubPhases},
+            //                          new Privilege { Id = 11111112 , ParentId = 111111 , Name =  @Resources.General_Edit  , Description = Resources.General_EditSubPhases},
+            //               new Privilege { Id = 111112 , ParentId = 1111 , Name = @Resources.General_Tasks , Description = Resources.General_Tasks},
+            //                          new Privilege { Id = 11111210 , ParentId = 111112 , Name =  @Resources.General_Add  , Description = Resources.General_AddTask},
+            //                          new Privilege { Id = 11111211 , ParentId = 111112 , Name =  @Resources.General_Delete  , Description = Resources.General_DeleteTask},
+            //                          new Privilege { Id = 11111212 , ParentId = 111112 , Name = @Resources.General_Edit , Description = Resources.General_EditTask },
+            //                          new Privilege { Id = 11111213 , ParentId = 111112 , Name = @Resources.Merge , Description = Resources.Merge },
 
-                     new Privilege { Id = 1112 , ParentId = 11 , Name =  "بحث في مهام المشاريع" , Description =  "بحث في مهام المشاريع"},
-                                      new Privilege { Id = 111210 , ParentId = 1112 , Name =  "تقرير جميع المهام", Description = "تقرير جميع المهام" },
-                     new Privilege { Id = 1113 , ParentId = 11 , Name = Resources.General_TasksControlling , Description = Resources.General_TasksControlling},
-                                      new Privilege { Id = 111310 , ParentId = 1113 , Name = Resources.General_AddTasks, Description = Resources.General_AddTasks},
-                                      new Privilege { Id = 111311 , ParentId = 1113 , Name = Resources.PlusTimetask, Description = Resources.PlusTimetask},
-                                      new Privilege { Id = 111312 , ParentId = 1113 , Name = Resources.Pro_PlayTaskAsk, Description = Resources.Pro_PlayTaskAsk},
-                                      new Privilege { Id = 111313 , ParentId = 1113 , Name = Resources.General_DeleteTask, Description = Resources.General_DeleteTask},
-                                      new Privilege { Id = 111314 , ParentId = 1113 , Name = Resources.exchangeTask, Description = Resources.exchangeTask},
-                                      new Privilege { Id = 111315 , ParentId = 1113 , Name = "إنهاء المهمة", Description = "إنهاء المهمة"},
-                                      new Privilege { Id = 111316 , ParentId = 1113 , Name = "ظهور المستخدم في فرع أخر لإسناد المهام إليه" , Description = "ظهور المستخدم في فرع أخر لإسناد المهام إليه"},
+            //         new Privilege { Id = 1112 , ParentId = 11 , Name =  "بحث في مهام المشاريع" , Description =  "بحث في مهام المشاريع"},
+            //                          new Privilege { Id = 111210 , ParentId = 1112 , Name =  "تقرير جميع المهام", Description = "تقرير جميع المهام" },
+            //         new Privilege { Id = 1113 , ParentId = 11 , Name = Resources.General_TasksControlling , Description = Resources.General_TasksControlling},
+            //                          new Privilege { Id = 111310 , ParentId = 1113 , Name = Resources.General_AddTasks, Description = Resources.General_AddTasks},
+            //                          new Privilege { Id = 111311 , ParentId = 1113 , Name = Resources.PlusTimetask, Description = Resources.PlusTimetask},
+            //                          new Privilege { Id = 111312 , ParentId = 1113 , Name = Resources.Pro_PlayTaskAsk, Description = Resources.Pro_PlayTaskAsk},
+            //                          new Privilege { Id = 111313 , ParentId = 1113 , Name = Resources.General_DeleteTask, Description = Resources.General_DeleteTask},
+            //                          new Privilege { Id = 111314 , ParentId = 1113 , Name = Resources.exchangeTask, Description = Resources.exchangeTask},
+            //                          new Privilege { Id = 111315 , ParentId = 1113 , Name = "إنهاء المهمة", Description = "إنهاء المهمة"},
+            //                          new Privilege { Id = 111316 , ParentId = 1113 , Name = "ظهور المستخدم في فرع أخر لإسناد المهام إليه" , Description = "ظهور المستخدم في فرع أخر لإسناد المهام إليه"},
 
-            new Privilege { Id = 1114 , ParentId = 11 , Name = Resources.Pro_Workorders1 , Description = Resources.Pro_Workorders1},
-                                      new Privilege { Id = 111410 , ParentId = 1114 , Name = Resources.General_Show, Description = Resources.General_Show},
-                                      new Privilege { Id = 111411 , ParentId = 1114 , Name = Resources.General_Add, Description = Resources.General_Add},
-                                      new Privilege { Id = 111412 , ParentId = 1114 , Name = Resources.General_Edit, Description = Resources.General_Edit},
-                                      new Privilege { Id = 111413 , ParentId = 1114 , Name = Resources.General_Delete, Description = Resources.General_Delete},
-                     new Privilege { Id = 1115 , ParentId = 11 , Name =  Resources.General_AdjustTheProceedings , Description = Resources.General_AdjustTheProceedings},
-                                      new Privilege { Id = 111510 , ParentId = 1115 , Name = Resources.General_Add, Description = Resources.General_Add  },
+            //new Privilege { Id = 1114 , ParentId = 11 , Name = Resources.Pro_Workorders1 , Description = Resources.Pro_Workorders1},
+            //                          new Privilege { Id = 111410 , ParentId = 1114 , Name = Resources.General_Show, Description = Resources.General_Show},
+            //                          new Privilege { Id = 111411 , ParentId = 1114 , Name = Resources.General_Add, Description = Resources.General_Add},
+            //                          new Privilege { Id = 111412 , ParentId = 1114 , Name = Resources.General_Edit, Description = Resources.General_Edit},
+            //                          new Privilege { Id = 111413 , ParentId = 1114 , Name = Resources.General_Delete, Description = Resources.General_Delete},
+            //         new Privilege { Id = 1115 , ParentId = 11 , Name =  Resources.General_AdjustTheProceedings , Description = Resources.General_AdjustTheProceedings},
+            //                          new Privilege { Id = 111510 , ParentId = 1115 , Name = Resources.General_Add, Description = Resources.General_Add  },
 
-                                      new Privilege { Id = 111511 , ParentId = 1115 , Name =  Resources.General_Edit , Description = Resources.General_Edit},
+            //                          new Privilege { Id = 111511 , ParentId = 1115 , Name =  Resources.General_Edit , Description = Resources.General_Edit},
 
-                                      new Privilege { Id = 111512 , ParentId = 1115 , Name =  @Resources.General_Delete , Description = Resources.General_Delete},
+            //                          new Privilege { Id = 111512 , ParentId = 1115 , Name =  @Resources.General_Delete , Description = Resources.General_Delete},
 
-                                      //new Privilege { Id = 111513 , ParentId = 1115 , Name = Resources.Acc_projectType , Description = Resources.Acc_projectType},
+            //                          //new Privilege { Id = 111513 , ParentId = 1115 , Name = Resources.Acc_projectType , Description = Resources.Acc_projectType},
 
-                                      //new Privilege { Id = 111514 , ParentId = 1115 , Name =  Resources.Acc_SubprojectType , Description = Resources.Acc_SubprojectType},
+            //                          //new Privilege { Id = 111514 , ParentId = 1115 , Name =  Resources.Acc_SubprojectType , Description = Resources.Acc_SubprojectType},
 
-                           new Privilege { Id = 1116 , ParentId = 11 , Name = Resources.Pro_Models , Description = Resources.Pro_Models},
-                                      new Privilege { Id = 111610 , ParentId = 1116 , Name =   @Resources.General_Add , Description = Resources.Pro_AddNewModel },
-                                      new Privilege { Id = 111611 , ParentId = 1116 , Name =  @Resources.General_Delete  , Description = Resources.General_DeleteModel},
-                                      new Privilege { Id = 111612 , ParentId = 1116 , Name =  @Resources.General_Edit , Description = Resources.General_EditModel },
-                           //new Privilege { Id = 1116 , ParentId = 11 , Name =  Resources.General_SupervisionCard, Description = Resources.General_SupervisionCard },
-                           //           new Privilege { Id = 111610 , ParentId = 1116 , Name =  @Resources.General_Delete , Description = "تعديل بطاقة اشراف"},
+            //               new Privilege { Id = 1116 , ParentId = 11 , Name = Resources.Pro_Models , Description = Resources.Pro_Models},
+            //                          new Privilege { Id = 111610 , ParentId = 1116 , Name =   @Resources.General_Add , Description = Resources.Pro_AddNewModel },
+            //                          new Privilege { Id = 111611 , ParentId = 1116 , Name =  @Resources.General_Delete  , Description = Resources.General_DeleteModel},
+            //                          new Privilege { Id = 111612 , ParentId = 1116 , Name =  @Resources.General_Edit , Description = Resources.General_EditModel },
+            //               //new Privilege { Id = 1116 , ParentId = 11 , Name =  Resources.General_SupervisionCard, Description = Resources.General_SupervisionCard },
+            //               //           new Privilege { Id = 111610 , ParentId = 1116 , Name =  @Resources.General_Delete , Description = "تعديل بطاقة اشراف"},
                           
 
 
-                        new Privilege { Id = 1119 , ParentId = 11 , Name = "متابعة طلعات الاشراف", Description = "متابعة طلعات الاشراف"},
-                                      //new Privilege { Id = 111910 , ParentId = 1119 , Name = Resources.General_Show, Description = Resources.General_Show},
-                                      new Privilege { Id = 111911 , ParentId = 1119 , Name = Resources.General_Add, Description = Resources.General_Add},
-                                      new Privilege { Id = 111912 , ParentId = 1119 , Name = Resources.General_Edit, Description = Resources.General_Edit},
-                                      new Privilege { Id = 111913 , ParentId = 1119 , Name = Resources.General_Delete, Description = Resources.General_Delete},
-                                       new Privilege { Id = 111914 , ParentId = 1119 , Name = "اتاحة طلعة", Description = "اتاحة طلعة"},
+            //            new Privilege { Id = 1119 , ParentId = 11 , Name = "متابعة طلعات الاشراف", Description = "متابعة طلعات الاشراف"},
+            //                          //new Privilege { Id = 111910 , ParentId = 1119 , Name = Resources.General_Show, Description = Resources.General_Show},
+            //                          new Privilege { Id = 111911 , ParentId = 1119 , Name = Resources.General_Add, Description = Resources.General_Add},
+            //                          new Privilege { Id = 111912 , ParentId = 1119 , Name = Resources.General_Edit, Description = Resources.General_Edit},
+            //                          new Privilege { Id = 111913 , ParentId = 1119 , Name = Resources.General_Delete, Description = Resources.General_Delete},
+            //                           new Privilege { Id = 111914 , ParentId = 1119 , Name = "اتاحة طلعة", Description = "اتاحة طلعة"},
 
 
-                        new Privilege { Id = 1120 , ParentId = 11 , Name = Resources.Pro_ProjectStatus, Description = Resources.Pro_ProjectStatus},
-                          new Privilege { Id = 1121 , ParentId = 11 , Name = "متابعة إيرادات ومصروفات المشاريع", Description = "متابعة إيرادات ومصروفات المشاريع"},
+            //            new Privilege { Id = 1120 , ParentId = 11 , Name = Resources.Pro_ProjectStatus, Description = Resources.Pro_ProjectStatus},
+            //              new Privilege { Id = 1121 , ParentId = 11 , Name = "متابعة إيرادات ومصروفات المشاريع", Description = "متابعة إيرادات ومصروفات المشاريع"},
 
 
-                           new Privilege { Id = 1117 , ParentId = 11 , Name = "التحكم في ايقاف وتشيغل المشروع" , Description = "التحكم في ايقاف وتشيغل المشروع"},
-                           new Privilege { Id = 1118 , ParentId = 11 , Name = " admin  مشاريع" , Description = " admin  مشاريع"},
+            //               new Privilege { Id = 1117 , ParentId = 11 , Name = "التحكم في ايقاف وتشيغل المشروع" , Description = "التحكم في ايقاف وتشيغل المشروع"},
+            //               new Privilege { Id = 1118 , ParentId = 11 , Name = " admin  مشاريع" , Description = " admin  مشاريع"},
 
-                           new Privilege { Id = 1122 , ParentId = 11 , Name =  "إلغاء المهام وحذف المشروع" , Description = "إلغاء المهام وحذف المشروع"},
-                           new Privilege { Id = 1123 , ParentId = 11 , Name =  "التحكم في بداية المشروع" , Description = "التحكم في بداية المشروع"},
-                            new Privilege { Id = 1124 , ParentId = 11 , Name =  " استمارة المشروع " , Description = "استمارة المشروع"},
+            //               new Privilege { Id = 1122 , ParentId = 11 , Name =  "إلغاء المهام وحذف المشروع" , Description = "إلغاء المهام وحذف المشروع"},
+            //               new Privilege { Id = 1123 , ParentId = 11 , Name =  "التحكم في بداية المشروع" , Description = "التحكم في بداية المشروع"},
+            //                new Privilege { Id = 1124 , ParentId = 11 , Name =  " استمارة المشروع " , Description = "استمارة المشروع"},
 
-                           ///أرشيف المشاريع المحول من السكرتارية
-                           new Privilege { Id = 1212 , ParentId = 11 , Name =  Resources.General_ArchiveProjects, Description = Resources.General_ArchiveProjects },
-                               new Privilege { Id = 1212101 , ParentId = 1212 , Name =  Resources.Transferringtheprojecttoongoing, Description = Resources.Transferringtheprojecttoongoing },
+            //               ///أرشيف المشاريع المحول من السكرتارية
+            //               new Privilege { Id = 1212 , ParentId = 11 , Name =  Resources.General_ArchiveProjects, Description = Resources.General_ArchiveProjects },
+            //                   new Privilege { Id = 1212101 , ParentId = 1212 , Name =  Resources.Transferringtheprojecttoongoing, Description = Resources.Transferringtheprojecttoongoing },
 
 
 
@@ -321,15 +323,15 @@ namespace TaamerProject.API.Helper
                        new Privilege { Id = 1213101 , ParentId = 12131 , Name =  Resources.General_Add , Description =  Resources.General_Add},
                         new Privilege { Id = 1213102 , ParentId = 12131 , Name =  Resources.General_Edit , Description =  Resources.General_Edit},
                          new Privilege { Id = 1213103 , ParentId = 12131 , Name =  Resources.General_Delete , Description =  Resources.General_Delete},
-                          new Privilege { Id = 12132 , ParentId = 11 , Name = Resources.General_SearchFileProject , Description =  Resources.General_SearchFileProject},
+                          //new Privilege { Id = 12132 , ParentId = 11 , Name = Resources.General_SearchFileProject , Description =  Resources.General_SearchFileProject},
 
-                          //Project Reports
-                           new Privilege { Id = 121321 , ParentId = 11 , Name = Resources.Project_reports , Description =  Resources.Project_reports},
-                           new Privilege { Id = 1213211 , ParentId = 121321 , Name = "تقرير الاداء الشامل" , Description =   "تقرير الاداء الشامل"},
-                           new Privilege { Id = 1213212 , ParentId = 121321 , Name = "مشاريع المستخدم" , Description =  "مشاريع المستخدم"},
-                           new Privilege { Id = 1213213 , ParentId = 121321 , Name = "مهام المستخدم" , Description =  "مهام المستخدم"},
-                           new Privilege { Id = 1213214 , ParentId = 121321 , Name = "مهام حسب المشروع" , Description =  "مهام حسب المشروع"},
-                           new Privilege { Id = 1213215 , ParentId = 121321 , Name = "تكلفة المشروع" , Description =  "تكلفة المشروع"},
+                          ////Project Reports
+                          // new Privilege { Id = 121321 , ParentId = 11 , Name = Resources.Project_reports , Description =  Resources.Project_reports},
+                          // new Privilege { Id = 1213211 , ParentId = 121321 , Name = "تقرير الاداء الشامل" , Description =   "تقرير الاداء الشامل"},
+                          // new Privilege { Id = 1213212 , ParentId = 121321 , Name = "مشاريع المستخدم" , Description =  "مشاريع المستخدم"},
+                          // new Privilege { Id = 1213213 , ParentId = 121321 , Name = "مهام المستخدم" , Description =  "مهام المستخدم"},
+                          // new Privilege { Id = 1213214 , ParentId = 121321 , Name = "مهام حسب المشروع" , Description =  "مهام حسب المشروع"},
+                          // new Privilege { Id = 1213215 , ParentId = 121321 , Name = "تكلفة المشروع" , Description =  "تكلفة المشروع"},
 
 
                 ///////////// employee ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -473,7 +475,7 @@ namespace TaamerProject.API.Helper
                                            new Privilege { Id = 13100105 , ParentId = 131001 , Name =  Resources.MNAcc_PostInvoice , Description =  Resources.MNAcc_PostInvoice},
                                               new Privilege { Id = 13100106 , ParentId = 131001 , Name =  Resources.PostBack , Description =  Resources.PostBack},
                                                new Privilege { Id = 13100107 , ParentId = 131001 , Name =  "حفظ وترحيل" , Description =  "حفظ وترحيل"},
-                                                 new Privilege { Id = 13100108 , ParentId = 131001 , Name =  "إصدار فاتورة من مشروع" , Description =  "إصدار فاتورة من مشروع"},
+
 
 
 
@@ -616,6 +618,14 @@ namespace TaamerProject.API.Helper
                           new Privilege { Id = 13180808 , ParentId = 131808 , Name =  "متابعة مراكز التكلفة", Description = "متابعة مراكز التكلفة" },
                           new Privilege { Id = 13180809 , ParentId = 131808 , Name =  "اشعارات الدائن والمدين", Description = "اشعارات الدائن والمدين" },
                           new Privilege { Id = 13180810 , ParentId = 131808 , Name =  "جدول أعمار الديون", Description = "جدول أعمار الديون" },
+
+                          //new in haseeb
+                          new Privilege { Id = 13180811 , ParentId = 131808 , Name =  " المبيعات والارباح اليوميه", Description = " المبيعات والارباح اليوميه" },
+                          new Privilege { Id = 13180812 , ParentId = 131808 , Name =  " المبيعات والارباح الشهريه", Description = " المبيعات والارباح الشهريه" },
+                          new Privilege { Id = 13180813 , ParentId = 131808 , Name =  " المبيعات والارباح والمردود الشهريه", Description = " المبيعات والارباح والمردور الشهريه" },
+                          new Privilege { Id = 13180814 , ParentId = 131808 , Name =  " ارباح المبيعات والمردود السنوي", Description = " ارباح المبيعات والمردود السنوي" },
+                          new Privilege { Id = 13180815 , ParentId = 131808 , Name =  " المندوبين ", Description = " المندوبين " },
+
 
 
 

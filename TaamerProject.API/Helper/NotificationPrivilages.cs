@@ -73,150 +73,150 @@ namespace TaamerProject.API.Helper
                 new NotificationPrivilage(){Id=213, ParentId= 21, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
         #endregion 
         #region Projects
-             new NotificationPrivilage(){Id=3, ParentId= null, Name=Resources.Pro_Projectmanagement, Description= Resources.Pro_Projectmanagement },
+        //     new NotificationPrivilage(){Id=3, ParentId= null, Name=Resources.Pro_Projectmanagement, Description= Resources.Pro_Projectmanagement },
 
 
-        //إيقاف مشروع
-             new NotificationPrivilage(){Id=33, ParentId= 3, Name="إيقاف مشروع", Description= "إيقاف مشروع" },
-                new NotificationPrivilage(){Id=331, ParentId= 33, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=332, ParentId= 33, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=333, ParentId= 33, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //تشغيل مشروع كان متوقف
-             new NotificationPrivilage(){Id=34, ParentId= 3, Name="تشغيل مشروع كان متوقف", Description= "تشغيل مشروع كان متوقف" },
-                new NotificationPrivilage(){Id=341, ParentId= 34, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=342, ParentId= 34, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=343, ParentId= 34, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //إسناد مهمة جديدة لموظف
-             new NotificationPrivilage(){Id=35, ParentId= 3, Name=Resources.General_AddTasks, Description= Resources.General_AddTasks },
-                new NotificationPrivilage(){Id=351, ParentId= 35, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=352, ParentId= 35, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=353, ParentId= 35, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //تحويل مهمة إلى لموظف آخر
-             new NotificationPrivilage(){Id=36, ParentId= 3, Name=Resources.exchangeTask, Description= Resources.exchangeTask },
-                new NotificationPrivilage(){Id=361, ParentId= 36, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=362, ParentId= 36, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=363, ParentId= 36, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //اشعار بالعاملين علي مشروع
-             //new NotificationPrivilage(){Id=37, ParentId= 3, Name="اشعار بالعاملين علي مشروع", Description= "اشعار بالعاملين علي مشروع" },
-             //   new NotificationPrivilage(){Id=371, ParentId= 37, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-             //   new NotificationPrivilage(){Id=372, ParentId= 37, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-             //   new NotificationPrivilage(){Id=373, ParentId= 37, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //تغيير مدة المهمة 
-             new NotificationPrivilage(){Id=38, ParentId= 3, Name="تغيير مدة المهمة ", Description= "تغيير مدة المهمة" },
-                new NotificationPrivilage(){Id=381, ParentId= 38, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=382, ParentId= 38, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=383, ParentId= 38, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //منح المستخدم صلاحية علي مشروع 
-             new NotificationPrivilage(){Id=39, ParentId= 3, Name="منح المستخدم صلاحية علي مشروع ", Description= "منح المستخدم صلاحية علي مشروع" },
-                new NotificationPrivilage(){Id=391, ParentId= 39, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=392, ParentId= 39, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=393, ParentId= 39, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //انتهاء مرحلة رئيسية من مشروع
-             //new NotificationPrivilage(){Id=310, ParentId= 3, Name="انتهاء مرحلة رئيسية من مشروع ", Description= "انتهاء مرحلة رئيسية من مشروع" },
-             //   new NotificationPrivilage(){Id=3101, ParentId= 310, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-             //   new NotificationPrivilage(){Id=3102, ParentId= 310, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-             //   new NotificationPrivilage(){Id=3103, ParentId= 310, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //انتهاء مرحلة فرعية من مشروع
-             //new NotificationPrivilage(){Id=311, ParentId= 3, Name="انتهاء مرحلة فرعية من مشروع ", Description= "انتهاء مرحلة فرعية من مشروع" },
-             //   new NotificationPrivilage(){Id=3111, ParentId= 311, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-             //   new NotificationPrivilage(){Id=3112, ParentId= 311, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-             //   new NotificationPrivilage(){Id=3113, ParentId= 311, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //المهمة قيد التشغيل
-             new NotificationPrivilage(){Id=312, ParentId= 3, Name="المهمة قيد التشغيل", Description= "المهمة قيد التشغيل" },
-                new NotificationPrivilage(){Id=3121, ParentId= 312, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3122, ParentId= 312, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                //new NotificationPrivilage(){Id=3123, ParentId= 312, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //تحويل المشروع من الأرشيف الي جاري
-            new NotificationPrivilage(){Id=313, ParentId= 3, Name="تحويل المشروع من الأرشيف الي جاري", Description= "تحويل المشروع من الأرشيف الي جاري" },
-                new NotificationPrivilage(){Id=3131, ParentId= 313, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3132, ParentId= 313, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3133, ParentId= 313, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //بدأ مرحلة مشروع
-            new NotificationPrivilage(){Id=314, ParentId= 3, Name="بدأ مرحلة مشروع", Description= "بدأ مرحلة مشروع" },
-                new NotificationPrivilage(){Id=3141, ParentId= 314, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3142, ParentId= 314, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                //new NotificationPrivilage(){Id=3143, ParentId= 314, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //انتهاء مرحلة مشروع 
-            new NotificationPrivilage(){Id=315, ParentId= 3, Name="انتهاء مرحلة مشروع", Description= "انتهاء مرحلة مشروع" },
-                new NotificationPrivilage(){Id=3151, ParentId= 315, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3152, ParentId= 315, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3153, ParentId= 315, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //التكليف بمرحلة إشراف
-            //new NotificationPrivilage(){Id=316, ParentId= 3, Name="التكليف بمرحلة إشراف", Description= "التكليف بمرحلة إشراف" },
-            //    new NotificationPrivilage(){Id=3161, ParentId= 316, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-            //    new NotificationPrivilage(){Id=3162, ParentId= 316, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-            //    new NotificationPrivilage(){Id=3163, ParentId= 316, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //إجراء عملية تحقق من الوثائق ناجحة
-            new NotificationPrivilage(){Id=317, ParentId= 3, Name="إجراء عملية تحقق من الوثائق ناجحة", Description= "إجراء عملية تحقق من الوثائق ناجحة" },
-                new NotificationPrivilage(){Id=3171, ParentId= 317, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3172, ParentId= 317, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3173, ParentId= 317, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-        //التكليف بطلعة إشراف
-            new NotificationPrivilage(){Id=318, ParentId= 3, Name="التكليف بطلعة إشراف", Description= "التكليف بطلعة إشرافة" },
-                new NotificationPrivilage(){Id=3181, ParentId= 318, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3182, ParentId= 318, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3183, ParentId= 318, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////إيقاف مشروع
+        //     new NotificationPrivilage(){Id=33, ParentId= 3, Name="إيقاف مشروع", Description= "إيقاف مشروع" },
+        //        new NotificationPrivilage(){Id=331, ParentId= 33, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=332, ParentId= 33, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=333, ParentId= 33, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////تشغيل مشروع كان متوقف
+        //     new NotificationPrivilage(){Id=34, ParentId= 3, Name="تشغيل مشروع كان متوقف", Description= "تشغيل مشروع كان متوقف" },
+        //        new NotificationPrivilage(){Id=341, ParentId= 34, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=342, ParentId= 34, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=343, ParentId= 34, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////إسناد مهمة جديدة لموظف
+        //     new NotificationPrivilage(){Id=35, ParentId= 3, Name=Resources.General_AddTasks, Description= Resources.General_AddTasks },
+        //        new NotificationPrivilage(){Id=351, ParentId= 35, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=352, ParentId= 35, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=353, ParentId= 35, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////تحويل مهمة إلى لموظف آخر
+        //     new NotificationPrivilage(){Id=36, ParentId= 3, Name=Resources.exchangeTask, Description= Resources.exchangeTask },
+        //        new NotificationPrivilage(){Id=361, ParentId= 36, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=362, ParentId= 36, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=363, ParentId= 36, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////اشعار بالعاملين علي مشروع
+        //     //new NotificationPrivilage(){Id=37, ParentId= 3, Name="اشعار بالعاملين علي مشروع", Description= "اشعار بالعاملين علي مشروع" },
+        //     //   new NotificationPrivilage(){Id=371, ParentId= 37, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //     //   new NotificationPrivilage(){Id=372, ParentId= 37, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //     //   new NotificationPrivilage(){Id=373, ParentId= 37, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////تغيير مدة المهمة 
+        //     new NotificationPrivilage(){Id=38, ParentId= 3, Name="تغيير مدة المهمة ", Description= "تغيير مدة المهمة" },
+        //        new NotificationPrivilage(){Id=381, ParentId= 38, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=382, ParentId= 38, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=383, ParentId= 38, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////منح المستخدم صلاحية علي مشروع 
+        //     new NotificationPrivilage(){Id=39, ParentId= 3, Name="منح المستخدم صلاحية علي مشروع ", Description= "منح المستخدم صلاحية علي مشروع" },
+        //        new NotificationPrivilage(){Id=391, ParentId= 39, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=392, ParentId= 39, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=393, ParentId= 39, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////انتهاء مرحلة رئيسية من مشروع
+        //     //new NotificationPrivilage(){Id=310, ParentId= 3, Name="انتهاء مرحلة رئيسية من مشروع ", Description= "انتهاء مرحلة رئيسية من مشروع" },
+        //     //   new NotificationPrivilage(){Id=3101, ParentId= 310, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //     //   new NotificationPrivilage(){Id=3102, ParentId= 310, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //     //   new NotificationPrivilage(){Id=3103, ParentId= 310, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////انتهاء مرحلة فرعية من مشروع
+        //     //new NotificationPrivilage(){Id=311, ParentId= 3, Name="انتهاء مرحلة فرعية من مشروع ", Description= "انتهاء مرحلة فرعية من مشروع" },
+        //     //   new NotificationPrivilage(){Id=3111, ParentId= 311, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //     //   new NotificationPrivilage(){Id=3112, ParentId= 311, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //     //   new NotificationPrivilage(){Id=3113, ParentId= 311, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////المهمة قيد التشغيل
+        //     new NotificationPrivilage(){Id=312, ParentId= 3, Name="المهمة قيد التشغيل", Description= "المهمة قيد التشغيل" },
+        //        new NotificationPrivilage(){Id=3121, ParentId= 312, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3122, ParentId= 312, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        //new NotificationPrivilage(){Id=3123, ParentId= 312, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////تحويل المشروع من الأرشيف الي جاري
+        //    new NotificationPrivilage(){Id=313, ParentId= 3, Name="تحويل المشروع من الأرشيف الي جاري", Description= "تحويل المشروع من الأرشيف الي جاري" },
+        //        new NotificationPrivilage(){Id=3131, ParentId= 313, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3132, ParentId= 313, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3133, ParentId= 313, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////بدأ مرحلة مشروع
+        //    new NotificationPrivilage(){Id=314, ParentId= 3, Name="بدأ مرحلة مشروع", Description= "بدأ مرحلة مشروع" },
+        //        new NotificationPrivilage(){Id=3141, ParentId= 314, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3142, ParentId= 314, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        //new NotificationPrivilage(){Id=3143, ParentId= 314, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////انتهاء مرحلة مشروع 
+        //    new NotificationPrivilage(){Id=315, ParentId= 3, Name="انتهاء مرحلة مشروع", Description= "انتهاء مرحلة مشروع" },
+        //        new NotificationPrivilage(){Id=3151, ParentId= 315, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3152, ParentId= 315, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3153, ParentId= 315, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////التكليف بمرحلة إشراف
+        //    //new NotificationPrivilage(){Id=316, ParentId= 3, Name="التكليف بمرحلة إشراف", Description= "التكليف بمرحلة إشراف" },
+        //    //    new NotificationPrivilage(){Id=3161, ParentId= 316, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //    //    new NotificationPrivilage(){Id=3162, ParentId= 316, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //    //    new NotificationPrivilage(){Id=3163, ParentId= 316, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////إجراء عملية تحقق من الوثائق ناجحة
+        //    new NotificationPrivilage(){Id=317, ParentId= 3, Name="إجراء عملية تحقق من الوثائق ناجحة", Description= "إجراء عملية تحقق من الوثائق ناجحة" },
+        //        new NotificationPrivilage(){Id=3171, ParentId= 317, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3172, ParentId= 317, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3173, ParentId= 317, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////التكليف بطلعة إشراف
+        //    new NotificationPrivilage(){Id=318, ParentId= 3, Name="التكليف بطلعة إشراف", Description= "التكليف بطلعة إشرافة" },
+        //        new NotificationPrivilage(){Id=3181, ParentId= 318, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3182, ParentId= 318, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3183, ParentId= 318, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
 
-        //طلب تمديد مهمة
-            new NotificationPrivilage(){Id=319, ParentId= 3, Name="طلب تمديد مهمة", Description= "طلب تمديد مهمة" },
-                new NotificationPrivilage(){Id=3191, ParentId= 319, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3192, ParentId= 319, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3193, ParentId= 319, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////طلب تمديد مهمة
+        //    new NotificationPrivilage(){Id=319, ParentId= 3, Name="طلب تمديد مهمة", Description= "طلب تمديد مهمة" },
+        //        new NotificationPrivilage(){Id=3191, ParentId= 319, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3192, ParentId= 319, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3193, ParentId= 319, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
 
-        //طلب تحويل مهمة
-            new NotificationPrivilage(){Id=320, ParentId= 3, Name="طلب تحويل مهمة", Description= "طلب تحويل مهمة" },
-                new NotificationPrivilage(){Id=3201, ParentId= 320, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3202, ParentId= 320, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3203, ParentId= 320, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        ////طلب تحويل مهمة
+        //    new NotificationPrivilage(){Id=320, ParentId= 3, Name="طلب تحويل مهمة", Description= "طلب تحويل مهمة" },
+        //        new NotificationPrivilage(){Id=3201, ParentId= 320, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3202, ParentId= 320, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3203, ParentId= 320, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
 
-         // تحويل مدير مشروع
-            new NotificationPrivilage(){Id=321, ParentId= 3, Name=" تحويل مدير مشروع", Description= " تحويل مدير مشروع" },
-                new NotificationPrivilage(){Id=3211, ParentId= 321, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3212, ParentId= 321, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3213, ParentId= 321, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        // // تحويل مدير مشروع
+        //    new NotificationPrivilage(){Id=321, ParentId= 3, Name=" تحويل مدير مشروع", Description= " تحويل مدير مشروع" },
+        //        new NotificationPrivilage(){Id=3211, ParentId= 321, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3212, ParentId= 321, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3213, ParentId= 321, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
 
-            // تحويل مهمة سير
-            new NotificationPrivilage(){Id=322, ParentId= 3, Name="تحويل مهمة سير", Description= "تحويل مهمة سير" },
-                new NotificationPrivilage(){Id=3221, ParentId= 322, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3222, ParentId= 322, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3223, ParentId= 322, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-               //انهاء مشروع
-             new NotificationPrivilage(){Id=323, ParentId= 3, Name="إنهاء مشروع", Description= "إنهاء مشروع" },
-                new NotificationPrivilage(){Id=3231, ParentId= 323, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3232, ParentId= 323, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3233, ParentId= 323, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-                //اقتراب انتهاء المشروع
-                 new NotificationPrivilage(){Id=324, ParentId= 3, Name="عند إقتراب انتهاء مدة المشروع", Description= "عند إقتراب انتهاء مدة المشروع" },
-                new NotificationPrivilage(){Id=3241, ParentId= 324, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3242, ParentId= 324, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3243, ParentId= 324, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        //    // تحويل مهمة سير
+        //    new NotificationPrivilage(){Id=322, ParentId= 3, Name="تحويل مهمة سير", Description= "تحويل مهمة سير" },
+        //        new NotificationPrivilage(){Id=3221, ParentId= 322, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3222, ParentId= 322, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3223, ParentId= 322, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        //       //انهاء مشروع
+        //     new NotificationPrivilage(){Id=323, ParentId= 3, Name="إنهاء مشروع", Description= "إنهاء مشروع" },
+        //        new NotificationPrivilage(){Id=3231, ParentId= 323, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3232, ParentId= 323, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3233, ParentId= 323, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        //        //اقتراب انتهاء المشروع
+        //         new NotificationPrivilage(){Id=324, ParentId= 3, Name="عند إقتراب انتهاء مدة المشروع", Description= "عند إقتراب انتهاء مدة المشروع" },
+        //        new NotificationPrivilage(){Id=3241, ParentId= 324, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3242, ParentId= 324, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3243, ParentId= 324, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
                
 
-                        //إصدار فاتورة من زر(إنشاء مشروع)
-             new NotificationPrivilage(){Id=325, ParentId= 3, Name="إصدار فاتورة من زر(إنشاء مشروع)", Description= "إصدار فاتورة من زر(إنشاء مشروع)" },
-                new NotificationPrivilage(){Id=3251, ParentId= 325, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3252, ParentId= 325, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3253, ParentId= 325, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+        //                //إصدار فاتورة من زر(إنشاء مشروع)
+        //     new NotificationPrivilage(){Id=325, ParentId= 3, Name="إصدار فاتورة من زر(إنشاء مشروع)", Description= "إصدار فاتورة من زر(إنشاء مشروع)" },
+        //        new NotificationPrivilage(){Id=3251, ParentId= 325, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3252, ParentId= 325, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3253, ParentId= 325, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
 
 
-            new NotificationPrivilage(){Id=326, ParentId= 3, Name="تذكير عرض سعر", Description= "تذكير عرض سعر" },
-                new NotificationPrivilage(){Id=3261, ParentId= 326, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3262, ParentId= 326, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                new NotificationPrivilage(){Id=3263, ParentId= 326, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
-
-
-
-
-             new NotificationPrivilage(){Id=327, ParentId= 3, Name="اشعار عند انتهاء مهمة", Description= "اشعار عند انتهاء مهمة" },
-                new NotificationPrivilage(){Id=3271, ParentId= 327, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3272, ParentId= 327, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //    new NotificationPrivilage(){Id=326, ParentId= 3, Name="تذكير عرض سعر", Description= "تذكير عرض سعر" },
+        //        new NotificationPrivilage(){Id=3261, ParentId= 326, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3262, ParentId= 326, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //        new NotificationPrivilage(){Id=3263, ParentId= 326, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
 
 
 
-                    new NotificationPrivilage(){Id=328, ParentId= 3, Name="عند اكتمال هدف استراتيجي للمشروع", Description= "عند اكتمال هدف استراتيجي للمشروع" },
-                new NotificationPrivilage(){Id=3281, ParentId= 328, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
-                new NotificationPrivilage(){Id=3282, ParentId= 328, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
-                    new NotificationPrivilage(){Id=3283, ParentId= 328, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
+
+        //     new NotificationPrivilage(){Id=327, ParentId= 3, Name="اشعار عند انتهاء مهمة", Description= "اشعار عند انتهاء مهمة" },
+        //        new NotificationPrivilage(){Id=3271, ParentId= 327, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3272, ParentId= 327, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+
+
+
+        //            new NotificationPrivilage(){Id=328, ParentId= 3, Name="عند اكتمال هدف استراتيجي للمشروع", Description= "عند اكتمال هدف استراتيجي للمشروع" },
+        //        new NotificationPrivilage(){Id=3281, ParentId= 328, Name= Resources.General_SendMail, Description= Resources.General_SendMail },
+        //        new NotificationPrivilage(){Id=3282, ParentId= 328, Name= Resources.General_Notifaction, Description= Resources.General_Notifaction },
+        //            new NotificationPrivilage(){Id=3283, ParentId= 328, Name= Resources.General_SendMassage, Description= Resources.General_SendMassage },
             #endregion           
         #region Accounts
            new NotificationPrivilage(){Id=4, ParentId= null, Name=Resources.General_Accounting, Description= Resources.General_Accounting },

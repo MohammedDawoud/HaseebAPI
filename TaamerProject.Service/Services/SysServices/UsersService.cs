@@ -261,14 +261,17 @@ namespace TaamerProject.Service.Services
                     // save user Branches 
                     try
                     {
-                        foreach (var item in users.BranchesList)
+                        if (users.BranchesList !=null && users.BranchesList.Count > 0)
                         {
-                            var userBranch = new UserBranches();
-                            userBranch.UserId = users.UserId;
-                            userBranch.BranchId = item;
-                            userBranch.AddUser = UserId;
-                            userBranch.AddDate = DateTime.Now;
-                            _TaamerProContext.UserBranches.Add(userBranch);
+                            foreach (var item in users.BranchesList)
+                            {
+                                var userBranch = new UserBranches();
+                                userBranch.UserId = users.UserId;
+                                userBranch.BranchId = item;
+                                userBranch.AddUser = UserId;
+                                userBranch.AddDate = DateTime.Now;
+                                _TaamerProContext.UserBranches.Add(userBranch);
+                            }
                         }
                     }
                     catch (Exception ex)

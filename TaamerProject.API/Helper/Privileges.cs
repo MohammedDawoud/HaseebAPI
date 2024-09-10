@@ -158,6 +158,7 @@ namespace TaamerProject.API.Helper
                              new Privilege { Id = 121305 , ParentId = 1213 , Name =  Resources.General_Governmentalentities , Description =  Resources.General_Governmentalentities},
                              new Privilege { Id = 121306 , ParentId = 1213 , Name =  "كشف حساب عميل" , Description =  "كشف حساب عميل"},
                              new Privilege { Id = 121307 , ParentId = 1213 , Name =  "متابعة التحصيل" , Description =  "متابعة التحصيل"},
+                             new Privilege { Id = 121308 , ParentId = 1213 , Name =  "عرض السعر" , Description =  "عرض السعر"},
 
                              //new Privilege { Id = 121306 , ParentId = 1213 , Name =  Resources.Pro_PrivateCustomer , Description =  Resources.Pro_PrivateCustomer},
 

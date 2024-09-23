@@ -142,7 +142,7 @@ namespace TaamerProject.Service.Services
                         //ServicesUpdated.CostCenterId = service.CostCenterId;
                         //ServicesUpdated.PackageId = service.PackageId;
                         ServicesUpdated.ServiceName_EN = service.ServiceName_EN;
-                        //ServicesUpdated.ServiceType = service.ServiceType;
+                        ServicesUpdated.ServiceType = service.ServiceType;
 
                     }
                     _TaamerProContext.SaveChanges();

@@ -158,7 +158,12 @@ namespace TaamerProject.API.Helper
                              new Privilege { Id = 121305 , ParentId = 1213 , Name =  Resources.General_Governmentalentities , Description =  Resources.General_Governmentalentities},
                              new Privilege { Id = 121306 , ParentId = 1213 , Name =  "كشف حساب عميل" , Description =  "كشف حساب عميل"},
                              new Privilege { Id = 121307 , ParentId = 1213 , Name =  "متابعة التحصيل" , Description =  "متابعة التحصيل"},
-                             new Privilege { Id = 121308 , ParentId = 1213 , Name =  "عرض السعر" , Description =  "عرض السعر"},
+                             //new Privilege { Id = 121308 , ParentId = 1213 , Name =  "عرض السعر" , Description =  "عرض السعر"},
+
+                          new Privilege { Id = 1214 , ParentId = 12 , Name =  "عرض سعر" , Description =  "عرض سعر"},
+                       new Privilege { Id = 121401 , ParentId = 1214 , Name =  Resources.General_Add , Description =  Resources.General_Add},
+                        new Privilege { Id = 121402 , ParentId = 1214 , Name =  Resources.General_Edit , Description =  Resources.General_Edit},
+                         new Privilege { Id = 121403 , ParentId = 1214 , Name =  Resources.General_Delete , Description =  Resources.General_Delete},
 
                              //new Privilege { Id = 121306 , ParentId = 1213 , Name =  Resources.Pro_PrivateCustomer , Description =  Resources.Pro_PrivateCustomer},
 
@@ -467,7 +472,9 @@ namespace TaamerProject.API.Helper
               ///////////////// Accounting /////////////////////////////////////    
              new Privilege { Id = 13 , ParentId = null , Name =  Resources.General_Accounts , Description = Resources.General_Accounts},
               new Privilege { Id = 1310 , ParentId = 13 , Name =  Resources.MNAcc_Accountingbonds, Description = Resources.MNAcc_Accountingbonds },
-               new Privilege { Id = 131001 , ParentId = 1310 , Name =  Resources.MNAcc_Invoice, Description = Resources.MNAcc_Invoice },
+                new Privilege { Id = 131006 , ParentId = 1310 , Name =  "المسودات", Description = "المسودات" },
+
+            new Privilege { Id = 131001 , ParentId = 1310 , Name =  Resources.MNAcc_Invoice, Description = Resources.MNAcc_Invoice },
 
                 new Privilege { Id = 13100101 , ParentId = 131001 , Name =  Resources.General_Add , Description =  Resources.General_Add},
                                        new Privilege { Id = 13100102 , ParentId = 131001 , Name =  Resources.General_Edit , Description =  Resources.General_Edit},

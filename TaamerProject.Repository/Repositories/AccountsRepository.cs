@@ -2291,7 +2291,9 @@ namespace TaamerProject.Repository.Repositories
                         decimal qtyTotal_V = 0;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            qtyStorehouse_V=(Convert.ToDecimal((dr["DebentureQty"]).ToString()) + Convert.ToDecimal((dr["PurQty"]).ToString())) - Convert.ToDecimal((dr["DebentureQty"]).ToString());
+                            qtyStorehouse_V = Convert.ToDecimal((dr["PurQty"]).ToString()) + Convert.ToDecimal((dr["DebentureQty"]).ToString())
+                                - Convert.ToDecimal((dr["TransferQty"]).ToString()) - Convert.ToDecimal((dr["SalesQty"]).ToString())
+                                + Convert.ToDecimal((dr["SalesCreditQty"]).ToString()) - Convert.ToDecimal((dr["PurDebitQty"]).ToString());
                             qtyTotal_V = qtyStorehouse_V + Convert.ToDecimal((dr["Begbalance"]).ToString());
                             lmd.Add(new QuantitieVM
                             {
@@ -2304,8 +2306,11 @@ namespace TaamerProject.Repository.Repositories
                                 SerialNumber = (dr["SerialNumber"]).ToString(),
                                 ItemCode = (dr["ItemCode"]).ToString(),
                                 PurQty = Convert.ToDecimal((dr["PurQty"]).ToString()),
+                                PurDebitQty = Convert.ToDecimal((dr["PurDebitQty"]).ToString()),
                                 SalesQty = Convert.ToDecimal((dr["SalesQty"]).ToString()),
-                                DebentureQty = Convert.ToInt32((dr["DebentureQty"]).ToString()),
+                                SalesCreditQty = Convert.ToDecimal((dr["SalesCreditQty"]).ToString()),
+                                DebentureQty = Convert.ToDecimal((dr["DebentureQty"]).ToString()),
+                                TransferQty = Convert.ToDecimal((dr["TransferQty"]).ToString()),
                                 qtyStorehouse = Convert.ToDecimal((qtyStorehouse_V).ToString()) ,
                                 qtyTotal = Convert.ToDecimal((qtyTotal_V).ToString()) ,
                             });

@@ -138,8 +138,12 @@ namespace TaamerProject.Models
         public string? SerialNumber { get; set; }
         public string? ItemCode { get; set; }
         public decimal? PurQty { get; set; }
+        public decimal? PurDebitQty { get; set; }
+
         public decimal? SalesQty { get; set; }
-        public int? DebentureQty { get; set; }
+        public decimal? SalesCreditQty { get; set; }
+        public decimal? DebentureQty { get; set; }
+        public decimal TransferQty { get; set; }
         public decimal? qtyStorehouse { get; set; }
         public decimal? qtyTotal { get; set; }
     }

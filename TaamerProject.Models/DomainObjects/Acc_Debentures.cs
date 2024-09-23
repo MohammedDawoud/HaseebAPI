@@ -17,7 +17,7 @@ namespace TaamerProject.Models
         public int? ServicesId { get; set; }
         public int? FromStorehouseId { get; set; }
         public int? ToStorehouseId { get; set; }
-        public int? Qty { get; set; }
+        public decimal? Qty { get; set; }
         public string? QtyText { get; set; }
         public int? BranchId { get; set; }
         public int? YearId { get; set; }

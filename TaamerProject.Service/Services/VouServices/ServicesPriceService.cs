@@ -143,6 +143,7 @@ namespace TaamerProject.Service.Services
                         //ServicesUpdated.PackageId = service.PackageId;
                         ServicesUpdated.ServiceName_EN = service.ServiceName_EN;
                         ServicesUpdated.ServiceType = service.ServiceType;
+                        ServicesUpdated.StorehouseId = service.StorehouseId;
 
                     }
                     _TaamerProContext.SaveChanges();

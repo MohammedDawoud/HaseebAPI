@@ -2292,7 +2292,7 @@ namespace TaamerProject.Repository.Repositories
                         foreach (DataRow dr in dt.Rows)
                         {
                             qtyStorehouse_V = Convert.ToDecimal((dr["PurQty"]).ToString()) + Convert.ToDecimal((dr["DebentureQty"]).ToString())
-                                - Convert.ToDecimal((dr["TransferQty"]).ToString()) - Convert.ToDecimal((dr["SalesQty"]).ToString())
+                                + Convert.ToDecimal((dr["TransferQty"]).ToString()) - Convert.ToDecimal((dr["SalesQty"]).ToString())
                                 + Convert.ToDecimal((dr["SalesCreditQty"]).ToString()) - Convert.ToDecimal((dr["PurDebitQty"]).ToString());
                             qtyTotal_V = qtyStorehouse_V + Convert.ToDecimal((dr["Begbalance"]).ToString());
                             lmd.Add(new QuantitieVM
@@ -2383,13 +2383,13 @@ namespace TaamerProject.Repository.Repositories
                         a.Fill(ds);
                         DataTable dt = new DataTable();
                         dt = ds.Tables[0];
-                        decimal QtyCredit = 0;
                         string Name = "";
                         string TypeName = "";
-
+                        decimal qtyStorehouse_V = 0;
+                        decimal qtyTotal_V = 0;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            if (Convert.ToInt32((dr["InvoiceId"]).ToString())==2)
+                            if (Convert.ToInt32((dr["Type"]).ToString())==2)
                             {
                                 Name = (dr["customername"]).ToString();
                                 TypeName = "سحب";
@@ -2399,7 +2399,10 @@ namespace TaamerProject.Repository.Repositories
                                 Name = (dr["suppliername"]).ToString();
                                 TypeName = "إيداع";
                             }
-                            QtyCredit = Convert.ToDecimal(Convert.ToDecimal((dr["DebentureQty"]).ToString()) - Convert.ToDecimal((dr["Qty"]).ToString()));
+                            qtyStorehouse_V = Convert.ToDecimal((dr["PurQty"]).ToString()) + Convert.ToDecimal((dr["DebentureQty"]).ToString())
+                                + Convert.ToDecimal((dr["TransferQty"]).ToString()) - Convert.ToDecimal((dr["SalesQty"]).ToString())
+                                + Convert.ToDecimal((dr["SalesCreditQty"]).ToString()) - Convert.ToDecimal((dr["PurDebitQty"]).ToString());
+                            qtyTotal_V = qtyStorehouse_V + Convert.ToDecimal((dr["Begbalance"]).ToString());
                             lmd.Add(new ItemMovementVM
                             {
                                 InvoiceId = Convert.ToInt32((dr["InvoiceId"]).ToString()),
@@ -2410,9 +2413,14 @@ namespace TaamerProject.Repository.Repositories
                                 Date = (dr["Date"]).ToString(),
                                 Type = Convert.ToInt32((dr["Type"]).ToString()),
                                 TypeName = TypeName,
-                                DebentureQty = Convert.ToInt32((dr["DebentureQty"]).ToString()),
-                                Qty = Convert.ToDecimal((dr["Qty"]).ToString()),
-                                QtyCredit = QtyCredit,
+                                PurQty = Convert.ToDecimal((dr["PurQty"]).ToString()),
+                                PurDebitQty = Convert.ToDecimal((dr["PurDebitQty"]).ToString()),
+                                SalesQty = Convert.ToDecimal((dr["SalesQty"]).ToString()),
+                                SalesCreditQty = Convert.ToDecimal((dr["SalesCreditQty"]).ToString()),
+                                DebentureQty = Convert.ToDecimal((dr["DebentureQty"]).ToString()),
+                                TransferQty = Convert.ToDecimal((dr["TransferQty"]).ToString()),
+                                qtyStorehouse = Convert.ToDecimal((qtyStorehouse_V).ToString()),
+                                qtyTotal = Convert.ToDecimal((qtyTotal_V).ToString()),
                                 Amount = Convert.ToDecimal((dr["Amount"]).ToString()),
                                 TaxAmount = Convert.ToDecimal((dr["TaxAmount"]).ToString()),
                                 TotalAmount = Convert.ToDecimal((dr["TotalAmount"]).ToString()),

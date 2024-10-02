@@ -454,6 +454,7 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.Begbalance).HasColumnName("Begbalance");
                 entity.Property(t => t.SerialNumber).HasColumnName("SerialNumber");
                 entity.Property(t => t.ItemCode).HasColumnName("ItemCode");
+                entity.Property(t => t.StorehouseId).HasColumnName("StorehouseId");
 
 
 

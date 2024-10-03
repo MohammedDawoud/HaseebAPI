@@ -25,6 +25,9 @@ namespace TaamerProject.Models
         public string? TotalViolations { get; set; }
         public string? TotalySalaries { get; set; }
         public string? TotalyDays { get; set; }
+
+        public string? TotalLateDiscount { get; set; }
+        public string? TotalAbsenceDiscount { get; set; }
     }
     public class EmployeesSalaryRptVM_New
     {
@@ -54,6 +57,9 @@ namespace TaamerProject.Models
         public string? TTotalViolations { get; set; }
         public string? TTotalySalaries { get; set; }
         public string? TTotalyDays { get; set; }
+
+        public string? TTotalLateDiscount { get; set; }
+        public string? TTotalAbsenceDiscount { get; set; }
     }
 
 

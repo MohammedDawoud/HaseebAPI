@@ -20,7 +20,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<IEnumerable<EmployeesVM>> GetAllEmployeesBySearchObject(EmployeesVM SalarySearch, string lang, int BranchId, string Con = "");
         Task<IEnumerable<EmployeesVM>> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, string Con = "");
         Task<IEnumerable<EmployeesVM>> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno, string Con = "");
-        Task<IEnumerable<EmployeesVM>> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno, int YearId, string Con = "");
+        IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno, int YearId, string Con = "");
         Task<IEnumerable<EmployeesVM>> GetAllUsersEmployees();
         Task<List<int>> GetEmpsInVacations(int? month = 0);
         Task<List<string>> GetEmpNosInVacations(int? month = 0);

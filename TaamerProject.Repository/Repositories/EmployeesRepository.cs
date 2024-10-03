@@ -10,6 +10,7 @@ using TaamerProject.Repository.Interfaces;
 using TaamerProject.Models.DBContext;
 using TaamerProject.Models;
 using TaamerProject.Models.Common;
+using Haseeb.Models.Enums;
 
 namespace TaamerProject.Repository.Repositories
 {
@@ -1772,7 +1773,7 @@ namespace TaamerProject.Repository.Repositories
 
 
 
-        public async Task<IEnumerable<EmployeesVM>> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno,int YearId, string Con = "")
+       public IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno, int YearId, string Con)
         {
             int MonthNo = DateTime.Now.Month;
 
@@ -1928,7 +1929,7 @@ namespace TaamerProject.Repository.Repositories
                     int RestDays = 30;//DaysInMonth; //- int.Parse(Emp.WorkStartDate.Split('-')[2]);
                     if (Emp.HousingAllowance.Value != null && Emp.HousingAllowance.Value > 0)
                     {
-                        Emp.ThisMonthSalary = Math.Round((decimal)(((Emp.Salary.Value ) / 30) * RestDays), 2);
+                        Emp.ThisMonthSalary = Math.Round((decimal)(((Emp.Salary.Value) / 30) * RestDays), 2);
                         Emp.HousingAllowance = Emp.HousingAllowance.Value;
 
                     }
@@ -1954,11 +1955,11 @@ namespace TaamerProject.Repository.Repositories
 
                 }
 
-                var monthallownc = (decimal)await _allowanceRepository.GetAllownacesSumForPayroll(Emp.EmployeeId, StartDateOfMonth, EndDateOfMonth) + (decimal)await _allowanceRepository.GetAllownacesSumForPayroll2(Emp.EmployeeId, Monthno);
+                var monthallownc = (decimal)_allowanceRepository.GetAllownacesSumForPayroll(Emp.EmployeeId, StartDateOfMonth, EndDateOfMonth).Result + (decimal)_allowanceRepository.GetAllownacesSumForPayroll2(Emp.EmployeeId, Monthno).Result;
                 Emp.MonthlyAllowances = monthallownc + Emp.OtherAllownces;
-                var totalrewrd = await _discountRewardRepository.GetDiscountRewordSumForPayroll(Emp.EmployeeId, StartDateOfMonth, EndDateOfMonth, 2) + await _discountRewardRepository.GetDiscountRewordSumForPayroll2(Emp.EmployeeId, Monthno, 2);
+                var totalrewrd = _discountRewardRepository.GetDiscountRewordSumForPayroll(Emp.EmployeeId, StartDateOfMonth, EndDateOfMonth, 2).Result + _discountRewardRepository.GetDiscountRewordSumForPayroll2(Emp.EmployeeId, Monthno, 2).Result;
                 Emp.TotalRewards = totalrewrd;
-                var toaoldiscount = await _discountRewardRepository.GetDiscountRewordSumForPayroll(Emp.EmployeeId, StartDateOfMonth, EndDateOfMonth, 1) + await _discountRewardRepository.GetDiscountRewordSumForPayroll2(Emp.EmployeeId, Monthno, 1);
+                var toaoldiscount = _discountRewardRepository.GetDiscountRewordSumForPayroll(Emp.EmployeeId, StartDateOfMonth, EndDateOfMonth, 1).Result + _discountRewardRepository.GetDiscountRewordSumForPayroll2(Emp.EmployeeId, Monthno, 1).Result;
 
                 Emp.TotalDiscounts = toaoldiscount;
                 //Accepted Vactions
@@ -1999,7 +2000,7 @@ namespace TaamerProject.Repository.Repositories
                 Emp.Taamen = tamn.ToString();
 
                 decimal totcaramount = 0;
-                var crmov = await _carMovementsRepository.GetAllCarMovementsSearchObject(new CarMovementsVM { EmpId = Emp.EmployeeId }, Emp.BranchId.HasValue ? Emp.BranchId.Value : 0);
+                var crmov = _carMovementsRepository.GetAllCarMovementsSearchObject(new CarMovementsVM { EmpId = Emp.EmployeeId }, Emp.BranchId.HasValue ? Emp.BranchId.Value : 0).Result;
                 if (crmov.Count() > 0)
                 {
                     foreach (var emcar in crmov)
@@ -2012,24 +2013,29 @@ namespace TaamerProject.Repository.Repositories
                     }
                 }
                 //Absent days excluded vaction days
-                var totlabs = await _attendenceRepository.GetAbsenceData(startDate, endDate, Emp.EmployeeId, YearId, Emp.BranchId ?? 0, lang, Con);
+                var totlabs = _attendenceRepository.GetAbsenceData_withWeekEnd(startDate, endDate, Emp.EmployeeId, YearId, 0, lang, Con).Result;
+                var dawam = _TaamerProContext.AttTimeDetails.Where(x => x.AttTimeId == Emp.DawamId).ToList().Select(x => x.Day);
 
-                Emp.TotalDayAbs = totlabs.Count();
+                var totalabsencediscount = CalculateAbsenceDiscounts(totlabs.ToList(), Emp.Salary.Value / 30, Emp.DawamId.Value);
 
+                Emp.TotalDayAbs = totlabs.Count(a => dawam.Contains(int.Parse(a.DayNOfWeek))); ;// totlabs.Count();
+                Emp.TotalAbsenceDiscount = totalabsencediscount;
+                var latedata = _attendenceRepository.GetLateData(startDate, endDate, Emp.EmployeeId, YearId, 0, 0, lang, Con);
+                Emp.TotalLateDiscount = latedata.Result.Sum(x => x.Discount1) + latedata.Result.Sum(x => x.Discount2);
                 if (!string.IsNullOrEmpty(Emp.EndWorkDate) && int.Parse(Emp.EndWorkDate.Split('-')[0]) == YearId && int.Parse(Emp.EndWorkDate.Split('-')[1]) == Monthno)
                 {
                     int daynum = int.Parse(Emp.EndWorkDate.Split('-')[2]);
 
                     if (Monthno < MonthNo)
                     {
-                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary+ Emp.HousingAllowance) / 30) * 30) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
-                          (((Emp.Salary / 30) * Emp.TotalDayAbs) + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations)
+                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance) / 30) * 30) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
+                          (totalabsencediscount + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations + latedata.Result.Sum(x => x.Discount1) + latedata.Result.Sum(x => x.Discount2))
                            ), 2);
                     }
                     else
                     {
-                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance )/ 30) * daynum) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
-                      (((Emp.Salary / 30) * Emp.TotalDayAbs) + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations)
+                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance) / 30) * daynum) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
+                      (totalabsencediscount + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations + latedata.Result.Sum(x => x.Discount1) + latedata.Result.Sum(x => x.Discount2))
                        ), 2);
                     }
                 }
@@ -2038,14 +2044,14 @@ namespace TaamerProject.Repository.Repositories
 
                     if (Monthno < MonthNo)
                     {
-                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance )/ 30) * 30) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
-                          (((Emp.Salary / 30) * Emp.TotalDayAbs) + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations)
+                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance) / 30) * 30) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
+                          (totalabsencediscount + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations + latedata.Result.Sum(x => x.Discount1) + latedata.Result.Sum(x => x.Discount2))
                            ), 2);
                     }
                     else
                     {
-                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance )/ 30) * day) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
-                      (((Emp.Salary / 30) * Emp.TotalDayAbs) + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations)
+                        Emp.TotalySalaries = Math.Round((decimal)(((((Emp.ThisMonthSalary + Emp.HousingAllowance) / 30) * day) + Emp.MonthlyAllowances.Value + Emp.Bonus + Emp.TotalRewards.Value) -
+                      (totalabsencediscount + Emp.TotalLoans.Value + tamn + totcaramount + Emp.TotalDiscounts.Value + Emp.TotalPaidVacations + latedata.Result.Sum(x => x.Discount1) + latedata.Result.Sum(x => x.Discount2))
                        ), 2);
                     }
                 }
@@ -2064,6 +2070,174 @@ namespace TaamerProject.Repository.Repositories
             }
             return employees;
         }
+
+        /// <summary>
+        /// //////////////////////////////////////////////////////////absence discount    ///////////////////////
+
+        private decimal CalculateAbsenceDiscounts(List<AbsenceVM> absences, decimal salary, int dawamId)
+        {
+            decimal total = 0;
+
+
+            //discount variables 
+            int Between1And3 = 0;
+            int Between4And6 = 0;
+            int Between7And10 = 0;
+            int GreaterThan10 = 0;
+            var groupedAbsences = absences.GroupBy(a => a.EmpNo)
+                                            .Select(g => new
+                                            {
+                                                EmpNo = g.Key,
+                                                Absences = g.OrderBy(a => a.Mdate).ToList()
+                                            }).ToList();
+            var dawam = _TaamerProContext.AttTimeDetails.Where(x => x.AttTimeId == dawamId).ToList().Select(x => x.Day);
+
+            //foreach (var group in groupedAbsences)
+            foreach (var group in groupedAbsences)
+            {
+                int consecutiveDays = 0;
+                DateTime? previousDate = null;
+
+                foreach (var absence in group.Absences)
+                {
+                    var currentDate = DateTime.ParseExact(absence.Mdate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+                    Console.WriteLine($"Current Date: {currentDate}, Previous Date: {previousDate}");
+
+                    if (previousDate.HasValue && (currentDate - previousDate.Value).Days == 1)
+                    {
+                        if (!dawam.Contains(Convert.ToInt32(absence.DayNOfWeek)))
+                        {
+                            previousDate = currentDate;
+                            continue;
+                        }
+
+                        consecutiveDays++;
+                    }
+                    else if (!dawam.Contains(Convert.ToInt32(absence.DayNOfWeek)))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (consecutiveDays > 0)
+                        {
+                            total += CalculateDiscount(consecutiveDays, salary, ref Between1And3, ref Between4And6, ref Between7And10, ref GreaterThan10);
+                        }
+
+                        consecutiveDays = 1;
+                    }
+
+                    previousDate = currentDate;
+                }
+
+                if (consecutiveDays > 0)
+                {
+                    total += CalculateDiscount(consecutiveDays, salary, ref Between1And3, ref Between4And6, ref Between7And10, ref GreaterThan10);
+                }
+            }
+
+            //    int consecutiveDays = 0;
+            //    DateTime? previousDate = null;
+
+
+            //    foreach (var absence in group.Absences)
+            //    {
+            //        var currentDate = DateTime.ParseExact(absence.Mdate, "dd-MM-yyyy", CultureInfo.InvariantCulture);// Convert.ToDateTime(absence.Mdate);
+
+            //        if (previousDate.HasValue && (currentDate - previousDate.Value).Days == 1)
+            //        {
+            //            if (previousDate.HasValue && !dawam.Contains(Convert.ToInt32(absence.DayNOfWeek)))
+            //            {
+            //                previousDate = currentDate;
+            //            }
+            //            else
+            //            {
+            //                consecutiveDays++;
+            //               // total += CalculateDiscount(consecutiveDays,salary,ref Between1And3,ref Between4And6,ref Between7And10,ref GreaterThan10);
+            //                previousDate = currentDate;
+            //            }
+            //        }
+            //        //else if (previousDate.HasValue && !dawam.Contains(dayofweek))
+            //        //{
+            //        //    previousDate = currentDate;
+            //        //}
+            //        else if(!previousDate.HasValue && !dawam.Contains(Convert.ToInt32(absence.DayNOfWeek)))
+            //        {
+            //            continue;
+            //        }
+            //        else
+            //        {
+            //            if(consecutiveDays > 0)
+            //            {
+            //                total += CalculateDiscount(consecutiveDays, salary, ref Between1And3, ref Between4And6, ref Between7And10, ref GreaterThan10);
+            //            }
+
+            //            consecutiveDays = 1;
+            //           // total += CalculateDiscount(consecutiveDays,salary,ref Between1And3,ref Between4And6,ref Between7And10,ref GreaterThan10);
+            //            previousDate = currentDate;
+            //        }
+
+
+            //    }
+
+            //    if (consecutiveDays > 0)
+            //    {
+            //        total += CalculateDiscount(consecutiveDays, salary, ref Between1And3, ref Between4And6, ref Between7And10, ref GreaterThan10);
+            //    }
+            //}
+            return total;
+        }
+
+
+        public decimal CalculateDiscount(int absent, decimal salary, ref int Between1And3, ref int Between4And6, ref int Between7And10, ref int GreaterThan10)
+        {
+
+            if (absent >= 1 && absent <= 3)
+            {
+                return CalculateAbsenceDiscount(salary, absent, (int)AbsencePeriod.Between1And3, ref Between1And3);
+            }
+            else if (absent >= 4 && absent < 7)
+            {
+                return CalculateAbsenceDiscount(salary, absent, (int)AbsencePeriod.Between4And6, ref Between4And6);
+            }
+            else if (absent >= 7 && absent <= 10)
+            {
+                return CalculateAbsenceDiscount(salary, absent, (int)AbsencePeriod.Between7And10, ref Between7And10);
+            }
+            else if (absent > 10)
+            {
+                return CalculateAbsenceDiscount(salary, absent, (int)AbsencePeriod.GreaterThan10, ref GreaterThan10);
+            }
+
+            return 0m;
+        }
+
+        private decimal CalculateAbsenceDiscount(decimal salary, int daynum, int type, ref int count)
+        {
+
+
+            //count++;
+            //var id = (count > 1 && count <=3) ? 1 : (count >= 4 && count <= 6) ? 2 : (count >= 7 && count <= 10) ? 3 : (count >10) ? 4 :1;
+            //var absencerules = _TaamerProContext.AbsenceLists.FirstOrDefault(x => x.ID == id);
+            //return id switch
+            //{
+
+
+            count++;
+            var id = count > 4 ? 4 : count;
+            var absencerules = _TaamerProContext.AbsenceLists.FirstOrDefault(x => x.ID == type);
+            return id switch
+            {
+                (int)AbsencePeriod.Between1And3 => (daynum * salary) + (absencerules.First.Value * salary),
+                (int)AbsencePeriod.Between4And6 => (daynum * salary) + (absencerules.Second.Value * salary),
+                (int)AbsencePeriod.Between7And10 => (daynum * salary) + (absencerules.Third.Value * salary),
+                (int)AbsencePeriod.GreaterThan10 => (daynum * salary) + (absencerules.Fourth.Value * salary),
+                _ => 0m
+            };
+        }
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<EmployeesVM>>  GetAllUsersEmployees()
         {
             var employees = _TaamerProContext.Employees.Where(s => s.IsDeleted == false && string.IsNullOrEmpty(s.EndWorkDate)&& !string.IsNullOrEmpty(s.WorkStartDate)).Select(x => new EmployeesVM
@@ -3139,5 +3313,6 @@ namespace TaamerProject.Repository.Repositories
         {
             throw new NotImplementedException();
         }
+
     }
 }

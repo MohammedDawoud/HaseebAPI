@@ -142,6 +142,10 @@ namespace TaamerProject.Models
         public List<AttTimeDetailsVM>? Isworkday { get; set; }
 
         public string? status { get; set; }
+        // New fields for discounts
+        public decimal? Discount1 { get; set; }
+        public decimal? Discount2 { get; set; }
+        public decimal? EmpSalary { get; set; }
     }
 
 

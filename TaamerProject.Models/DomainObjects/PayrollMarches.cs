@@ -31,6 +31,8 @@ namespace TaamerProject.Models
         public string? Taamen { get; set; }
         public bool? IsPostPayVoucher { get; set; }
         public int? YearId { get; set; }
+        public decimal? TotalLateDiscount { get; set; }
+        public decimal? TotalAbsenceDiscount { get; set; }
         public virtual Employees? Employee { get; set; }
     }
 }

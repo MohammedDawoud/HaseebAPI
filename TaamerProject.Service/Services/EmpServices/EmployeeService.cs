@@ -129,7 +129,7 @@ namespace TaamerProject.Service.Services
         }
         public IEnumerable<EmployeesVM> GetAllEmployeesSearch(bool IsAllBranch, string lang, int UserId, int BranchId,int Monthno,int YearId, string Con)
         {
-            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno, YearId, Con).Result;
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno, YearId, Con);
 
         
             return Emps;
@@ -167,7 +167,8 @@ namespace TaamerProject.Service.Services
                         TotalSalaryOfThisMonth = Emp.TotalySalaries,
                         TotalAbsDays = Emp.TotalDayAbs,
                         TotalVacations = Emp.TotalPaidVacations,
-                        Taamen = Emp.Taamen
+                        Taamen = Emp.Taamen,
+                        
 
 
                     };
@@ -200,7 +201,7 @@ namespace TaamerProject.Service.Services
 
         public IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId,int Monthno, string Con)
         {
-            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno,DateTime.Now.Year, Con).Result;
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno,DateTime.Now.Year, Con);
 
             ///PayrollMarches
             foreach (var Emp in Emps)
@@ -231,7 +232,9 @@ namespace TaamerProject.Service.Services
                         TotalVacations = Emp.TotalPaidVacations,
                         Taamen = Emp.Taamen,
                         YearId=DateTime.Now.Year,
-                        
+                        TotalLateDiscount = Emp.TotalLateDiscount,
+                        TotalAbsenceDiscount = Emp.TotalAbsenceDiscount,
+
 
 
                     };
@@ -256,6 +259,8 @@ namespace TaamerProject.Service.Services
                     payroll.TotalVacations = Emp.TotalPaidVacations;
                     payroll.Taamen = Emp.Taamen;
                     payroll.YearId = DateTime.Now.Year;
+                    payroll.TotalLateDiscount = Emp.TotalLateDiscount;
+                    payroll.TotalAbsenceDiscount = Emp.TotalAbsenceDiscount;
                     _payrollMarchesService.SavePayrollMarches(payroll, UserId, BranchId);
                 }
             }
@@ -265,7 +270,7 @@ namespace TaamerProject.Service.Services
 
         public IEnumerable<EmployeesVM> GetEmployeesForPayroll(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno,int YearId, string Con)
         {
-            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno,YearId, Con).Result;
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno,YearId, Con);
 
             ///PayrollMarches
             foreach (var Emp in Emps)
@@ -295,7 +300,9 @@ namespace TaamerProject.Service.Services
                         TotalAbsDays = Emp.TotalDayAbs,
                         TotalVacations = Emp.TotalPaidVacations,
                         Taamen = Emp.Taamen,
-                        YearId=YearId
+                        YearId=YearId,
+                        TotalAbsenceDiscount = Emp.TotalAbsenceDiscount,
+                        TotalLateDiscount = Emp.TotalLateDiscount,
 
 
                     };
@@ -320,6 +327,8 @@ namespace TaamerProject.Service.Services
                     payroll.TotalVacations = Emp.TotalPaidVacations;
                     payroll.Taamen = Emp.Taamen;
                     payroll.YearId = YearId;
+                    payroll.TotalLateDiscount = Emp.TotalLateDiscount;
+                    payroll.TotalAbsenceDiscount = Emp.TotalAbsenceDiscount;
                     _payrollMarchesService.SavePayrollMarches(payroll, UserId, BranchId);
                 }
             }
@@ -327,7 +336,7 @@ namespace TaamerProject.Service.Services
         }
         public IEnumerable<EmployeesVM> GetEmployeesForPayrollPrint(bool IsAllBranch, string lang, int UserId, int BranchId, int Monthno, int YearId, string Con)
         {
-            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno, YearId, Con).Result;
+            var Emps = _employeeRepository.GetEmployeesForPayroll(IsAllBranch, lang, UserId, BranchId, Monthno, YearId, Con);
 
             return Emps;
         }

@@ -166,6 +166,8 @@ namespace TaamerProject.Models
 
         public decimal? OtherAllownces { get; set; }
         public string? Age { get; set; }
+        public decimal? TotalLateDiscount { get; set; }
+        public decimal? TotalAbsenceDiscount { get; set; }
 
     }
 }

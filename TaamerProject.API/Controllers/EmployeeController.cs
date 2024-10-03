@@ -615,9 +615,8 @@ namespace TaamerProject.API.Controllers
         //    string FilePathReturn = @"TempFiles/" + FileName;
         //    return Content(FilePathReturn);
         //}
-
         [HttpPost("PrintEmployeesSalaryReport2")]
-        public IActionResult PrintEmployeesSalaryReport2([FromBody]EmployeesVM SalarySearch)
+        public IActionResult PrintEmployeesSalaryReport2([FromBody] EmployeesVM SalarySearch)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             EmployeesSalaryRptVM_New salaryRptVM_New = new EmployeesSalaryRptVM_New();
@@ -630,7 +629,7 @@ namespace TaamerProject.API.Controllers
             if (SalarySearch.BranchId == null || SalarySearch.BranchId == 0)
             {
                 SalarySearch.BranchId = 0;
-                 IsAllBranch = true;
+                IsAllBranch = true;
 
             }
             int orgId = _branchesService.GetOrganizationId(_globalshared.BranchId_G).Result;
@@ -639,8 +638,8 @@ namespace TaamerProject.API.Controllers
 
             //var Emps = _employesService.GetAllEmployeesSearch(SalarySearch, UsersData.Lang, _globalshared.UserId_G, _globalshared.BranchId_G, _Con);
             List<PayrollMarchesVM> Emps = new List<PayrollMarchesVM>();
-             Emps = _payrollMarchesService.GetPayrollMarches((int)SalarySearch.MonthNo, (int)SalarySearch.BranchId, "",_globalshared.YearId_G).Result.ToList();
-            if(Emps==null || Emps.Count() == 0)
+            Emps = _payrollMarchesService.GetPayrollMarches((int)SalarySearch.MonthNo, (int)SalarySearch.BranchId, "", _globalshared.YearId_G).Result.ToList();
+            if (Emps == null || Emps.Count() == 0)
             {
                 var emp = _employesService.GetEmployeesForPayroll(IsAllBranch, _globalshared.Lang_G, _globalshared.UserId_G, (int)SalarySearch.BranchId, (int)SalarySearch.MonthNo, _globalshared.YearId_G, Con);
 
@@ -677,11 +676,15 @@ namespace TaamerProject.API.Controllers
                     TotalRewards = s.TotalRewards.ToString() ?? "0",
                     //TotalViolations = s.TotalViolations.ToString() ?? "0",
                     TotalySalaries = s.TotalSalaryOfThisMonth.ToString() ?? "0",
+                    TotalLateDiscount = s.TotalLateDiscount.ToString() ?? "0",
+                    TotalAbsenceDiscount = s.TotalAbsenceDiscount.ToString() ?? "0",
+
                 }).ToList();
-                if(Emps !=null && Emps.Count() > 0)
+                if (Emps != null && Emps.Count() > 0)
                 {
-                    var total=new TotalEmployeesSalaryRptVM() { 
-                        TSalary = Emps.Sum(x=>x.SalaryOfThisMonth).ToString() ?? "0",
+                    var total = new TotalEmployeesSalaryRptVM()
+                    {
+                        TSalary = Emps.Sum(x => x.SalaryOfThisMonth).ToString() ?? "0",
 
                         TCommunicationAllawance = Emps.Sum(x => x.CommunicationAllawance).ToString() ?? "0",
                         TProfessionAllawance = Emps.Sum(x => x.ProfessionAllawance).ToString() ?? "0",
@@ -696,7 +699,9 @@ namespace TaamerProject.API.Controllers
                         TTotalDiscounts = Emps.Sum(x => x.TotalDiscounts).ToString() ?? "0",
                         TTotalRewards = Emps.Sum(x => x.TotalRewards).ToString() ?? "0",
                         //TotalViolations = s.TotalViolations.ToString() ?? "0",
-                        TTotalySalaries = Emps.Sum(x => x.TotalSalaryOfThisMonth).ToString() ?? "0"
+                        TTotalySalaries = Emps.Sum(x => x.TotalSalaryOfThisMonth).ToString() ?? "0",
+                        TTotalLateDiscount = Emps.Sum(x => x.TotalLateDiscount).ToString() ?? "0",
+                        TTotalAbsenceDiscount = Emps.Sum(x => x.TotalAbsenceDiscount).ToString() ?? "0",
                     };
                     salaryRptVM_New.Total = total;
                 }
@@ -708,16 +713,16 @@ namespace TaamerProject.API.Controllers
 
                 //ViewData["rptSource"] = rptSource;
 
-                if (SalarySearch.BranchId != null && SalarySearch.BranchId !=0)
+                if (SalarySearch.BranchId != null && SalarySearch.BranchId != 0)
                 {
-                    salaryRptVM_New.BranchName =_branchesService.GetBranchById((int)SalarySearch.BranchId).Result.NameAr;
+                    salaryRptVM_New.BranchName = _branchesService.GetBranchById((int)SalarySearch.BranchId).Result.NameAr;
                 }
                 else
                 {
                     salaryRptVM_New.BranchName = "";
 
                 }
-                salaryRptVM_New.MonthName = (SalarySearch.MonthNo==null || SalarySearch.MonthNo ==0) ? "" : getmnth((int)SalarySearch.MonthNo);
+                salaryRptVM_New.MonthName = (SalarySearch.MonthNo == null || SalarySearch.MonthNo == 0) ? "" : getmnth((int)SalarySearch.MonthNo);
 
                 //string Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                 //ViewData["Date"] = Date;
@@ -746,6 +751,8 @@ namespace TaamerProject.API.Controllers
                     TotalyDays = s.TotalAbsDays.ToString() ?? "0",
                     TotalDiscounts = s.TotalDiscounts.ToString() ?? "0",
                     TotalRewards = s.TotalRewards.ToString() ?? "0",
+                    TotalLateDiscount = s.TotalLateDiscount.ToString() ?? "0",
+                    TotalAbsenceDiscount = s.TotalAbsenceDiscount.ToString() ?? "0",
                     //TotalViolations = s.TotalViolations.ToString() ?? "0",
                     TotalySalaries = s.TotalSalaryOfThisMonth.ToString() ?? "0",
                 }).ToList();
@@ -768,7 +775,9 @@ namespace TaamerProject.API.Controllers
                         TTotalDiscounts = Emps.Sum(x => x.TotalDiscounts).ToString() ?? "0",
                         TTotalRewards = Emps.Sum(x => x.TotalRewards).ToString() ?? "0",
                         //TotalViolations = s.TotalViolations.ToString() ?? "0",
-                        TTotalySalaries = Emps.Sum(x => x.TotalSalaryOfThisMonth).ToString() ?? "0"
+                        TTotalySalaries = Emps.Sum(x => x.TotalSalaryOfThisMonth).ToString() ?? "0",
+                        TTotalLateDiscount = Emps.Sum(x => x.TotalLateDiscount).ToString() ?? "0",
+                        TTotalAbsenceDiscount = Emps.Sum(x => x.TotalAbsenceDiscount).ToString() ?? "0",
                     };
                     salaryRptVM_New.Total = total;
                 }
@@ -809,6 +818,7 @@ namespace TaamerProject.API.Controllers
 
 
         }
+
 
 
 
@@ -1229,12 +1239,12 @@ namespace TaamerProject.API.Controllers
                 IsAllBranch = true;
             }
 
-            if(_globalshared.YearId_G < DateTime.Now.Year)
+            if (_globalshared.YearId_G < DateTime.Now.Year)
             {
-                var emp = _employesService.GetEmployeesForPayroll(IsAllBranch, _globalshared.Lang_G, _globalshared.UserId_G, (int)SalarySearch.BranchId,(int)SalarySearch.MonthNo, _globalshared.YearId_G, Con);
+                var emp = _employesService.GetEmployeesForPayroll(IsAllBranch, _globalshared.Lang_G, _globalshared.UserId_G, (int)SalarySearch.BranchId, (int)SalarySearch.MonthNo, _globalshared.YearId_G, Con);
 
-                var payrolls = _payrollMarchesService.GetPayrollMarches((int)SalarySearch.MonthNo, (int)SalarySearch.BranchId, "",_globalshared.YearId_G);
-                //payrolls = payrolls.ToList();
+                var payrolls = _payrollMarchesService.GetPayrollMarches((int)SalarySearch.MonthNo, (int)SalarySearch.BranchId, "", _globalshared.YearId_G);
+                //payrolls = payrolls.ToList();GetEmpPayrollMarchescvs
                 var payroll = payrolls.Result.Where(x => (emp.Select(y => y.EmployeeId).Contains(x.EmpId))).ToList().DistinctBy(x => x.EmpId).ToList();
 
                 return Ok(payroll);
@@ -1250,7 +1260,7 @@ namespace TaamerProject.API.Controllers
                 return Ok(payroll);
             }
 
-       
+
         }
         [HttpGet("GetCurrentYear")]
         public IActionResult GetCurrentYear()

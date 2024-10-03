@@ -206,6 +206,10 @@ namespace TaamerProject.Models.DBContext
         public virtual DbSet<Guide_QuestionsAnswers> Guide_QuestionsAnswers { get; set; }
         public virtual DbSet<SupportRequestsReplay> RequestsReplays { get; set; }
 
+
+        public virtual DbSet<Emp_AbsenceList> AbsenceLists { get; set; }
+        public virtual DbSet<Emp_LateList> LateLists { get; set; }
+
         public string GetDatabaseName()
         {
             return Database.GetDbConnection().Database;
@@ -4152,6 +4156,23 @@ namespace TaamerProject.Models.DBContext
                 modelBuilder.Entity<SupportRequestsReplay>().HasOne(s => s.SupportResquests).WithMany().HasForeignKey(e => e.ServiceRequestId);
 
             });
+
+            //--------------------------------END--------------------------------------------------
+
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<Emp_LateList>(entity =>
+            {
+                entity.HasKey(e => e.ID);
+                entity.ToTable("Emp_LateList");
+            });
+
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<Emp_AbsenceList>(entity =>
+            {
+                entity.HasKey(e => e.ID);
+                entity.ToTable("Emp_AbsenceList");
+            });
+
 
             //--------------------------------END--------------------------------------------------
             #endregion

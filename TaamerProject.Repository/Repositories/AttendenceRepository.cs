@@ -10,6 +10,7 @@ using System.Data;
 
 using TaamerProject.Repository.Interfaces;
 using TaamerProject.Models.DBContext;
+using Haseeb.Models.Enums;
 
 namespace TaamerProject.Repository.Repositories
 {
@@ -493,6 +494,113 @@ namespace TaamerProject.Repository.Repositories
             }
 
         }
+
+        public async Task<IEnumerable<AbsenceVM>> GetAbsenceData_withWeekEnd(string FromDate, string ToDate, int EmpId, int? YearId, int BranchId, string lang, string Con)
+        {
+            try
+            {
+                List<AbsenceVM> lmd = new List<AbsenceVM>();
+
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "SP_AttAbsenceEmployees_withoutWeekEnd";
+                        command.Connection = con;
+                        string from = null;
+                        string to = null;
+                        int EmpployeId = 0;
+                        int BrId = 0;
+
+
+                        if (FromDate == "")
+                        {
+                            from = null;
+                            command.Parameters.Add(new SqlParameter("@From", YearId + "-01-01"));
+                        }
+                        else
+                        {
+                            from = FromDate;
+                            string fdate = String.Format("{0:yyyy-MM-dd}", from);
+                            command.Parameters.Add(new SqlParameter("@From", fdate));
+                        }
+                        if (ToDate == "")
+                        {
+                            to = null;
+                            command.Parameters.Add(new SqlParameter("@To", (YearId + 1) + "-12-31"));
+
+                        }
+                        else
+                        {
+                            to = ToDate;
+
+                            string tdate = String.Format("{0:yyyy-MM-dd}", to);
+                            command.Parameters.Add(new SqlParameter("@To", tdate));
+                        }
+
+                        if (EmpId == 0)
+                        {
+                            EmpployeId = 0;
+                            command.Parameters.Add(new SqlParameter("@EmpId", EmpployeId));
+
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@EmpId", EmpId));
+                        }
+
+                        if (BranchId == 0)
+                        {
+                            BrId = 0;
+                            command.Parameters.Add(new SqlParameter("@BranchId", BrId));
+
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        }
+
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+                        DataTable dt = new DataTable();
+                        dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+
+                        // loop for adding add from dataset to list<modeldata>  
+                        {
+                            lmd.Add(new AbsenceVM
+                            {
+                                EmpNo = (dr[0]).ToString(),
+
+                                E_FullName = dr[2].ToString(),
+                                DayNOfWeek = (dr[5]).ToString(),
+                                Mdate = dr[4].ToString(),
+
+                                E_BranchId = (dr[15]).ToString()
+
+
+
+
+                            });
+
+                        }
+                    }
+                }
+                return lmd.ToList();
+            }
+            catch (Exception ex)
+            {
+                //string msg = ex.Message;
+                List<AbsenceVM> lmd = new List<AbsenceVM>();
+                return lmd.ToList();
+            }
+
+        }
+
         public async Task<IEnumerable<LateVM>> GetLateData(string FromDate, string ToDate, int EmpId, int? YearId, int Shift, int BranchId, string lang, string Con)
         {
             try
@@ -510,6 +618,12 @@ namespace TaamerProject.Repository.Repositories
                         int EmpployeId = 0;
                         int BrId = 0;
                         int shift = 0;
+
+                        //discount variables 
+                        int countLessThan15 = 0;
+                        int countBetween15And30 = 0;
+                        int countBetween30And60 = 0;
+                        int countGreaterThan60 = 0;
 
 
                         if (FromDate == "")
@@ -593,7 +707,7 @@ namespace TaamerProject.Repository.Repositories
                                 DawamId = (dr[13]).ToString(),
                                 TimeJoin1 = (!String.IsNullOrWhiteSpace(dr[4].ToString())) ? Convert.ToDateTime(dr[4]).ToString("hh:mm tt") : dr[13].ToString() != 2.ToString() ? "----" : "",
                                 TimeJoin2 = (!String.IsNullOrWhiteSpace(dr[6].ToString())) ? Convert.ToDateTime(dr[6]).ToString("hh:mm tt") : dr[13].ToString() != 1.ToString() ? "----" : "",
-                                
+
                                 MoveTimeIntJoin1 = dr[8].ToString(),
                                 MoveTimeStringJoin1 = (!String.IsNullOrWhiteSpace(dr[4].ToString())) ? (!String.IsNullOrWhiteSpace(dr[8].ToString()) || Convert.ToInt32(dr[8]) > 0 ? dr[18].ToString().Substring(1) : "00:00") : "",
                                 MoveTimeIntJoin2 = dr[10].ToString(),
@@ -603,12 +717,20 @@ namespace TaamerProject.Repository.Repositories
                                 BranchId = (dr[2]).ToString(),
                                 DateDay = ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US"),
 
+                                // Calculate the discount for the late times
+                                Discount1 = (!String.IsNullOrWhiteSpace(dr[8].ToString())) ? CalculateDiscount(Convert.ToInt32(dr[8]), Convert.ToDecimal(dr[24]), ref countLessThan15, ref countBetween15And30, ref countBetween30And60, ref countGreaterThan60) : 0,
+                                Discount2 = (!String.IsNullOrWhiteSpace(dr[10].ToString())) ? CalculateDiscount(Convert.ToInt32(dr[10]), Convert.ToDecimal(dr[24]), ref countLessThan15, ref countBetween15And30, ref countBetween30And60, ref countGreaterThan60) : 0
+
+
                             });
 
                         }
                     }
                 }
                 return lmd;
+                //.Where(x=>(x.MoveTimeStringJoin1 !=null && x.MoveTimeStringJoin1 !="00:00" && x.MoveTimeStringJoin1=="")
+                //|| (x.MoveTimeStringJoin2 !=null && x.MoveTimeStringJoin2 != null && x.MoveTimeStringJoin2 != "")
+                //);
             }
             catch (Exception ex)
             {
@@ -618,6 +740,47 @@ namespace TaamerProject.Repository.Repositories
             }
 
         }
+
+
+        public decimal CalculateDiscount(int lateMinutes, decimal salary, ref int countLessThan15, ref int countBetween15And30, ref int countBetween30And60, ref int countGreaterThan60)
+        {
+            if (lateMinutes < 15)
+            {
+                return IncrementAndCalculateDiscount(salary, (int)LatePeriod.LessThan15, ref countLessThan15);
+            }
+            else if (lateMinutes >= 15 && lateMinutes < 30)
+            {
+                return IncrementAndCalculateDiscount(salary, (int)LatePeriod.Between15And30, ref countBetween15And30);
+            }
+            else if (lateMinutes >= 30 && lateMinutes < 60)
+            {
+                return IncrementAndCalculateDiscount(salary, (int)LatePeriod.Between30And60, ref countBetween30And60);
+            }
+            else if (lateMinutes >= 60)
+            {
+                return IncrementAndCalculateDiscount(salary, (int)LatePeriod.GreaterThan60, ref countGreaterThan60);
+            }
+
+            return 0m;
+        }
+
+        private decimal IncrementAndCalculateDiscount(decimal salary, int type, ref int count)
+        {
+
+
+            count++;
+            var id = count > 4 ? 4 : count;
+            var laterules = _TaamerProContext.LateLists.FirstOrDefault(x => x.ID == type);
+            return id switch
+            {
+                (int)LatePeriod.LessThan15 => (laterules.First.Value / 100) * salary,
+                (int)LatePeriod.Between15And30 => (laterules.Second.Value / 100) * salary,
+                (int)LatePeriod.Between30And60 => (laterules.Third.Value / 100) * salary,
+                (int)LatePeriod.GreaterThan60 => (laterules.Fourth.Value / 100) * salary,
+                _ => 0m
+            };
+        }
+
         public async Task<IEnumerable<LateVM>> GetLateDataToday(string TodayDate, int? YearId, int Shift, int BranchId, string lang, string Con)
         {
             try

@@ -67,7 +67,7 @@ namespace TaamerProject.Repository.Interfaces
         }
 
         public async Task<IEnumerable<PayrollMarchesVM>> GetPayrollMarches(int MonthId, int BranchSearch, string SearchText,int YearId)
-        {
+            {
             var payrolls = _TaamerProContext.PayrollMarches.Where(x => !x.IsDeleted && x.MonthNo == MonthId && x.YearId == YearId &&
 
             ((BranchSearch > 0 && x.Employee.BranchId == BranchSearch) || (BranchSearch == 0 && true))).Select(x => new PayrollMarchesVM
@@ -98,6 +98,8 @@ namespace TaamerProject.Repository.Interfaces
                 IsPostPayVoucher = x.IsPostPayVoucher ?? false,
                 Taamen = x.Taamen ?? "0",
                 YearId = x.YearId,
+                TotalLateDiscount = x.TotalLateDiscount,
+                TotalAbsenceDiscount = x.TotalAbsenceDiscount,
             }).ToList().OrderByDescending(x=>x.PayrollId).ToList();
             return payrolls.DistinctBy(x => x.EmpId).ToList();
         }

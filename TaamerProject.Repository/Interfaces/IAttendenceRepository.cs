@@ -34,6 +34,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<IEnumerable<Attendance_W_VM>> GetAttendance_Screen_W(int Year, int Month, int? YearId, int Shift, int BranchId, int SwType, string lang, string Con, int UserIDF);
 
         Task<IEnumerable<LateVM>> GetAttendanceData_Application(string FromDate, string ToDate, int? YearId, int Shift, int BranchId, string lang, string Con);
+         Task<IEnumerable<AbsenceVM>> GetAbsenceData_withWeekEnd(string FromDate, string ToDate, int EmpId, int? YearId, int BranchId, string lang, string Con);
 
 
     }

@@ -158,9 +158,15 @@ namespace TaamerProject.Models
         public string? Date { get; set; }
         public int? Type { get; set; }
         public string? TypeName { get; set; }
-        public int? DebentureQty { get; set; }
-        public decimal? Qty { get; set; }
-        public decimal? QtyCredit { get; set; }
+        public decimal? PurQty { get; set; }
+        public decimal? PurDebitQty { get; set; }
+
+        public decimal? SalesQty { get; set; }
+        public decimal? SalesCreditQty { get; set; }
+        public decimal? DebentureQty { get; set; }
+        public decimal TransferQty { get; set; }
+        public decimal? qtyStorehouse { get; set; }
+        public decimal? qtyTotal { get; set; }
         public decimal? Amount { get; set; }
         public decimal? TaxAmount { get; set; }
         public decimal? TotalAmount { get; set; }

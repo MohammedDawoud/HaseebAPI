@@ -23,9 +23,9 @@ namespace TaamerProject.Repository.Repositories
 
         }
 
-        public async Task<IEnumerable<SupportRequestVM> >GetAllSupportResquests(string lang, int BranchId,int UserId)
+        public async Task<IEnumerable<SupportRequestVM>> GetAllSupportResquests(string lang, int BranchId, int UserId)
         {
-            var allSupportResquests = _TaamerProContext.SupportResquests.Where(s => s.IsDeleted == false && s.AddUser==UserId ).Select(x => new SupportRequestVM
+            var allSupportResquests = _TaamerProContext.SupportResquests.Where(s => s.IsDeleted == false && s.AddUser == UserId).Select(x => new SupportRequestVM
             {
                 RequestId = x.RequestId,
                 Type = x.Type,
@@ -39,11 +39,11 @@ namespace TaamerProject.Repository.Repositories
                 OrganizationId = x.OrganizationId,
                 AttachmentUrl = x.AttachmentUrl,
                 BranchId = x.BranchId,
-                Department=x.Department ??"",
+                Department = x.Department ?? "",
                 priority = x.priority ?? "",
                 LastReplayFrom = x.LastReplayFrom,
                 Status = x.Status,
-                StatusName =x.Status==1?"تحت الاجراء" :x.Status==2?"مأجلة" :x.Status==3 ?"ملغاه" :x.Status==4?"تم اغلاقها" :x.Status==5?"تم اغلاقها لمضي 24 ساعة دون رد" :"تحت الاجراء",
+                StatusName = x.Status == 1 ? "تحت الاجراء" : x.Status == 2 ? "مأجلة" : x.Status == 3 ? "ملغاه" : x.Status == 4 ? "تم اغلاقها" : x.Status == 5 ? "تم اغلاقها لمضي 24 ساعة دون رد" : "تحت الاجراء",
             }).ToList().Select(s => new SupportRequestVM()
             {
                 RequestId = s.RequestId,
@@ -52,20 +52,20 @@ namespace TaamerProject.Repository.Repositories
                 Topic = s.Topic,
                 Date = s.Date,
                 //DateF = s.Date.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CreateSpecificCulture("en")),
-                DateF ="",
+                DateF = "",
 
                 UserId = s.UserId,
                 OrganizationId = s.OrganizationId,
                 AttachmentUrl = s.AttachmentUrl,
                 BranchId = s.BranchId,
-                Department=s.Department??"",
+                Department = s.Department ?? "",
                 priority = s.priority ?? "",
-                Repaly=s.Repaly ??"",
-                LastReplayDate = s.LastReplayDate??"",
+                Repaly = s.Repaly ?? "",
+                LastReplayDate = s.LastReplayDate ?? "",
                 TicketNo = s.TicketNo ?? "",
                 LastReplayFrom = s.LastReplayFrom,
                 Status = s.Status,
-                
+
                 StatusName = s.Status == 1 ? "تحت الاجراء" : s.Status == 2 ? "مأجلة" : s.Status == 3 ? "ملغاه" : s.Status == 4 ? "تم اغلاقها" : s.Status == 5 ? "تم اغلاقها لمضي 24 ساعة دون رد" : "تحت الاجراء",
 
 
@@ -76,7 +76,7 @@ namespace TaamerProject.Repository.Repositories
 
         public async Task<IEnumerable<SupportRequestVM>> GetAllOpenSupportResquests(string lang, int BranchId, int UserId)
         {
-            var allSupportResquests = _TaamerProContext.SupportResquests.Where(s => s.IsDeleted == false && s.AddUser == UserId && (s.Status==(int)SupportRequestStatus.Opend || s.Status == (int)SupportRequestStatus.Delay)).Select(x => new SupportRequestVM
+            var allSupportResquests = _TaamerProContext.SupportResquests.Where(s => s.IsDeleted == false && s.AddUser == UserId && (s.Status == (int)SupportRequestStatus.Opend || s.Status == (int)SupportRequestStatus.Delay)).Select(x => new SupportRequestVM
             {
                 RequestId = x.RequestId,
                 Type = x.Type,
@@ -91,22 +91,22 @@ namespace TaamerProject.Repository.Repositories
                 BranchId = x.BranchId,
                 Department = x.Department ?? "",
                 priority = x.priority ?? "",
-                Status=x.Status,
+                Status = x.Status,
                 CustomerULR = x.CustomerULR,
                 Repaly = x.Repaly ?? "",
                 LastReplayDate = x.LastReplayDate ?? "",
                 TicketNo = x.TicketNo ?? "",
-                LastReplayFrom=x.LastReplayFrom??"",
-                
+                LastReplayFrom = x.LastReplayFrom ?? "",
+
                 StatusName = x.Status == 1 ? "تحت الاجراء" : x.Status == 2 ? "مأجلة" : x.Status == 3 ? "ملغاه" : x.Status == 4 ? "تم اغلاقها" : x.Status == 5 ? "تم اغلاقها لمضي 24 ساعة دون رد" : "تحت الاجراء",
 
             }).ToList();
             return allSupportResquests;
         }
 
-            public async Task<IEnumerable<SupportRequestVM>> GetAllOpenSupportResquestsWithReplay(int UserId)
+        public async Task<IEnumerable<SupportRequestVM>> GetAllOpenSupportResquestsWithReplay(int UserId)
         {
-            var allSupportResquests = _TaamerProContext.SupportResquests.Where(s => s.IsDeleted == false && s.AddUser == UserId && (s.Status==(int)SupportRequestStatus.Opend || s.Status == (int)SupportRequestStatus.Delay) && ! string.IsNullOrEmpty(s.Repaly)).Select(x => new SupportRequestVM
+            var allSupportResquests = _TaamerProContext.SupportResquests.Where(s => s.IsDeleted == false && s.AddUser == UserId && (s.Status == (int)SupportRequestStatus.Opend || s.Status == (int)SupportRequestStatus.Delay) && !string.IsNullOrEmpty(s.Repaly)).Select(x => new SupportRequestVM
             {
                 RequestId = x.RequestId,
                 Type = x.Type,
@@ -121,12 +121,12 @@ namespace TaamerProject.Repository.Repositories
                 BranchId = x.BranchId,
                 Department = x.Department ?? "",
                 priority = x.priority ?? "",
-                Status=x.Status,
+                Status = x.Status,
                 CustomerULR = x.CustomerULR,
                 Repaly = x.Repaly ?? "",
                 LastReplayDate = x.LastReplayDate ?? "",
                 TicketNo = x.TicketNo ?? "",
-                LastReplayFrom=x.LastReplayFrom ??"",
+                LastReplayFrom = x.LastReplayFrom ?? "",
                 StatusName = x.Status == 1 ? "تحت الاجراء" : x.Status == 2 ? "مأجلة" : x.Status == 3 ? "ملغاه" : x.Status == 4 ? "تم اغلاقها" : x.Status == 5 ? "تم اغلاقها لمضي 24 ساعة دون رد" : "تحت الاجراء",
 
             }).ToList();

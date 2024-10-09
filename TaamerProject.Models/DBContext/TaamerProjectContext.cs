@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Haseeb.Models.DomainObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -209,6 +210,7 @@ namespace TaamerProject.Models.DBContext
 
         public virtual DbSet<Emp_AbsenceList> AbsenceLists { get; set; }
         public virtual DbSet<Emp_LateList> LateLists { get; set; }
+        public virtual DbSet<ContactList> ContactLists { get; set; }
 
         public string GetDatabaseName()
         {
@@ -4174,6 +4176,15 @@ namespace TaamerProject.Models.DBContext
                 entity.ToTable("Emp_AbsenceList");
             });
 
+
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<ContactList>(entity =>
+            {
+                entity.HasKey(e => e.ContactListId);
+                entity.ToTable("ContactList");
+                modelBuilder.Entity<ContactList>().HasOne(s => s.Users).WithMany().HasForeignKey(e => e.UserId);
+
+            });
 
             //--------------------------------END--------------------------------------------------
             #endregion

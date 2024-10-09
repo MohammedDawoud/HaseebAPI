@@ -56,7 +56,7 @@ namespace TaamerProject.API.Controllers
             return _random.Next(min, max);
         }
         [HttpPost("SaveSupportResquests")]
-        public async Task<IActionResult> SaveSupportResquestsAsync([FromForm]SupportResquests supportResquests, List<IFormFile> postedFiles)
+        public async Task<IActionResult> SaveSupportResquestsAsync([FromForm] SupportResquests supportResquests, List<IFormFile> postedFiles)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             //string path = Path.Combine("/Uploads/Organizations/pictures/");
@@ -88,25 +88,25 @@ namespace TaamerProject.API.Controllers
 
 
             var version = _Versionservice.GetVersion().Result;
-            
-            var result = _supportRequestsService.SaveSupportResquests(supportResquests, _globalshared.UserId_G, _globalshared.BranchId_G, version.VersionCode??"", fnamepath);
+
+            var result = _supportRequestsService.SaveSupportResquests(supportResquests, _globalshared.UserId_G, _globalshared.BranchId_G, version.VersionCode ?? "", fnamepath);
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 try
                 {
                     try
                     {
-                         var uri =  "https://api2.tameercloud.com/"; //"https://localhost:44334/";// "http://164.68.110.173:8080/";
-                         // var uri = "https://localhost:44334/";// "http://164.68.110.173:8080/";
+                        var uri = "https://api2.tameercloud.com/"; //"https://localhost:44334/";// "http://164.68.110.173:8080/";
+                                                                   // var uri = "https://localhost:44334/";// "http://164.68.110.173:8080/";
 
                         if (uri != null && uri != "")
                         {
                             //Generate Token
                             var token = getapitoken(uri);
 
-                            var serviceobj = ServiceRequests(supportResquests, result.ReturnedStr??"");
+                            var serviceobj = ServiceRequests(supportResquests, result.ReturnedStr ?? "");
                             var org = _orgService.GetBranchOrganization();
-                            var user = _usersService.GetUserById(_globalshared.UserId_G,_globalshared.Lang_G);
+                            var user = _usersService.GetUserById(_globalshared.UserId_G, _globalshared.Lang_G);
                             var branch = _branchesService.GetBranchById(_globalshared.BranchId_G);
                             var formData = new MultipartFormDataContent();
 
@@ -114,11 +114,11 @@ namespace TaamerProject.API.Controllers
                             formData.Add(new StringContent(serviceobj.ServiesName ?? ""), "ServiesName");
                             formData.Add(new StringContent(serviceobj.visitDate ?? ""), "visitDate");
                             formData.Add(new StringContent(serviceobj.VisitTime ?? ""), "VisitTime");
-                            formData.Add(new StringContent((serviceobj.ServiceType??0).ToString()), "ServiceType");
-                            formData.Add(new StringContent((serviceobj.Priority??0).ToString()), "Priority");
+                            formData.Add(new StringContent((serviceobj.ServiceType ?? 0).ToString()), "ServiceType");
+                            formData.Add(new StringContent((serviceobj.Priority ?? 0).ToString()), "Priority");
                             formData.Add(new StringContent(serviceobj.RequeterMobileNumber ?? ""), "RequeterMobileNumber");
-                            formData.Add(new StringContent((serviceobj.FromApp??0).ToString()), "FromApp");
-                            formData.Add(new StringContent((org.Result.NameAr??"").ToString()), "ExternalOrgName");
+                            formData.Add(new StringContent((serviceobj.FromApp ?? 0).ToString()), "FromApp");
+                            formData.Add(new StringContent((org.Result.NameAr ?? "").ToString()), "ExternalOrgName");
                             formData.Add(new StringContent((user.Result.FullNameAr ?? user.Result.FullName ?? "").ToString()), "ExternalCustomerName");
                             formData.Add(new StringContent((org.Result.Mobile ?? "").ToString()), "ExternalMobNumber");
                             formData.Add(new StringContent((supportResquests.Topic ?? "").ToString()), "Note");
@@ -191,12 +191,12 @@ namespace TaamerProject.API.Controllers
                                 Console.WriteLine(data);
                                 if (data != null && data.statusCode == HttpStatusCode.OK)
                                 {
-                                    string ticketno = data.reasonPhrase??"";
+                                    string ticketno = data.reasonPhrase ?? "";
                                     _supportRequestsService.UpdateSupportResquestsNo(result.ReturnedParm.Value, ticketno, _globalshared.UserId_G, _globalshared.BranchId_G);
                                     string stat = "";
                                     supportResquests.TicketNo = ticketno;
-                                    
-                              
+
+
                                     _supportRequestsService.SendMail(supportResquests, _globalshared.BranchId_G, _globalshared.UserId_G, version.VersionCode, org.Result.NameAr, fnamepath, user.Result.Email);
                                     // _supportRequestsService.AutomationMail(supportResquests, _globalshared.BranchId_G);
 
@@ -205,10 +205,10 @@ namespace TaamerProject.API.Controllers
                                 {
                                     if (result.ReturnedParm.Value != null && result.ReturnedParm.Value != 0)
                                     {
-                                       var delete= _supportRequestsService.Deleterequest(result.ReturnedParm.Value, _globalshared.UserId_G, _globalshared.BranchId_G);
+                                        var delete = _supportRequestsService.Deleterequest(result.ReturnedParm.Value, _globalshared.UserId_G, _globalshared.BranchId_G);
                                         return BadRequest(delete);
                                     }
-                                   
+
                                 }
 
                             }
@@ -244,7 +244,7 @@ namespace TaamerProject.API.Controllers
 
             for (int j = 0; j < Result.Count(); j++)
             {
-                var CorrectDate = (Result[j].Date??DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CreateSpecificCulture("en"));
+                var CorrectDate = (Result[j].Date ?? DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CreateSpecificCulture("en"));
                 Result[j].DateF = CorrectDate;
 
             }
@@ -256,13 +256,13 @@ namespace TaamerProject.API.Controllers
         public ServiceRequest ServiceRequests(SupportResquests support, string mobile)
         {
             ServiceRequest sr = new ServiceRequest();
-            sr.ServiesName = support.Address??"";
+            sr.ServiesName = support.Address ?? "";
             sr.visitDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
             sr.VisitTime = "10:00-12:00";
             sr.ServiceType = 100;
             sr.Priority = getpriority(support.priority ?? "");
             sr.RequeterMobileNumber = mobile;
-            sr.FromApp = 1;
+            sr.FromApp = 2;
             return sr;
         }
 
@@ -286,8 +286,8 @@ namespace TaamerProject.API.Controllers
                     formData.Add(new StringContent(serviceobj.ServiesName ?? ""), "ServiesName");
                     formData.Add(new StringContent(serviceobj.visitDate ?? ""), "visitDate");
                     formData.Add(new StringContent(serviceobj.VisitTime ?? ""), "VisitTime");
-                    formData.Add(new StringContent((serviceobj.ServiceType??0).ToString()), "ServiceType");
-                    formData.Add(new StringContent((serviceobj.Priority??0).ToString()), "Priority");
+                    formData.Add(new StringContent((serviceobj.ServiceType ?? 0).ToString()), "ServiceType");
+                    formData.Add(new StringContent((serviceobj.Priority ?? 0).ToString()), "Priority");
                     formData.Add(new StringContent(serviceobj.RequeterMobileNumber ?? ""), "RequeterMobileNumber");
                     formData.Add(new StringContent(serviceobj.RequeterMobileNumber ?? ""), "postedFiles");
 
@@ -357,7 +357,7 @@ namespace TaamerProject.API.Controllers
             return result;
         }
 
-       
+
         [HttpPost("getpriority")]
         public int getpriority(string strpriority)
         {
@@ -378,21 +378,21 @@ namespace TaamerProject.API.Controllers
         }
 
         [HttpPost("UpdateSupportResquests")]
-        public IActionResult UpdateSupportResquests(int? RequestId,int? Status,string? Replay,string? SenderName,string? UserImg)
+        public IActionResult UpdateSupportResquests(int? RequestId, int? Status, string? Replay, string? SenderName, string? UserImg)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-            var Result = _supportRequestsService.UpdateSupportResquests(RequestId.Value, Replay, Status??0, SenderName, UserImg, _globalshared.UserId_G, _globalshared.BranchId_G);
+            var Result = _supportRequestsService.UpdateSupportResquests(RequestId.Value, Replay, Status ?? 0, SenderName, UserImg, _globalshared.UserId_G, _globalshared.BranchId_G);
 
-        
+
             return Ok(Result);
         }
 
 
         [HttpPost("UpdateSupportResquestsForm")]
-        public IActionResult UpdateSupportResquestsForm(int? RequestId, int? Status, string? Replay, string? SenderName, string? UserImg,string? AttachmentUrl)
+        public IActionResult UpdateSupportResquestsForm(int? RequestId, int? Status, string? Replay, string? SenderName, string? UserImg, string? AttachmentUrl)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-            var Result = _supportRequestsService.UpdateSupportResquests(RequestId.Value, Replay, Status ?? 0, SenderName, UserImg, _globalshared.UserId_G, _globalshared.BranchId_G,AttachmentUrl);
+            var Result = _supportRequestsService.UpdateSupportResquests(RequestId.Value, Replay, Status ?? 0, SenderName, UserImg, _globalshared.UserId_G, _globalshared.BranchId_G, AttachmentUrl);
 
 
             return Ok(Result);
@@ -402,7 +402,7 @@ namespace TaamerProject.API.Controllers
         {
             try
             {
-                 var uri =  "https://api2.tameercloud.com/"; //"https://localhost:44334/";// "http://164.68.110.173:8080/";
+                var uri = "https://api2.tameercloud.com/"; //"https://localhost:44334/";// "http://164.68.110.173:8080/";
                 //var uri = "https://localhost:44334/";// "http://164.68.110.173:8080/";
 
                 if (uri != null && uri != "")
@@ -410,7 +410,7 @@ namespace TaamerProject.API.Controllers
                     //Generate Token
                     var token = getapitoken(uri);
 
-                   
+
                     using (var client = new HttpClient())
                     {
                         //Base API URI
@@ -423,8 +423,8 @@ namespace TaamerProject.API.Controllers
                         //HTTP POST API
                         //var responseTask = client.PostAsync("api/ServiceRequest/SaveServiceRequest", null);
 
-                        var res = await client.PostAsync("api/ServiceRequest/UpdateRequestStatusFromTameer?TameerServiceRequestId="+ TameerServiceRequestId + "&&Status="+ Status + "", null);
-                      
+                        var res = await client.PostAsync("api/ServiceRequest/UpdateRequestStatusFromTameer?TameerServiceRequestId=" + TameerServiceRequestId + "&&Status=" + Status + "", null);
+
 
                     }
 
@@ -434,11 +434,11 @@ namespace TaamerProject.API.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message,ex);
+                throw new Exception(ex.Message, ex);
             }
         }
         [HttpPost("SaveRequestReplayFromTameer")]
-        public IActionResult SaveRequestReplayFromTameer(IFormFile? file ,[FromForm]int? RequestId, [FromForm] string? Replay)
+        public IActionResult SaveRequestReplayFromTameer(IFormFile? file, [FromForm] int? RequestId, [FromForm] string? Replay)
         {
 
             System.Net.Http.HttpResponseMessage response = new System.Net.Http.HttpResponseMessage();
@@ -527,7 +527,7 @@ namespace TaamerProject.API.Controllers
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             var Result = _supportRequestsService.GetAllReplyByServiceId(RequestId).Result.ToArray();
 
-            
+
             return Ok(Result);
         }
 
@@ -540,7 +540,7 @@ namespace TaamerProject.API.Controllers
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             var Result = _supportRequestsService.GetAllOpenSupportResquestsreplayesDashboard(_globalshared.UserId_G).Result.ToArray();
 
-            
+
             return Ok(Result);
         }
 

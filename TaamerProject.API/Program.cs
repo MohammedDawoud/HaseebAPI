@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.StaticFiles;
 using TaamerProject.Service.Services.EmpServices;
+using TaamerProject.Service.Services.ProjServices;
 
 namespace TaamerProject.API
 {
@@ -231,7 +232,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IContractDetailsService, ContractDetailsService>();
             builder.Services.AddTransient<IGuide_QuestionsAnswersService,Guide_QuestionsAnswersService>();
             builder.Services.AddTransient<ILaw_regulationsService, Law_regulationsService>();
-
+            builder.Services.AddTransient<IContactListsService, ContactListsService>();
 
             #endregion
             #region Repository
@@ -411,6 +412,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IContact_BranchesRepository, Contact_BranchesRepository>();
             builder.Services.AddTransient<IGuide_QuestionsAnswersRepository, Guide_QuestionsAnswersRepository>();
             builder.Services.AddTransient<ILaw_regulationsRepository, Law_regulationsRepository>();
+            builder.Services.AddTransient<IContactListRepository, ContactListRepository>();
 
             #endregion
 

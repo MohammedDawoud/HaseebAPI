@@ -18,15 +18,15 @@ using System.Net.Http.Headers;
 using System.Net.Mime;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
-using Haseeb.Service.LocalResources;
 using TaamerProject.Models.Enums;
 using TaamerProject.Models.DomainObjects;
 using TaamerProject.Models.ViewModels;
 using Twilio.TwiML.Voice;
+using Haseeb.Service.LocalResources;
 
 namespace TaamerProject.Service.Services
 {
-    public class SupportRequestsService :  ISupportRequestsService
+    public class SupportRequestsService : ISupportRequestsService
     {
         private readonly ISupportResquestsRepository _supportRequestsRepository;
         private readonly IOrganizationsRepository _OrganizationsRepository;
@@ -48,7 +48,7 @@ namespace TaamerProject.Service.Services
             _OrganizationsRepository = organizationsRepository;
             _UsersRepository = usersRepository;
             _EmailSettingRepository = emailSettingRepository;
-            _BranchesRepository = branchesRepository;         
+            _BranchesRepository = branchesRepository;
             _LicencesRepository = licencesRepository;
             _TaamerProContext = dataContext;
             _SystemAction = systemAction;
@@ -71,15 +71,15 @@ namespace TaamerProject.Service.Services
                 //     stat = "مستمر";
                 //}
                 //else { stat = "منتهي"; }
-               // var OrgName = "";
-                if (supportResquests.RequestId == 0) 
+                // var OrgName = "";
+                if (supportResquests.RequestId == 0)
                 {
                     //var organization = _OrganizationsRepository.GetMatching(s => s.IsDeleted == false).FirstOrDefault();
                     var organization = _TaamerProContext.Organizations.Where(s => s.IsDeleted == false).FirstOrDefault();
                     supportResquests.OrganizationId = organization.OrganizationId;
                     supportResquests.AddUser = UserId;
                     supportResquests.UserId = UserId;
-                    supportResquests.Status =(int)SupportRequestStatus.Opend;
+                    supportResquests.Status = (int)SupportRequestStatus.Opend;
                     supportResquests.AddDate = DateTime.Now;
                     supportResquests.BranchId = BranchId;
                     var now = DateTime.Now;
@@ -87,7 +87,7 @@ namespace TaamerProject.Service.Services
                                             now.Hour, now.Minute, now.Second);
                     supportResquests.Date = date;
                     //OrgName = organization.NameAr;
-                     _TaamerProContext.SupportResquests.Add(supportResquests);
+                    _TaamerProContext.SupportResquests.Add(supportResquests);
 
                     _TaamerProContext.SaveChanges();
                     //SendMail(supportResquests, organization.BranchId.Value, UserId, VersionCode, OrgName, AttachmentFile, stat,user.Email);
@@ -95,10 +95,10 @@ namespace TaamerProject.Service.Services
                     //-----------------------------------------------------------------------------------------------------------------
                     string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                     string ActionNote = "اضافة طلب دعم جديد" + supportResquests.Topic;
-                     _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                    _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
 
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK,ReasonPhrase =Resources.General_SavedSuccessfully ,ReturnedStr= organization.Mobile,ReturnedParm=supportResquests.RequestId };
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedStr = organization.Mobile, ReturnedParm = supportResquests.RequestId };
                 }
                 else
                     throw new Exception();
@@ -108,16 +108,16 @@ namespace TaamerProject.Service.Services
                 //-----------------------------------------------------------------------------------------------------------------
                 string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                 string ActionNote = "فشل في حفظ  طلب الدعم";
-                 _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
                 //-----------------------------------------------------------------------------------------------------------------
 
-                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest,ReasonPhrase =Resources.General_SavedFailed };
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
             }
         }
-        public Task<IEnumerable<SupportRequestVM>> GetAllSupportResquests(string lang, int BranchId ,int UserId)
+        public Task<IEnumerable<SupportRequestVM>> GetAllSupportResquests(string lang, int BranchId, int UserId)
         {
             var SupportRequest = _supportRequestsRepository.GetAllSupportResquests(lang, BranchId, UserId);
-            
+
             return SupportRequest;
         }
         public Task<IEnumerable<SupportRequestVM>> GetAllOpenSupportResquests(string lang, int BranchId, int UserId)
@@ -147,11 +147,11 @@ namespace TaamerProject.Service.Services
         public int getpriority(string strpriority)
         {
             int intptiority = 0;
-            if(strpriority == "منخفض")
+            if (strpriority == "منخفض")
             {
                 intptiority = 1;
             }
-            else if(strpriority== "متوسط")
+            else if (strpriority == "متوسط")
             {
                 intptiority = 2;
             }
@@ -161,29 +161,29 @@ namespace TaamerProject.Service.Services
             }
             return intptiority;
         }
-        public ServiceRequest ServiceRequest(SupportResquests support,string attachment,string mobile)
+        public ServiceRequest ServiceRequest(SupportResquests support, string attachment, string mobile)
         {
             ServiceRequest sr = new ServiceRequest();
             sr.ServiesName = support.Topic;
-            sr.visitDate= DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+            sr.visitDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
             sr.VisitTime = "10:00-12:00";
             sr.ServiceType = 100;
-            sr.Priority = getpriority( support.priority);
+            sr.Priority = getpriority(support.priority);
             sr.RequeterMobileNumber = mobile;
             sr.AttachUrl = attachment;
 
             return sr;
         }
-        public bool SendMail(SupportResquests supportResquests, int BranchId, int UserId,string VersionCode,string OrgName,string AttachmentFile,string RequesterMail)
+        public bool SendMail(SupportResquests supportResquests, int BranchId, int UserId, string VersionCode, string OrgName, string AttachmentFile, string RequesterMail)
         {
             try
             {
                 //var DateOfComplaint = supportResquests.AddDate.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CreateSpecificCulture("en"));
                 //var user = _UsersRepository.GetById(supportResquests.UserId);
-                Users? user =  _TaamerProContext.Users.Where(s => s.UserId == supportResquests.UserId).FirstOrDefault();
+                Users? user = _TaamerProContext.Users.Where(s => s.UserId == supportResquests.UserId).FirstOrDefault();
 
-               // var branch = _BranchesRepository.GetById(user.BranchId);
-                Branch? branch =  _TaamerProContext.Branch.Where(s => s.BranchId == user.BranchId).FirstOrDefault();
+                // var branch = _BranchesRepository.GetById(user.BranchId);
+                Branch? branch = _TaamerProContext.Branch.Where(s => s.BranchId == user.BranchId).FirstOrDefault();
 
                 //string textBody = 
                 //    "<table border='1'style='text-align:center;padding:3px;'><tr><td style='border=1px solid #eee'>اسم المنشأة </td>" +
@@ -222,7 +222,7 @@ namespace TaamerProject.Service.Services
                     "<strong><span dir=\"LTR\">www.bayanatech.com.sa</span></strong></p>";
 
                 var mail = new MailMessage();
-               
+
                 var loginInfo = new NetworkCredential("support@bayanatech.com.sa", "Makka@13471-T");
 
                 if (_EmailSettingRepository.GetEmailSetting().Result.DisplayName != null)
@@ -236,7 +236,7 @@ namespace TaamerProject.Service.Services
 
 
                 // mail.From = new MailAddress("support@bayanatech.com.sa");
-               // mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
+                // mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
                 mail.To.Add(new MailAddress("info@bayanatech.com.sa"));
                 mail.To.Add(new MailAddress(RequesterMail));
                 mail.CC.Add(new MailAddress("tsupport@bayanatech.com.sa"));
@@ -244,7 +244,7 @@ namespace TaamerProject.Service.Services
                 // mail.CC.Add(new MailAddress("mohammeddawoud66@gmail.com"));
 
 
-                mail.Subject ="فتح تذكرة جديدة :" + supportResquests.Address  + "[" + "Ticket ID" +"  "+ supportResquests.TicketNo + "]"  ;
+                mail.Subject = "فتح تذكرة جديدة :" + supportResquests.Address + "[" + "Ticket ID" + "  " + supportResquests.TicketNo + "]";
                 try
                 {
                     mail.Body = textBody;
@@ -304,12 +304,12 @@ namespace TaamerProject.Service.Services
         {
             try
             {
-               // var DateOfComplaint = supportResquests.AddDate.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CreateSpecificCulture("en"));
+                // var DateOfComplaint = supportResquests.AddDate.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CreateSpecificCulture("en"));
                 //var user = _UsersRepository.GetById(supportResquests.UserId);
-                Users? user =  _TaamerProContext.Users.Where(s => s.UserId == supportResquests.UserId).FirstOrDefault();
+                Users? user = _TaamerProContext.Users.Where(s => s.UserId == supportResquests.UserId).FirstOrDefault();
 
                 // var branch = _BranchesRepository.GetById(user.BranchId);
-                Branch? branch =  _TaamerProContext.Branch.Where(s => s.BranchId == user.BranchId).FirstOrDefault();
+                Branch? branch = _TaamerProContext.Branch.Where(s => s.BranchId == user.BranchId).FirstOrDefault();
 
                 string textBody = "<p> تم فتح التذكرة و جاري المتابعة والفحص وسيتم الرد عليك في أسرع وقت ممكن</p> </br></br></br></br></br></br>  <p style='margin-top:10px;'>شكرا لتواصلكم مع الدعم الفني </p><p> www.bayanatech.com.sa </p> ";
                 //textBody = textBody + "<br/>";
@@ -338,7 +338,7 @@ namespace TaamerProject.Service.Services
 
                 //// mail.From = new MailAddress("support@bayanatech.com.sa");
                 mail.To.Add(new MailAddress(user.Email));
-               // mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
+                // mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
                 //mail.To.Add(new MailAddress("info@bayanatech.com.sa"));
                 //mail.To.Add(new MailAddress(RequesterMail));
                 //mail.CC.Add(new MailAddress("tsupport@bayanatech.com.sa"));
@@ -346,7 +346,7 @@ namespace TaamerProject.Service.Services
                 //// mail.CC.Add(new MailAddress("mohammeddawoud66@gmail.com"));
 
 
-                mail.Subject = "[" + "Ticket ID"+"  " + supportResquests.TicketNo + "]" + supportResquests.Date;
+                mail.Subject = "[" + "Ticket ID" + "  " + supportResquests.TicketNo + "]" + supportResquests.Date;
                 try
                 {
                     mail.Body = textBody;
@@ -357,7 +357,7 @@ namespace TaamerProject.Service.Services
                     mail.Body = "Wrong message";
                 }
 
-             
+
 
 
 
@@ -403,12 +403,12 @@ namespace TaamerProject.Service.Services
         {
             try
             {
-             
-                    var uri = "https://localhost:44334/";
-                    if (uri != null && uri != "")
-                    {
-                        //Generate Token
-                        var token = getapitoken(uri);
+
+                var uri = "https://localhost:44334/";
+                if (uri != null && uri != "")
+                {
+                    //Generate Token
+                    var token = getapitoken(uri);
 
                     var serviceobj = ServiceRequest(support, attachment, mobile);
 
@@ -425,20 +425,20 @@ namespace TaamerProject.Service.Services
 
 
                     using (var client = new HttpClient())
-                            {
-                                //Base API URI
-                                client.BaseAddress = new Uri(uri);
-                                //JWT TOKEN
-                                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                                client.DefaultRequestHeaders
-                                .Accept
-                                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                //HTTP POST API
-                                //var responseTask = client.PostAsync("api/ServiceRequest/SaveServiceRequest", null);
+                    {
+                        //Base API URI
+                        client.BaseAddress = new Uri(uri);
+                        //JWT TOKEN
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        client.DefaultRequestHeaders
+                        .Accept
+                        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        //HTTP POST API
+                        //var responseTask = client.PostAsync("api/ServiceRequest/SaveServiceRequest", null);
 
-                                                    var res = client.PostAsync("api/ServiceRequest/SaveServiceRequest",
-                                 new StringContent(JsonConvert.SerializeObject(serviceobj ), Encoding.UTF8, "application/json") );
-                                    res.Wait();
+                        var res = client.PostAsync("api/ServiceRequest/SaveServiceRequest",
+     new StringContent(JsonConvert.SerializeObject(serviceobj), Encoding.UTF8, "application/json"));
+                        res.Wait();
                         Console.WriteLine(res.Result);
 
                     }
@@ -452,7 +452,7 @@ namespace TaamerProject.Service.Services
             {
 
             }
-            return new GeneralMessage { StatusCode = HttpStatusCode.OK,ReasonPhrase =Resources.sent_succesfully };
+            return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.sent_succesfully };
         }
 
 
@@ -462,27 +462,27 @@ namespace TaamerProject.Service.Services
             var result = "";
             try
             {
-              
-                        using (var client = new HttpClient())
-                        {
-                            //Base URI
-                            client.BaseAddress = new Uri(URI);
-                            //HTTP GET
+
+                using (var client = new HttpClient())
+                {
+                    //Base URI
+                    client.BaseAddress = new Uri(URI);
+                    //HTTP GET
 
 
-                            //Http GET 
-                            //Get Token API
-                            var responseTask = client.GetAsync("api/Users/gettoken?userid=1");
-                            responseTask.Wait();
+                    //Http GET 
+                    //Get Token API
+                    var responseTask = client.GetAsync("api/Users/gettoken?userid=1");
+                    responseTask.Wait();
 
-                            var reslt = responseTask.Result;
+                    var reslt = responseTask.Result;
 
-                            result = reslt.Content.ReadAsStringAsync().Result;
+                    result = reslt.Content.ReadAsStringAsync().Result;
 
-                        }
+                }
 
-                   
-                
+
+
             }
             catch (Exception ex)
             {
@@ -492,35 +492,36 @@ namespace TaamerProject.Service.Services
         }
 
 
-        public GeneralMessage UpdateSupportResquests(int Serviceid, string replay, int status,string SenderName,string SenderPhoto, int UserId, int BranchId,
-            string AttachmentUrl=null)
+        public GeneralMessage UpdateSupportResquests(int Serviceid, string replay, int status, string SenderName, string SenderPhoto, int UserId, int BranchId,
+            string AttachmentUrl = null)
         {
             var support = "";
             try
             {
-              var service=_TaamerProContext.SupportResquests.Where(x=>x.RequestId== Serviceid).FirstOrDefault();
+                var service = _TaamerProContext.SupportResquests.Where(x => x.RequestId == Serviceid).FirstOrDefault();
                 if (service != null)
                 {
                     support = service.Topic;
                     if (status != 0 && status != null)
                     {
-                        service.Status= status;
+                        service.Status = status;
                     }
                     if (replay != "" && replay != null)
                     {
-                        service.Repaly= replay;
+                        service.Repaly = replay;
                         service.LastReplayDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en"));
                         service.LastReplayFrom = "2";
-                        SupportRequestsReplay requestsReplay = new SupportRequestsReplay{
-                            ServiceRequestId= Serviceid,
-                            AddDate= DateTime.Now,
-                            Contacttxt=replay,
-                            SenderName= SenderName,
+                        SupportRequestsReplay requestsReplay = new SupportRequestsReplay
+                        {
+                            ServiceRequestId = Serviceid,
+                            AddDate = DateTime.Now,
+                            Contacttxt = replay,
+                            SenderName = SenderName,
                             //SenderPhoto= SenderPhoto,
-                            UserId= UserId,
-                            ContactDate=DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en")),
-                            ReplayFrom= "2",
-                            AttachmentUrl= AttachmentUrl,
+                            UserId = UserId,
+                            ContactDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en")),
+                            ReplayFrom = "2",
+                            AttachmentUrl = AttachmentUrl,
 
 
                         };
@@ -528,15 +529,15 @@ namespace TaamerProject.Service.Services
                     }
                 }
                 _TaamerProContext.SaveChanges();
-                    //SaveLabaikrequest(supportResquests, AttachmentFile, organization.Mobile);
-                    //-----------------------------------------------------------------------------------------------------------------
-                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
-                    string ActionNote = "تعديل طلب الدعم" + support;
-                    _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
-                    //-----------------------------------------------------------------------------------------------------------------
+                //SaveLabaikrequest(supportResquests, AttachmentFile, organization.Mobile);
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "تعديل طلب الدعم" + support;
+                _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
 
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
-               
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+
             }
             catch (Exception ex)
             {
@@ -550,23 +551,23 @@ namespace TaamerProject.Service.Services
             }
         }
 
-        public GeneralMessage UpdateSupportResquestsNo(int Serviceid, string TicketNo ,int UserId, int BranchId)
+        public GeneralMessage UpdateSupportResquestsNo(int Serviceid, string TicketNo, int UserId, int BranchId)
         {
             try
             {
                 var service = _TaamerProContext.SupportResquests.Where(x => x.RequestId == Serviceid).FirstOrDefault();
                 if (service != null)
                 {
-                    if ( TicketNo != null)
+                    if (TicketNo != null)
                     {
                         service.TicketNo = TicketNo;
                     }
-                   
+
                 }
                 var organization = _TaamerProContext.Organizations.Where(s => s.IsDeleted == false).FirstOrDefault();
 
                 _TaamerProContext.SaveChanges();
-               // SendMail(service, organization.BranchId.Value, UserId, VersionCode, OrgName, AttachmentFile, stat, user.Email);
+                // SendMail(service, organization.BranchId.Value, UserId, VersionCode, OrgName, AttachmentFile, stat, user.Email);
 
                 //SaveLabaikrequest(supportResquests, AttachmentFile, organization.Mobile);
                 //-----------------------------------------------------------------------------------------------------------------
@@ -595,10 +596,10 @@ namespace TaamerProject.Service.Services
         {
             try
             {
-              
+
                 if (supportResquests.SupportRequestsReplayId == 0)
                 {
-                    supportResquests.UserId=UserId;
+                    supportResquests.UserId = UserId;
                     supportResquests.ContactDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en"));
                     supportResquests.AddUser = UserId;
                     supportResquests.AddDate = DateTime.Now;
@@ -612,7 +613,7 @@ namespace TaamerProject.Service.Services
                     _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
 
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully};
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
                 }
                 else
                     throw new Exception();
@@ -631,14 +632,14 @@ namespace TaamerProject.Service.Services
 
 
 
-        public GeneralMessage SaveRequestReplayFromTameer(int Serviceid, string replay, int UserId, int BranchId,string? AttachmentUrl=null)
+        public GeneralMessage SaveRequestReplayFromTameer(int Serviceid, string replay, int UserId, int BranchId, string? AttachmentUrl = null)
         {
             var support = "";
             try
             {
                 var service = _TaamerProContext.SupportResquests.Where(x => x.RequestId == Serviceid).FirstOrDefault();
-                var Organization=_TaamerProContext.Organizations.FirstOrDefault();
-                var User =_TaamerProContext.Users.Where(x=>x.UserId== UserId).FirstOrDefault(); 
+                var Organization = _TaamerProContext.Organizations.FirstOrDefault();
+                var User = _TaamerProContext.Users.Where(x => x.UserId == UserId).FirstOrDefault();
                 if (service != null)
                 {
                     support = service.Topic;
@@ -656,8 +657,8 @@ namespace TaamerProject.Service.Services
                             SenderPhoto = Organization.TameerAPIURL + User.ImgUrl,
                             UserId = UserId,
                             ContactDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en")),
-                            ReplayFrom="1",
-                            AttachmentUrl= AttachmentUrl,
+                            ReplayFrom = "1",
+                            AttachmentUrl = AttachmentUrl,
 
 
                         };
@@ -711,7 +712,7 @@ namespace TaamerProject.Service.Services
                 //SaveLabaikrequest(supportResquests, AttachmentFile, organization.Mobile);
                 //-----------------------------------------------------------------------------------------------------------------
                 string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
-                string ActionNote = "تعديل طلب الدعم"  + SupportReplayId;
+                string ActionNote = "تعديل طلب الدعم" + SupportReplayId;
                 _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                 //-----------------------------------------------------------------------------------------------------------------
 
@@ -738,11 +739,11 @@ namespace TaamerProject.Service.Services
                 var service = _TaamerProContext.SupportResquests.Where(x => x.RequestId == Serviceid).FirstOrDefault();
                 if (service != null)
                 {
-                    service.IsDeleted=true;
+                    service.IsDeleted = true;
                 }
 
                 _TaamerProContext.SaveChanges();
-               //-----------------------------------------------------------------------------------------------------------------
+                //-----------------------------------------------------------------------------------------------------------------
                 string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                 string ActionNote = " فشل في حفظ الطلب ";
                 _SystemAction.SaveAction("SaveSupportResquests", "SupportRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
@@ -765,7 +766,7 @@ namespace TaamerProject.Service.Services
 
 
 
-        public bool SendReplayMail(SupportResquests supportResquests, int BranchId, string OrgName, string AttachmentFile, string RequesterMail,string ReplayText,string ReplayDate)
+        public bool SendReplayMail(SupportResquests supportResquests, int BranchId, string OrgName, string AttachmentFile, string RequesterMail, string ReplayText, string ReplayDate)
         {
             try
             {
@@ -805,7 +806,7 @@ namespace TaamerProject.Service.Services
                     "/strong><strong><span style='font-size:19px;font-family:\"Arial\",sans-serif;'></span></strong><span style='font-family:\"Arial\",sans-serif;'>&nbsp; &nbsp;</span>" +
                     "<strong><span dir=\"LTR\"> &nbsp; </span></strong></p>\r\n<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;text-align:right;font-size:21px;font-family:\"Calibri\",sans-serif;'>" +
                     "<span style='font-family:\"Arial\",sans-serif;color:red;'>&nbsp;</span></p>\r\n<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;text-align:right;font-size:21px;font-family:\"Calibri\",sans-serif;'>" +
-                    "<strong><span style='font-size:21px;font-family:\"Arial\",sans-serif;'>"+ ReplayText + "&nbsp;</span>" +
+                    "<strong><span style='font-size:21px;font-family:\"Arial\",sans-serif;'>" + ReplayText + "&nbsp;</span>" +
                     "</strong></p>\r\n<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;text-align:right;font-size:21px;font-family:\"Calibri\",sans-serif;'>" +
                     "<span style='font-family:\"Arial\",sans-serif;'>&nbsp;</span></p>\r\n<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;text-align:right;font-size:21px;font-family:\"Calibri\",sans-serif;'>" +
                     "<span style='font-family:\"Arial\",sans-serif;'>&nbsp;</span></p>\r\n<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;text-align:right;font-size:21px;font-family:\"Calibri\",sans-serif;'>" +

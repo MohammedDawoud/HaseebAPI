@@ -1338,6 +1338,45 @@ namespace TaamerProject.API.Controllers
             }
         }
 
+        [HttpGet("GetAllEmployeesByLocationId")]
+        public IActionResult GetAllEmployeesByLocationId(int LocationId)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            var Employees = _employesService.GetAllEmployeesByLocationId(_globalshared.Lang_G, LocationId);
+            return Ok(Employees);
+        }
+
+        [HttpPost("DeleteEmplocation")]
+        public IActionResult DeleteEmplocation(int EmpId, int LocationId)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            return Ok(_employesService.DeleteEmplocation(EmpId, LocationId, _globalshared.UserId_G, _globalshared.Lang_G, _globalshared.BranchId_G));
+        }
+        [HttpPost("AllowEmployeesites")]
+        public IActionResult AllowEmployeesites(int EmpId, bool Check, int Type)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            return Ok(_employesService.AllowEmployeesites(EmpId, Check, Type, _globalshared.UserId_G, _globalshared.Lang_G, _globalshared.BranchId_G));
+        }
+        [HttpPost("ConvertEmplocation")]
+        public IActionResult ConvertEmplocation(int EmpId, int oldLocationId, int newLocationId)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            return Ok(_employesService.ConvertEmplocation(EmpId, oldLocationId, newLocationId, _globalshared.UserId_G, _globalshared.Lang_G, _globalshared.BranchId_G));
+        }
+        [HttpPost("SaveEmplocation")]
+        public IActionResult SaveEmplocation(int EmpId, int LocationId)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            return Ok(_employesService.SaveEmplocation(EmpId, LocationId, _globalshared.UserId_G, _globalshared.Lang_G, _globalshared.BranchId_G));
+        }
+
+
     }
     public class EmployeeReport
     {

@@ -135,6 +135,10 @@ namespace TaamerProject.Models
         public decimal? OtherAllownces { get; set; }
         public string? Age { get; set; }
 
+
+        public int? AttendenceLocationId { get; set; }
+        public bool? allowoutsidesite { get; set; }
+        public bool? allowallsite { get; set; }
         [NotMapped]
         public string? BeginWork { get; set; }
         public Users? users { get; set; }
@@ -154,5 +158,7 @@ namespace TaamerProject.Models
         public virtual List<ExpensesGovernment>? ExpensesGovernment { get; set; }
 
         public virtual List<PayrollMarches>? PayrollMarches { get; set; }
+        public virtual List<EmpLocations>? EmployeeLocations { get; set; }
+
     }
 }

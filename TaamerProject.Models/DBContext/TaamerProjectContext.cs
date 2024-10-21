@@ -211,6 +211,9 @@ namespace TaamerProject.Models.DBContext
         public virtual DbSet<Emp_AbsenceList> AbsenceLists { get; set; }
         public virtual DbSet<Emp_LateList> LateLists { get; set; }
         public virtual DbSet<ContactList> ContactLists { get; set; }
+        public virtual DbSet<AttendenceLocationSettings> AttendenceLocations { get; set; }
+
+        public virtual DbSet<EmpLocations> EmpLocations { get; set; }
 
         public string GetDatabaseName()
         {
@@ -4187,6 +4190,30 @@ namespace TaamerProject.Models.DBContext
             });
 
             //--------------------------------END--------------------------------------------------
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<AttendenceLocationSettings>(entity =>
+            {
+                entity.HasKey(e => e.AttendenceLocationSettingsId);
+                entity.ToTable("Sys_AttendenceLocationSettings");
+                //modelBuilder.Entity<AttendenceLocationSettings>().HasMany<Employees>(s => s.Employees).WithOne(g => g.AttendenceLocation).HasForeignKey(s => s.AttendenceLocationId);
+                modelBuilder.Entity<AttendenceLocationSettings>().HasMany<EmpLocations>(s => s.EmpLocations).WithOne(g => g.AttendenceLocation).HasForeignKey(s => s.LocationId);
+
+            });
+
+            //--------------------------------END--------------------------------------------------
+
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<EmpLocations>(entity =>
+            {
+                entity.HasKey(e => e.EmpLocationId);
+                entity.ToTable("Emp_EmpLocations");
+                entity.Property(t => t.EmpId).HasColumnName("EmpId");
+                entity.Property(t => t.LocationId).HasColumnName("LocationId");
+                modelBuilder.Entity<EmpLocations>().HasOne(s => s.Employee).WithMany(s => s.EmployeeLocations).HasForeignKey(e => e.EmpId);
+                modelBuilder.Entity<EmpLocations>().HasOne(s => s.AttendenceLocation).WithMany(s => s.EmpLocations).HasForeignKey(e => e.LocationId);
+
+                //modelBuilder.Entity<EmpLocations>().HasOne(s => s.location).WithMany().HasForeignKey(e => e.LocationId);
+            });
             #endregion
 
             OnModelCreatingPartial(modelBuilder);

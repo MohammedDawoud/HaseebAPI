@@ -60,5 +60,14 @@ namespace TaamerProject.Service.Interfaces
         Task<IEnumerable<EmployeesVM>> GetEmployeeWithoutContract(int? DepartmectId, string lang, string? Searchtext);
         GeneralMessage DeleteQuacontractDetails(int EmployeeId);
         GeneralMessage RemoveEmployee(int EmpId, int UserId, int BranchId);
+
+        Task<IEnumerable<EmpLocationsVM>> GetAllEmployeesByLocationId(string lang, int LocationId);
+        GeneralMessage DeleteEmplocation(int EmpId, int LocationId, int User, string Lang, int BranchId);
+        GeneralMessage AllowEmployeesites(int EmpId, bool Check, int Type, int User, string Lang, int BranchId);
+
+        GeneralMessage ConvertEmplocation(int EmpId, int oldLocationId, int newLocationId, int User, string Lang, int BranchId);
+        GeneralMessage SaveEmplocation(int EmpId, int LocationId, int User, string Lang, int BranchId);
+
+
     }
 }

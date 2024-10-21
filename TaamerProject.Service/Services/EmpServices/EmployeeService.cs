@@ -44,6 +44,7 @@ namespace TaamerProject.Service.Services
         private readonly INationalityRepository _NationalityRepository;
         private readonly IOrganizationsService _organizationsService;
         private readonly ICustomerMailService _customerMailService;
+        private readonly IEmpLocationsRepository _empLocationsRepository;
 
 
 
@@ -53,7 +54,7 @@ namespace TaamerProject.Service.Services
             ISys_SystemActionsRepository sys_SystemActions, IEmpContractRepository empContractRepository, IContractRepository contractRepository, ISettingsRepository settingsRepository,
             IProjectPhasesTasksRepository projectPhasesTasksRepository, IProjectRepository projectRepository, IWorkOrdersRepository workOrdersRepository,
             ITransactionsRepository transactionsRepository, ISystemAction systemAction, TaamerProjectContext dataContext, IPayrollMarchesService payrollMarchesService
-            , INationalityRepository nationalityRepository,IOrganizationsService organizationsService,ICustomerMailService customerMailService)
+            , INationalityRepository nationalityRepository,IOrganizationsService organizationsService,ICustomerMailService customerMailService, IEmpLocationsRepository empLocationsRepository)
         { 
             _employeeRepository = employeesRepository;
             _BranchesRepository = branchesRepository;
@@ -78,6 +79,8 @@ namespace TaamerProject.Service.Services
             _NationalityRepository= nationalityRepository;
             _organizationsService = organizationsService;
             _customerMailService = customerMailService;
+            _empLocationsRepository = empLocationsRepository;
+
         }
 
         public async Task<IEnumerable<EmployeesVM>> GetAllEmployees(string lang, int BranchId)
@@ -1197,6 +1200,9 @@ namespace TaamerProject.Service.Services
                         SaveOffDoc.EarlyLogin = OffDoc.EarlyLogin;
                         SaveOffDoc.Allowances = OffDoc.Allowances;
                         SaveOffDoc.OtherAllownces=OffDoc.OtherAllownces;
+                        SaveOffDoc.AttendenceLocationId = OffDoc.AttendenceLocationId;
+                        SaveOffDoc.allowoutsidesite = OffDoc.allowoutsidesite ?? false;
+                        SaveOffDoc.allowallsite = OffDoc.allowallsite ?? false;
 
                         //SaveOffDoc.WorkEndDate = OffDoc.WorkEndDate;
                         //SaveOffDoc.WorkEndHijriDate = OffDoc.WorkEndHijriDate;
@@ -2352,6 +2358,187 @@ namespace TaamerProject.Service.Services
         }
 
 
+
+
+        public async Task<IEnumerable<EmpLocationsVM>> GetAllEmployeesByLocationId(string lang, int LocationId)
+        {
+            //var employees = await _employeeRepository.GetAllEmployeesByLocationId(lang, LocationId);
+            var employees = await _empLocationsRepository.GetLocationByLocationId(lang, LocationId);
+            return employees;
+        }
+
+        public GeneralMessage DeleteEmplocation(int EmpId, int LocationId, int User, string Lang, int BranchId)
+        {
+            try
+            {
+                var Emploc = _TaamerProContext.EmpLocations.Where(x => x.EmpId == EmpId && x.LocationId == LocationId && x.IsDeleted == false).FirstOrDefault();
+                if (Emploc != null)
+                {
+                    Emploc.IsDeleted = true;
+                    _TaamerProContext.SaveChanges();
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = "حذف موقع موظف رقم " + EmpId;
+                    _SystemAction.SaveAction("DeleteEmplocation", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate2, User, BranchId, ActionNote2, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "تم الحذف بنجاح" };
+                }
+                else
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في حذف موقع موظف";
+                    _SystemAction.SaveAction("DeleteEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "فشل في الحذف" };
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حذف موقع موظف";
+                _SystemAction.SaveAction("DeleteEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage() { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "فشل في الحذف" };
+            }
+        }
+        public GeneralMessage AllowEmployeesites(int EmpId, bool Check, int Type, int User, string Lang, int BranchId)
+        {
+            var Txtstr = "السماح";
+            if (Check == false) Txtstr = "عدم السماح";
+            try
+            {
+
+                var Emp = _TaamerProContext.Employees.Where(x => x.EmployeeId == EmpId && x.IsDeleted == false).FirstOrDefault();
+                if (Emp != null)
+                {
+                    if (Type == 1)
+                    {
+                        Emp.allowallsite = Check;
+                    }
+                    else
+                    {
+                        Emp.allowoutsidesite = Check;
+                    }
+
+                    _TaamerProContext.SaveChanges();
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = Txtstr + " بتسجيل الحضور والانصراف موظف رقم " + EmpId;
+                    _SystemAction.SaveAction("DeleteEmplocation", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate2, User, BranchId, ActionNote2, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "تم الحفظ بنجاح" };
+                }
+                else
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في " + Txtstr + " بتسجيل الحضور والانصراف موظف";
+                    _SystemAction.SaveAction("DeleteEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "فشل في الحفظ" };
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في " + Txtstr + " بتسجيل الحضور والانصراف موظف";
+                _SystemAction.SaveAction("DeleteEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage() { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "فشل في الحفظ" };
+            }
+        }
+
+        public GeneralMessage ConvertEmplocation(int EmpId, int oldLocationId, int newLocationId, int User, string Lang, int BranchId)
+        {
+            try
+            {
+                var Emploc = _TaamerProContext.EmpLocations.Where(x => x.EmpId == EmpId && x.LocationId == oldLocationId && x.IsDeleted == false).FirstOrDefault();
+                if (Emploc != null)
+                {
+
+                    var Emploc2 = _TaamerProContext.EmpLocations.Where(x => x.EmpId == EmpId && x.LocationId == newLocationId && x.IsDeleted == false).ToList();
+                    if (Emploc2.Count() > 0)
+                    {
+                        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "هذا الموظف موجود من قبل علي هذا الموقع" };
+
+                    }
+
+                    Emploc.LocationId = newLocationId;
+
+                    _TaamerProContext.SaveChanges();
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote2 = "تغيير موقع موظف رقم " + EmpId;
+                    _SystemAction.SaveAction("ConvertEmplocation", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate2, User, BranchId, ActionNote2, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "تم التغيير بنجاح" };
+                }
+                else
+                {
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = "فشل في تغيير موقع موظف";
+                    _SystemAction.SaveAction("ConvertEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                    //-----------------------------------------------------------------------------------------------------------------
+                    return new GeneralMessage() { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "فشل في التغيير" };
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في تغيير موقع موظف";
+                _SystemAction.SaveAction("ConvertEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, User, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage() { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "فشل في التغيير" };
+            }
+        }
+        public GeneralMessage SaveEmplocation(int EmpId, int LocationId, int UserId, string Lang, int BranchId)
+        {
+            try
+            {
+
+                var Emploc = _TaamerProContext.EmpLocations.Where(x => x.EmpId == EmpId && x.LocationId == LocationId && x.IsDeleted == false).ToList();
+                if (Emploc.Count() > 0)
+                {
+                    return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "هذا الموظف موجود من قبل علي هذا الموقع" };
+
+                }
+
+                EmpLocations empLocations = new EmpLocations();
+                empLocations.EmpLocationId = 0;
+                empLocations.EmpId = EmpId;
+                empLocations.LocationId = LocationId;
+                _TaamerProContext.EmpLocations.Add(empLocations);
+                _TaamerProContext.SaveChanges();
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "حفظ موظف علي موقع";
+                _SystemAction.SaveAction("SaveEmplocation", "EmployeeService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage() { StatusCode = HttpStatusCode.OK, ReasonPhrase = "تم حفظ موظف علي موقع بنجاح" };
+
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "فشل في حفظ الموظف علي الموقع";
+                _SystemAction.SaveAction("SaveEmplocation", "EmployeeService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
 
     }
 }

@@ -45,7 +45,8 @@ namespace TaamerProject.Repository.Repositories
         {
             try
             {
-                var drafts = _TaamerProContext.RequestsReplays.Where(s => s.IsDeleted == false && s.SupportResquests.AddUser == UserID && (s.SupportResquests.Status == (int)SupportRequestStatus.Opend || s.SupportResquests.Status == (int)SupportRequestStatus.Delay) && s.IsRead != true && s.ReplayFrom=="2").Select(x => new SupportRequestsReplayVM
+                var drafts = _TaamerProContext.RequestsReplays.Where(s => s.IsDeleted == false && s.SupportResquests.AddUser == UserID && 
+                (s.SupportResquests.Status == (int)SupportRequestStatus.Opend || s.SupportResquests.Status == (int)SupportRequestStatus.Delay) && s.IsRead != true && s.ReplayFrom=="2").Select(x => new SupportRequestsReplayVM
                 {
                     ServiceRequestId = x.ServiceRequestId,
                     ContactDate = x.ContactDate,

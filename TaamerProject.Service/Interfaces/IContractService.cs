@@ -39,5 +39,6 @@ namespace TaamerProject.Service.Interfaces
 
         GeneralMessage EditContractService(Contracts contract, int UserId, int BranchId, int? yearid);
         HijriDateFormat ConvertDateCalendar3(DateTime DateConv, string Calendar, string DateLangCulture);
+        Drafts_Templates getlastdraft();
     }
 }

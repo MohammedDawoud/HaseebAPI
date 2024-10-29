@@ -35,6 +35,19 @@ namespace TaamerProject.Repository.Repositories
         }
 
 
+        public async Task<IEnumerable<Drafts_TemplatesVM>> getdraftbyid(int id)
+        {
+            var drafts = _TaamerProContext.Drafts_Templates.Where(s => s.IsDeleted == false && s.DraftTempleteId==id).Select(x => new Drafts_TemplatesVM
+            {
+                DraftTempleteId = x.DraftTempleteId,
+                Name = x.Name,
+                DraftUrl = x.DraftUrl,
+                ProjectTypeId = x.ProjectTypeId,
+                //ProjectTypeName = x.ProjectType.NameAr
+            }).ToList();
+            return drafts;
+        }
+
         public async Task<Drafts_TemplatesVM> GetDraft_templateByProjectId(int projecttypeid)
         {
             var drafts = _TaamerProContext.Drafts_Templates.Where(s => s.IsDeleted == false &&s.ProjectTypeId== projecttypeid).Select(x => new Drafts_TemplatesVM

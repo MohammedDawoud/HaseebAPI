@@ -1535,7 +1535,10 @@ namespace TaamerProject.Service.Services
             }
         }
 
-
+        public Drafts_Templates getlastdraft()
+        {
+            return _TaamerProContext.Drafts_Templates.OrderByDescending(x => x.DraftTempleteId).FirstOrDefault();
+        }
     }
     public  class HijriDateFormat
     {

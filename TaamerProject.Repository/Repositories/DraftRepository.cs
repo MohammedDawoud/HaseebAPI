@@ -47,9 +47,9 @@ namespace TaamerProject.Repository.Repositories
 
         public async Task<IEnumerable<DraftVM>> GetAllDraftsbyProjectsType_2(int? TypeId)
         {
-            var drafts = _TaamerProContext.Draft.Where(s => s.IsDeleted == false && s.ProjectTypeId == TypeId).Select(x => new DraftVM
+            var drafts = _TaamerProContext.Drafts_Templates.Where(s => s.IsDeleted == false ).Select(x => new DraftVM
             {
-                DraftId = x.DraftId,
+                DraftId = x.DraftTempleteId,
                 DraftName = x.Name +" مرتبطة بمشروع"+ " : "+ x.ProjectType.NameAr,
                 DraftUrl = x.DraftUrl,
                 ProjectTypeId = x.ProjectTypeId,

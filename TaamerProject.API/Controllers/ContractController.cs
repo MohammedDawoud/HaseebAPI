@@ -2972,6 +2972,7 @@ namespace TaamerProject.API.Controllers
                 List<string> fileUrls = new List<string>();
                 //foreach (var item in contracts)
                 //{
+                var drafturl = _contractservice.getlastdraft();
                 var pathh = "";
                 string path = Path.Combine("Reports/Contract/");
                 if (!Directory.Exists(path))
@@ -2979,7 +2980,7 @@ namespace TaamerProject.API.Controllers
                     Directory.CreateDirectory(path);
                 }
                 string fileName = "Contract1_Draft.docx";
-                pathh = path + fileName;
+                pathh = drafturl.DraftUrl;// path + fileName;
 
                 // var pathh = "";
                 int? custid = 0;

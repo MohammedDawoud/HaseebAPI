@@ -15,6 +15,7 @@ namespace TaamerProject.Service.Interfaces
         GeneralMessage SaveDraft_Templates(Drafts_Templates drafts, int UserId, int BranchId);
 
         GeneralMessage ConnectDraft_Templates_WithProject(int DraftId, int ProjectTypeId, int UserId, int BranchId);
+        Task<IEnumerable<Drafts_TemplatesVM>> getdraftbyid(int id);
 
 
     }

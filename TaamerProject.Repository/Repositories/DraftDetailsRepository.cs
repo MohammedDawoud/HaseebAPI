@@ -32,7 +32,7 @@ namespace TaamerProject.Repository.Repositories
 
         public async Task<IEnumerable<DraftDetailsVM>> GetAllDraftsDetailsbyProjectId(int? ProjectId)
         {
-            var draftdetails = _TaamerProContext.DraftDetails.Where(s => s.IsDeleted == false && s.ProjectId == ProjectId).Select(x => new DraftDetailsVM
+            var draftdetails = _TaamerProContext.DraftDetails.Where(s => s.IsDeleted == false ).Select(x => new DraftDetailsVM
             {
                 DraftId = x.DraftId,
                 DraftDetailId = x.DraftDetailId,

@@ -37,6 +37,11 @@ namespace TaamerProject.Service.Services
             return drafts;
         }
 
+        public Task<IEnumerable<Drafts_TemplatesVM>> getdraftbyid(int id)
+        {
+            var drafts = _drafts_TemplatesRepository.getdraftbyid(id);
+            return drafts;
+        }
 
         public Task<Drafts_TemplatesVM> GetDraft_templateByProjectId(int projecttypeid)
         {

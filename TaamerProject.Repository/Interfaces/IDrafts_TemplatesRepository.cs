@@ -11,6 +11,7 @@ namespace TaamerProject.Repository.Interfaces
     {
         Task<IEnumerable<Drafts_TemplatesVM>> GetAllDrafts_templates();
         Task<Drafts_TemplatesVM> GetDraft_templateByProjectId(int projecttypeid);
+        Task<IEnumerable<Drafts_TemplatesVM>> getdraftbyid(int id);
 
 
     }

@@ -648,6 +648,7 @@ namespace TaamerProject.API.Helper
 
 
                            new Privilege { Id = 131904 , ParentId = 1319 , Name =  Resources.General_Fiscalyears, Description = Resources.General_Fiscalyears },
+                            new Privilege { Id = 131905 , ParentId = 1319 , Name =  "بحث بجميع السنوات", Description = "بحث بجميع السنوات" },
 
                         new Privilege { Id = 1320 , ParentId = 13 , Name =  Resources.ConfirmSalary, Description = Resources.ConfirmSalary },
                            // new Privilege { Id = 132001 , ParentId = 1320 , Name =  Resources., Description = Resources.General_AccountInfo },

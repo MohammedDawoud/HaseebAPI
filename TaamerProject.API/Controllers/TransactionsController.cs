@@ -81,10 +81,12 @@ namespace TaamerProject.API.Controllers
         }
         [HttpPost("GetAllTransSearch_New")]
 
-        public IActionResult GetAllTransSearch_New([FromForm] int? AccountId, [FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] int? CostCenterId)
+        public IActionResult GetAllTransSearch_New([FromForm] int? AccountId, [FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] int? CostCenterId, [FromForm] bool? isCheckedYear)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-            return Ok(_TransactionsService.GetAllTransSearch_New(AccountId, FromDate??"", ToDate??"", CostCenterId, _globalshared.BranchId_G, _globalshared.YearId_G).Result);
+            int YearIDCheck = _globalshared.YearId_G;
+            if (isCheckedYear == true) YearIDCheck = 0;
+            return Ok(_TransactionsService.GetAllTransSearch_New(AccountId, FromDate??"", ToDate??"", CostCenterId, _globalshared.BranchId_G, YearIDCheck).Result);
         }
         [HttpGet("GetAllTransSearchByAccIDandCostId")]
 
@@ -141,12 +143,13 @@ namespace TaamerProject.API.Controllers
 
 
         [HttpPost("GetReportGrid")]
-        public ActionResult GetReportGrid([FromForm]int? AccountId, [FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] int? CostCenterId, [FromForm] string? RasedBefore, [FromForm] string[] Sortedlist)
+        public ActionResult GetReportGrid([FromForm]int? AccountId, [FromForm] string? FromDate, [FromForm] string? ToDate, [FromForm] int? CostCenterId, [FromForm] string? RasedBefore, [FromForm] string[] Sortedlist, [FromForm] bool? isCheckedYear)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             ReportGridVM _reportGrid = new ReportGridVM();
-
-            var transactions = _TransactionsService.GetAllTransSearch_New(AccountId, FromDate??"", ToDate??"", CostCenterId, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
+            int YearIDCheck = _globalshared.YearId_G;
+            if (isCheckedYear == true) YearIDCheck = 0;
+            var transactions = _TransactionsService.GetAllTransSearch_New(AccountId, FromDate??"", ToDate??"", CostCenterId, _globalshared.BranchId_G, YearIDCheck).Result.ToList();
             var account = _accountsService.GetAccountById(AccountId??0).Result;
             string s = Sortedlist[0];
             string[] values = s.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);

@@ -73,7 +73,7 @@ namespace TaamerProject.API.pdfHandler
                 DateTime Date = InvoicesVMObj.AddDate ?? DateTime.Now;
                 string ActionDate = Date.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.CreateSpecificCulture("en"));
 
-                var SupplierName = organizationsVM.NameAr.TrimStart();
+                var SupplierName = (organizationsVM.NameAr ?? "").TrimStart();
 
                 SupplierName = SupplierName.TrimEnd();
 
@@ -838,7 +838,7 @@ namespace TaamerProject.API.pdfHandler
             DateTime Date = InvoicesVMObj.AddDate ?? DateTime.Now;
             string ActionDate = Date.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.CreateSpecificCulture("en"));
 
-            var SupplierName = organizationsVM.NameAr.TrimStart();
+            var SupplierName = (organizationsVM.NameAr ?? "").TrimStart();
 
             SupplierName = SupplierName.TrimEnd();
 
@@ -1458,7 +1458,7 @@ namespace TaamerProject.API.pdfHandler
             DateTime Date = InvoicesVMObj.AddDate ?? DateTime.Now;
             string ActionDate = Date.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.CreateSpecificCulture("en"));
 
-            var SupplierName = organizationsVM.NameAr.TrimStart();
+            var SupplierName = (organizationsVM.NameAr ?? "").TrimStart();
 
             SupplierName = SupplierName.TrimEnd();
 
@@ -2008,7 +2008,7 @@ namespace TaamerProject.API.pdfHandler
             DateTime Date = InvoicesVMObj.AddDate ?? DateTime.Now;
             string ActionDate = Date.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.CreateSpecificCulture("en"));
 
-            var SupplierName = organizationsVM.NameAr.TrimStart();
+            var SupplierName = (organizationsVM.NameAr ?? "").TrimStart();
 
             SupplierName = SupplierName.TrimEnd();
 
@@ -2568,7 +2568,7 @@ namespace TaamerProject.API.pdfHandler
                 DateTime Date = InvoicesVMObj.AddDate??DateTime.Now;
                 string ActionDate = Date.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.CreateSpecificCulture("en"));
 
-                var SupplierName = organizationsVM.NameAr.TrimStart();
+                var SupplierName = (organizationsVM.NameAr ?? "").TrimStart();
 
                 SupplierName = SupplierName.TrimEnd();
 
@@ -3126,7 +3126,7 @@ namespace TaamerProject.API.pdfHandler
                 DateTime Date = InvoicesVMObj.AddDate ?? DateTime.Now;
                 string ActionDate = Date.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.CreateSpecificCulture("en"));
 
-                var SupplierName = organizationsVM.NameAr.TrimStart();
+                var SupplierName = (organizationsVM.NameAr ?? "").TrimStart();
 
                 SupplierName = SupplierName.TrimEnd();
 

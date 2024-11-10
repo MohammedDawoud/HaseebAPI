@@ -88,6 +88,17 @@ namespace TaamerProject.API.Controllers
             });
             return Ok(someProject );
         }
+
+        [HttpPost("DeleteDraft_Templates")]
+        public IActionResult DeleteDraft_Templates(int DraftId)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+
+            var result = _drafts_TemplatesService.DeleteDraft_Templates(DraftId, _globalshared.UserId_G, _globalshared.BranchId_G);
+            return Ok(result);
+        }
+
+
         [HttpPost("GenerateRandomNo")]
         public int GenerateRandomNo()
         {

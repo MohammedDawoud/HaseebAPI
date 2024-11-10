@@ -16,6 +16,7 @@ namespace TaamerProject.Service.Interfaces
 
         GeneralMessage ConnectDraft_Templates_WithProject(int DraftId, int ProjectTypeId, int UserId, int BranchId);
         Task<IEnumerable<Drafts_TemplatesVM>> getdraftbyid(int id);
+        GeneralMessage DeleteDraft_Templates(int DraftId, int UserId, int BranchId);
 
 
     }

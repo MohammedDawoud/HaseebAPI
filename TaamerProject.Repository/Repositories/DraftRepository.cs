@@ -50,7 +50,7 @@ namespace TaamerProject.Repository.Repositories
             var drafts = _TaamerProContext.Drafts_Templates.Where(s => s.IsDeleted == false ).Select(x => new DraftVM
             {
                 DraftId = x.DraftTempleteId,
-                DraftName = x.Name +" مرتبطة بمشروع"+ " : "+ x.ProjectType.NameAr,
+                DraftName = x.Name ,//+" مرتبطة بمشروع"+ " : "+ x.ProjectType.NameAr,
                 DraftUrl = x.DraftUrl,
                 ProjectTypeId = x.ProjectTypeId,
                 ProjectTypeName = x.ProjectType.NameAr

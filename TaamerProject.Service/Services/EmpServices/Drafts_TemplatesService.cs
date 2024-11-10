@@ -203,7 +203,50 @@ namespace TaamerProject.Service.Services
                 return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest,ReasonPhrase = Resources.General_SavedFailed };
             }
         }
-       
+
+
+        public GeneralMessage DeleteDraft_Templates(int DraftId, int UserId, int BranchId)
+        {
+            try
+            {
+                //Draft draft = _DraftRepository.GetById(DraftId);
+                Drafts_Templates? draft = _TaamerProContext.Drafts_Templates.Where(s => s.DraftTempleteId == DraftId).FirstOrDefault();
+                if (draft != null)
+                {
+                    draft.IsDeleted = true;
+                    draft.DeleteDate = DateTime.Now;
+                    draft.DeleteUser = UserId;
+                    var draftdet = _TaamerProContext.DraftDetails.Where(s => s.DraftId == DraftId).ToList();
+                    if (draftdet.Count() > 0)
+                    {
+                        _TaamerProContext.DraftDetails.RemoveRange(draftdet);
+                    }
+
+
+                    _TaamerProContext.SaveChanges();
+                    //-----------------------------------------------------------------------------------------------------------------
+                    string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                    string ActionNote = " حذف مسودة رقم " + DraftId;
+                    _SystemAction.SaveAction("DeleteDraft", "DraftService", 3, Resources.General_DeletedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                    //-----------------------------------------------------------------------------------------------------------------
+
+                }
+
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_DeletedSuccessfully };
+            }
+            catch (Exception)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = " فشل في حذف مسودة رقم " + DraftId; ;
+                _SystemAction.SaveAction("DeleteDraft", "DraftService", 3, Resources.General_DeletedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_DeletedFailed };
+            }
+        }
+
 
     }
 }

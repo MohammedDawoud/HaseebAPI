@@ -1292,7 +1292,7 @@ namespace TaamerProject.API.Controllers
 
                     doc.Replace("#ContractDetails", ContractDetailsStr, false, true);
 
-                    doc.Replace("#ProjectNo", CustContract.ProjectNo, false, true);
+                    //doc.Replace("#ProjectNo", CustContract.ProjectNo, false, true);
 
 
 
@@ -1327,24 +1327,24 @@ namespace TaamerProject.API.Controllers
 
                         table2.TableFormat.Bidi = true;
                         Paragraph paragraphTemp;
-                        paragraphTemp = table2[0, 0].AddParagraph();
-                        paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
-                        paragraphTemp.AppendText("رقم المشروع");
+                        //paragraphTemp = table2[0, 0].AddParagraph();
+                        //paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
+                        //paragraphTemp.AppendText("رقم المشروع");
                         //table2[0, 0].AddParagraph().Format.IsBidi = true;
                         string text = "الخدمة";
-                        paragraphTemp = table2[0, 1].AddParagraph();
+                        paragraphTemp = table2[0, 0].AddParagraph();
                         paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
 
                         paragraphTemp.AppendText(text);
-                        paragraphTemp = table2[0, 2].AddParagraph();
+                        paragraphTemp = table2[0, 1].AddParagraph();
                         paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
 
                         paragraphTemp.AppendText(" الكمية");
-                        paragraphTemp = table2[0, 3].AddParagraph();
+                        paragraphTemp = table2[0, 2].AddParagraph();
                         paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
 
                         paragraphTemp.AppendText("مبلغ العقد");
-                        paragraphTemp = table2[0, 4].AddParagraph();
+                        paragraphTemp = table2[0, 3].AddParagraph();
                         paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
 
                         paragraphTemp.AppendText("مبلغ ضريبة");
@@ -1374,29 +1374,29 @@ namespace TaamerProject.API.Controllers
 
 
                             table2.AddRow(true, 5);
-                            paragraphTemp = table2[ii, 0].AddParagraph();
-                            paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
-                            paragraphTemp.AppendText((CustContract.ProjectNo ?? "").ToString());
+                            //paragraphTemp = table2[ii, 0].AddParagraph();
+                            //paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
+                            //paragraphTemp.AppendText((CustContract.ProjectNo ?? "").ToString());
 
-                            paragraphTemp = table2[ii, 1].AddParagraph();
+                            paragraphTemp = table2[ii, 0].AddParagraph();
                             paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
                             paragraphTemp.AppendText((S.servicename ?? "").ToString());
                             if (serviceDetails1 != "")
                             {
-                                table2[ii, 1].AddParagraph().AppendText(("━━━━━━━━━━━━").ToString());
+                                table2[ii, 0].AddParagraph().AppendText(("━━━━━━━━━━━━").ToString());
                             }
-                            paragraphTemp = table2[ii, 1].AddParagraph();
+                            paragraphTemp = table2[ii, 0].AddParagraph();
                             paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
                             paragraphTemp.AppendText((serviceDetails1 ?? "").ToString());
 
-                            paragraphTemp = table2[ii, 2].AddParagraph();
+                            paragraphTemp = table2[ii, 1].AddParagraph();
                             paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
                             paragraphTemp.AppendText((S.ServiceQty ?? 1).ToString());
 
-                            paragraphTemp = table2[ii, 3].AddParagraph();
+                            paragraphTemp = table2[ii, 2].AddParagraph();
                             paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
                             paragraphTemp.AppendText((S.Serviceamountval ?? 0).ToString());
-                            paragraphTemp = table2[ii, 4].AddParagraph();
+                            paragraphTemp = table2[ii, 3].AddParagraph();
                             paragraphTemp.Format.HorizontalAlignment = HorizontalAlignment.Right;
                             paragraphTemp.AppendText((TaxAmount ?? "").ToString());
                             ii++;
@@ -1598,7 +1598,7 @@ namespace TaamerProject.API.Controllers
                 FParagraph.Format.Borders.Color = System.Drawing.Color.DarkGray;
                 #endregion
 
-                uploadedFile = fileLocation = System.IO.Path.Combine("Uploads/Drafts/") + string.Format("{0}{1}", CustContract.ProjectNo, uploadedFileName);
+                uploadedFile = fileLocation = System.IO.Path.Combine("Uploads/Drafts/") + GenerateRandomNo() + uploadedFileName;
                 doc_Uploaded.SaveToFile(uploadedFile, FileFormat.Docx);
                 fileUrls.Add(uploadedFile);
                 //TempData["Linkurl"] = uploadedFile;

@@ -8077,7 +8077,7 @@ namespace TaamerProject.Repository.Repositories
         {
             try
             {
-                var inv = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && Convert.ToInt32(s.InvoiceNumber )== voucherNo && s.YearId == YearId ).Select(x => new InvoicesVM
+                var inv = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.Type==2 && Convert.ToInt32(s.InvoiceNumber )== voucherNo && s.YearId == YearId ).Select(x => new InvoicesVM
                 {
                     InvoiceNumber = x.InvoiceNumber,
                     InvoiceId = x.InvoiceId,

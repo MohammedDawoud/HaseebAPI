@@ -75,15 +75,15 @@ namespace TaamerProject.Service.Services
             return _TransactionsRepository.GetAllTransSearch(AccountId, FromDate, ToDate, CostCenterId, yearid ?? default(int), BranchId);
 
         }
-        public Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid)
+        public Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid, bool? isCheckedBranch)
         {
             if(AccountId ==null || AccountId == 0) {
-            var Fatra = _TransactionsRepository.GetAllTransSearch_New(AccountId, FromDate, ToDate, CostCenterId, yearid ?? default(int), BranchId);
+            var Fatra = _TransactionsRepository.GetAllTransSearch_New(AccountId, FromDate, ToDate, CostCenterId, yearid ?? default(int), BranchId, isCheckedBranch);
             return Fatra;
             }
             else
             {
-                var Fatra = _TransactionsRepository.GetAllTransSearch_New_withChild(AccountId, FromDate, ToDate, CostCenterId, yearid ?? default(int), BranchId);
+                var Fatra = _TransactionsRepository.GetAllTransSearch_New_withChild(AccountId, FromDate, ToDate, CostCenterId, yearid ?? default(int), BranchId, isCheckedBranch);
 
                 return Fatra;
             }

@@ -12,7 +12,7 @@ namespace TaamerProject.Service.Interfaces
         Task<IEnumerable<TransactionsVM>> GetAllTransByCostCenter(int? CostCenterId, string FromDate, string ToDate, int? yearid);
         Task<IEnumerable<TransactionsVM>> GetAllTransactionsSearch(TransactionsVM TransactionsSearch, int BranchId, int? yearid);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearch(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid);
-        Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid);
+        Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid, bool? isCheckedBranch);
 
         Task<IEnumerable<TransactionsVM>> GetAllTransSearchByAccIDandCostId(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearchByAccIDandCostId_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int BranchId, int? yearid);

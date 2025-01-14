@@ -223,23 +223,23 @@ namespace TaamerProject.Service.Services
 
                 var mail = new MailMessage();
 
-                var loginInfo = new NetworkCredential("support@bayanatech.com.sa", "Makka@13471-T");
+                var loginInfo = new NetworkCredential("support@tameercloud.com", "aA4LQkrbQdCm5jqt@");
 
                 if (_EmailSettingRepository.GetEmailSetting().Result.DisplayName != null)
                 {
-                    mail.From = new MailAddress("support@bayanatech.com.sa", _EmailSettingRepository.GetEmailSetting().Result.DisplayName);
+                    mail.From = new MailAddress("support@tameercloud.com", _EmailSettingRepository.GetEmailSetting().Result.DisplayName);
                 }
                 else
                 {
-                    mail.From = new MailAddress("support@bayanatech.com.sa", "لديك اشعار من نظام تعمير السحابي");
+                    mail.From = new MailAddress("support@tameercloud.com", "لديك اشعار من نظام تعمير السحابي");
                 }
 
 
-                // mail.From = new MailAddress("support@bayanatech.com.sa");
+                // mail.From = new MailAddress("support@tameercloud.com");
                 // mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
-                mail.To.Add(new MailAddress("info@bayanatech.com.sa"));
+                mail.To.Add(new MailAddress("noreply-tameer@bayanatech.com.sa"));
                 mail.To.Add(new MailAddress(RequesterMail));
-                mail.CC.Add(new MailAddress("tsupport@bayanatech.com.sa"));
+                mail.CC.Add(new MailAddress("tsupport@tameercloud.com"));
                 mail.CC.Add(new MailAddress("tsupport2@bayanatech.com.sa"));
                 // mail.CC.Add(new MailAddress("mohammeddawoud66@gmail.com"));
 
@@ -324,22 +324,22 @@ namespace TaamerProject.Service.Services
 
                 var mail = new MailMessage();
 
-                var loginInfo = new NetworkCredential("support@bayanatech.com.sa", "Makka@13471-T");
+                var loginInfo = new NetworkCredential("support@tameercloud.com", "aA4LQkrbQdCm5jqt@");
 
                 if (_EmailSettingRepository.GetEmailSetting().Result.DisplayName != null)
                 {
-                    mail.From = new MailAddress("support@bayanatech.com.sa", _EmailSettingRepository.GetEmailSetting().Result.DisplayName);
+                    mail.From = new MailAddress("support@tameercloud.com", _EmailSettingRepository.GetEmailSetting().Result.DisplayName);
                 }
                 else
                 {
-                    mail.From = new MailAddress("support@bayanatech.com.sa", "لديك اشعار من نظام تعمير السحابي");
+                    mail.From = new MailAddress("support@tameercloud.com", "لديك اشعار من نظام تعمير السحابي");
                 }
 
 
                 //// mail.From = new MailAddress("support@bayanatech.com.sa");
                 mail.To.Add(new MailAddress(user.Email));
                 // mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
-                //mail.To.Add(new MailAddress("info@bayanatech.com.sa"));
+                //mail.To.Add(new MailAddress("noreply-tameer@bayanatech.com.sa"));
                 //mail.To.Add(new MailAddress(RequesterMail));
                 //mail.CC.Add(new MailAddress("tsupport@bayanatech.com.sa"));
                 //mail.CC.Add(new MailAddress("tsupport2@bayanatech.com.sa"));
@@ -815,23 +815,23 @@ namespace TaamerProject.Service.Services
 
                 var mail = new MailMessage();
 
-                var loginInfo = new NetworkCredential("support@bayanatech.com.sa", "Makka@13471-T");
+                var loginInfo = new NetworkCredential("support@tameercloud.com", "aA4LQkrbQdCm5jqt@");
 
                 if (_EmailSettingRepository.GetEmailSetting().Result.DisplayName != null)
                 {
-                    mail.From = new MailAddress("support@bayanatech.com.sa", _EmailSettingRepository.GetEmailSetting().Result.DisplayName);
+                    mail.From = new MailAddress("support@tameercloud.com", _EmailSettingRepository.GetEmailSetting().Result.DisplayName);
                 }
                 else
                 {
-                    mail.From = new MailAddress("support@bayanatech.com.sa", "لديك اشعار من نظام تعمير السحابي");
+                    mail.From = new MailAddress("support@tameercloud.com", "لديك اشعار من نظام تعمير السحابي");
                 }
 
 
-                // mail.From = new MailAddress("support@bayanatech.com.sa");
+                // mail.From = new MailAddress("support@tameercloud.com");
                 //mail.To.Add(new MailAddress("ehab.r.sallam@gmail.com"));
-                mail.To.Add(new MailAddress("info@bayanatech.com.sa"));
+                mail.To.Add(new MailAddress("noreply-tameer@bayanatech.com.sa"));
                 mail.To.Add(new MailAddress(RequesterMail));
-                mail.CC.Add(new MailAddress("tsupport@bayanatech.com.sa"));
+                mail.CC.Add(new MailAddress("tsupport@tameercloud.com"));
                 mail.CC.Add(new MailAddress("tsupport2@bayanatech.com.sa"));
                 // mail.CC.Add(new MailAddress("mohammeddawoud66@gmail.com"));
 

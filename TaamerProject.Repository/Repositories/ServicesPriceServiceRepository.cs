@@ -54,8 +54,8 @@ namespace TaamerProject.Repository.Repositories
                 //PackageRatio2 = x.PackageId != null ? x.Package.PackageRatio2 : 0,
                 //PackageRatio3 = x.PackageId != null ? x.Package.PackageRatio3 : 0,
                 ServiceType = x.ServiceType ?? 1,
-                ServiceTypeName = x.ServiceType==2 ? "وحدة" : "قطعة",
-                StorehouseId=x.StorehouseId,
+                ServiceTypeName = x.ServiceTypes!=null?x.ServiceTypes.NameAr:"",
+                StorehouseId = x.StorehouseId,
 
 
 
@@ -98,7 +98,8 @@ namespace TaamerProject.Repository.Repositories
                 //PackageRatio2 = x.PackageId != null ? x.Package.PackageRatio2 : 0,
                 //PackageRatio3 = x.PackageId != null ? x.Package.PackageRatio3 : 0,
                 ServiceType = x.ServiceType ?? 1,
-                ServiceTypeName = x.ServiceType == 2 ? "وحدة" : "قطعة",
+                ServiceTypeName = x.ServiceTypes != null ? x.ServiceTypes.NameAr : "",
+
                 StorehouseId = x.StorehouseId,
 
             }).FirstOrDefault();
@@ -140,7 +141,8 @@ namespace TaamerProject.Repository.Repositories
                 //PackageRatio2 = x.PackageId != null ? x.Package.PackageRatio2 : 0,
                 //PackageRatio3 = x.PackageId != null ? x.Package.PackageRatio3 : 0,
                 ServiceType = x.ServiceType ?? 1,
-                ServiceTypeName = x.ServiceType == 2 ? "وحدة" : "قطعة",
+                ServiceTypeName = x.ServiceTypes != null ? x.ServiceTypes.NameAr : "",
+
                 StorehouseId = x.StorehouseId,
 
             }).OrderByDescending(x => x.ServicesId).ToList();
@@ -181,7 +183,8 @@ namespace TaamerProject.Repository.Repositories
                 //PackageRatio2 = x.PackageId != null ? x.Package.PackageRatio2 : 0,
                 //PackageRatio3 = x.PackageId != null ? x.Package.PackageRatio3 : 0,
                 ServiceType = x.ServiceType ?? 1,
-                ServiceTypeName = x.ServiceType == 2 ? "وحدة" : "قطعة",
+                ServiceTypeName = x.ServiceTypes != null ? x.ServiceTypes.NameAr : "",
+
                 StorehouseId = x.StorehouseId,
 
             }).OrderByDescending(x => x.ServicesId).ToList();
@@ -227,7 +230,8 @@ namespace TaamerProject.Repository.Repositories
                 //PackageRatio2 = x.PackageId != null ? x.Package.PackageRatio2 : 0,
                 //PackageRatio3 = x.PackageId != null ? x.Package.PackageRatio3 : 0,
                 ServiceType = x.ServiceType ?? 1,
-                ServiceTypeName = x.ServiceType == 2 ? "وحدة" : "قطعة",
+                ServiceTypeName = x.ServiceTypes != null ? x.ServiceTypes.NameAr : "",
+
                 StorehouseId = x.StorehouseId,
 
             }).OrderByDescending(x => x.ServicesId).ToList();
@@ -268,7 +272,8 @@ namespace TaamerProject.Repository.Repositories
                 //PackageRatio2 = x.PackageId != null ? x.Package.PackageRatio2 : 0,
                 //PackageRatio3 = x.PackageId != null ? x.Package.PackageRatio3 : 0,
                 ServiceType = x.ServiceType ?? 1,
-                ServiceTypeName = x.ServiceType == 2 ? "وحدة" : "قطعة",
+                ServiceTypeName = x.ServiceTypes != null ? x.ServiceTypes.NameAr : "",
+
                 StorehouseId = x.StorehouseId,
 
             }).OrderByDescending(x => x.ServicesId).ToList();

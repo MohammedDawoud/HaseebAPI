@@ -37,6 +37,7 @@ namespace TaamerProject.Models.DBContext
         public virtual DbSet<Acc_Debentures> Acc_Debentures { get; set; }
         public virtual DbSet<Acc_EmpFinYears> Acc_EmpFinYears { get; set; }
         public virtual DbSet<Acc_Floors> Acc_Floors { get; set; }
+        public virtual DbSet<Acc_ServiceTypes> Acc_ServiceTypes { get; set; }
         public virtual DbSet<Acc_Packages> Acc_Packages { get; set; }
         public virtual DbSet<Acc_Services_Price> Acc_Services_Price { get; set; }
         public virtual DbSet<Acc_Services_PriceOffer> Acc_Services_PriceOffer { get; set; }
@@ -357,6 +358,12 @@ namespace TaamerProject.Models.DBContext
             });
 
             //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<Acc_ServiceTypes>(entity =>
+            {
+                entity.HasKey(e => e.ServiceTypeId);
+                entity.ToTable("Acc_ServiceTypes");
+            });
+            //--------------------------------END--------------------------------------------------
             modelBuilder.Entity<Acc_Packages>(entity =>
             {
                 entity.HasKey(e => e.PackageId);
@@ -465,8 +472,8 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.ItemCode).HasColumnName("ItemCode");
                 entity.Property(t => t.StorehouseId).HasColumnName("StorehouseId");
 
-
-
+                modelBuilder.Entity<Acc_Services_Price>().HasOne(s => s.ServiceTypes).WithMany().HasForeignKey(e => e.ServiceType);
+                modelBuilder.Entity<Acc_Services_Price>().HasOne(s => s.AccountParentId).WithMany().HasForeignKey(e => e.AccountId);
                 modelBuilder.Entity<Acc_Services_Price>().HasOne(s => s.AccountParentId).WithMany().HasForeignKey(e => e.AccountId);
                 modelBuilder.Entity<Acc_Services_Price>().HasOne(s => s.ProjectParentId).WithMany().HasForeignKey(e => e.ProjectId);
                 modelBuilder.Entity<Acc_Services_Price>().HasOne(s => s.ProjectSubTypes).WithMany().HasForeignKey(e => e.ProjectSubTypeID);

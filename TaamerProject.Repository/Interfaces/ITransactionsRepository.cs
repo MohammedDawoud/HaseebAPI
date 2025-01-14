@@ -15,7 +15,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<IEnumerable<TransactionsVM>> GetAllSubCostTransByCostCenter(int? CostCenterId, string FromDate, string ToDate, int YearId);
         Task<IEnumerable<TransactionsVM>> GetAllTransactionsSearch(TransactionsVM TransactionsSearch, int YearId,int BranchId);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearch(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
-        Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
+        Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId, bool? isCheckedBranch);
 
         Task<IEnumerable<TransactionsVM>> GetAllTransSearchByAccIDandCostId(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearchByAccIDandCostId_New(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
@@ -52,7 +52,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<IEnumerable<TransactionsVM>> GetAllTotalJournals(int? FromJournal, int? ToJournal, string FromDate, string ToDate, int YearId, int BranchId);
         Task<IEnumerable<TransactionsVM>> GetFullAccountStatmentDGV(string FromDate, string ToDate, string AccountCode, string CCID, string Con, int BranchId, int YearId);
         Task<IEnumerable<TransactionsVM>> gettransbyid(int? jornal);
-        Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New_withChild(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
+        Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New_withChild(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId, bool? isCheckedBranch);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearchByAccIDandCostId_New_whithchild(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
 
 

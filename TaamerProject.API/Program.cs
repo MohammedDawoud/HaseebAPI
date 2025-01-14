@@ -75,6 +75,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IAcc_TotalSpacesRangeService, Acc_TotalSpacesRangeService>();
             builder.Services.AddTransient<IAcc_StorehouseService, Acc_StorehouseService>();
             builder.Services.AddTransient<IAcc_DebenturesService, Acc_DebenturesService>();
+            builder.Services.AddTransient<IAcc_ServiceTypesService, Acc_ServiceTypesService>();
 
             builder.Services.AddTransient<IAccountsService, AccountsService>();
             builder.Services.AddTransient<IAllowanceService, AllowanceService>();
@@ -251,6 +252,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IAcc_TotalSpacesRangeRepository, Acc_TotalSpacesRangeRepository>();
             builder.Services.AddTransient<IAcc_StorehouseRepository, Acc_StorehouseRepository>();
             builder.Services.AddTransient<IAcc_DebenturesRepository, Acc_DebenturesRepository>();
+            builder.Services.AddTransient<IAcc_ServiceTypesRepository, Acc_ServiceTypesRepository>();
 
             builder.Services.AddTransient<IAccountsRepository, AccountsRepository>();
             builder.Services.AddTransient<IAllowanceRepository, AllowanceRepository>();

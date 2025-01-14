@@ -79,7 +79,7 @@ namespace TaamerProject.Service.Services
             try
             {
                 //var settings = _SystemSettingsRepository.GetMatching(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
-                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
+                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false).FirstOrDefault();
 
                 var code = GenerateRandomNo();
                 var strbody ="";
@@ -174,7 +174,7 @@ namespace TaamerProject.Service.Services
             try
             {
                 //var settings = _SystemSettingsRepository.GetMatching(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
-                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
+                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false).FirstOrDefault();
 
                 if (settings.ZatcaCheckCode == Sentcode)
                 {
@@ -227,7 +227,7 @@ namespace TaamerProject.Service.Services
             {
                // var settings = _SystemSettingsRepository.GetMatching(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
 
-                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
+                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false).FirstOrDefault();
 
                 if (settings != null)
                 {
@@ -265,7 +265,7 @@ namespace TaamerProject.Service.Services
             try
             {
                 //var settings = _SystemSettingsRepository.GetMatching(s => s.IsDeleted == false && s.BranchId == BranchId);
-                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false && s.BranchId == BranchId).FirstOrDefault();
+                var settings = _TaamerProContext.SystemSettings.Where(s => s.IsDeleted == false).FirstOrDefault();
 
                 if (settings == null)
                 {

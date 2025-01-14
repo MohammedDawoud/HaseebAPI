@@ -31,6 +31,7 @@ namespace TaamerProject.Models
         public string? ItemCode { get; set; }
         public int? StorehouseId { get; set; }
 
+        public virtual Acc_ServiceTypes? ServiceTypes { get; set; }
 
         public virtual Acc_Packages? Package { get; set; }
 

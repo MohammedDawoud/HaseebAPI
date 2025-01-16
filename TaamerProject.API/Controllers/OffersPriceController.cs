@@ -757,6 +757,7 @@ namespace TaamerProject.API.Controllers
             foreach (var item in offerservice)
             {
                 var servicesPriOffer = _servicesPriceOfferService.GetServicesPriceByParentId(item.ServiceId, item.OfferId).Result.ToList();
+                servicesPriOffer = servicesPriOffer.Where(s => s.SureService == 1).ToList();
                 item.ServicesPricesOffer = servicesPriOffer; 
             }
             var payment = _customerPaymentsService.GetAllCustomerPaymentsboffer(OfferId).Result.ToList();

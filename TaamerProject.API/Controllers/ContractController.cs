@@ -159,98 +159,110 @@ namespace TaamerProject.API.Controllers
 
         [HttpGet("GetAllContractsNotPaidCustomer")]
         public IActionResult GetAllContractsNotPaidCustomer(bool FirstLoad)
+        {
+            List<ContractsVM> list = new List<ContractsVM>();
+            if (FirstLoad == true)
             {
-                List<ContractsVM> list = new List<ContractsVM>();
-                if (FirstLoad == true)
-                {
-                    return Ok(list);
-                }
+                return Ok(list);
+            }
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-                //var someContracts = _contractservice.GetAllContracts_B(BranchId, _globalshared.YearId_G).ToList().Where(s => s.TotalRemainingPayment > 0);
-                VoucherFilterVM voucherFilterVM = new VoucherFilterVM();
-                voucherFilterVM.Type = 2;
-                voucherFilterVM.CustomerId = null;
+            //var someContracts = _contractservice.GetAllContracts_B(BranchId, _globalshared.YearId_G).ToList().Where(s => s.TotalRemainingPayment > 0);
+            VoucherFilterVM voucherFilterVM = new VoucherFilterVM();
+            voucherFilterVM.Type = 2;
+            voucherFilterVM.CustomerId = null;
 
-                var someVoucher = _voucherService.GetAllVouchersSearchCustomer(voucherFilterVM, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
-                var result = someVoucher
-                    .GroupBy(s => new { s.CustomerId, s.CustomerMobile, s.CustomerName, s.CustomerName_W })
-                    .Select(cl => new ContractsVM
-                    {
-                        CustomerId = cl.First().CustomerId,
-                        CustomerName = cl.First().CustomerName ?? "",
-                        CustomerName_W = cl.First().CustomerName_W ?? "",
-                        CustomerMobile = cl.First().CustomerMobile ?? "",
-                        TotalValue = cl.Sum(c => c.TotalValue),
-                    }).ToList();
-                foreach (var inv in result)
+            VoucherFilterVM voucherFilterVM2 = new VoucherFilterVM();
+            voucherFilterVM2.Type = 29;
+            voucherFilterVM2.CustomerId = null;
+
+            var someVoucher = _voucherService.GetAllVouchersSearchCustomer(voucherFilterVM, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
+            var someVoucherCredit = _voucherService.GetAllVouchersSearchCustomer(voucherFilterVM2, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
+
+            var result = someVoucher
+                .GroupBy(s => new { s.CustomerId, s.CustomerMobile, s.CustomerName, s.CustomerName_W })
+                .Select(cl => new ContractsVM
                 {
-                    decimal TotalPaidPaymentResult = 0;
-                    decimal resultReVoucher = 0;
-                    decimal resultEntryVoucher = 0;
-                    decimal resultInvoicePayVoucher = 0;
-                    decimal resultInvoicePayVoucherCredit = 0;
+                    CustomerId = cl.First().CustomerId,
+                    CustomerName = cl.First().CustomerName ?? "",
+                    CustomerName_W = cl.First().CustomerName_W ?? "",
+                    CustomerMobile = cl.First().CustomerMobile ?? "",
+                    TotalValue = cl.Sum(c => c.TotalValue),
+                }).ToList();
+            foreach (var inv in result)
+            {
+                decimal TotalPaidPaymentResult = 0;
+                decimal resultReVoucher = 0;
+                decimal resultPayVoucher = 0;
+                decimal resultInvoicePayVoucherCreditPaid = 0;
+                decimal resultEntryVoucher = 0;
+                decimal resultInvoicePayVoucher = 0;
+                decimal resultInvoicePayVoucherCredit = 0;
 
-                    //var resultReVoucher = _voucherService.VousherRe_Sum(inv.InvoiceId);
-                    var AccountResult = _customerservice.GetCustomersByCustomerId(inv.CustomerId ?? 0, _globalshared.Lang_G).Result;
-                    if (AccountResult != null)
+                //var resultReVoucher = _voucherService.VousherRe_Sum(inv.InvoiceId);
+                var AccountResult = _customerservice.GetCustomersByCustomerId(inv.CustomerId ?? 0, _globalshared.Lang_G).Result;
+                if (AccountResult != null)
+                {
+                    var Allresult = _transactionsService.GetAllTransByAccountId(AccountResult.AccountId, "", "", _globalshared.YearId_G).Result;
+
+                    resultReVoucher = Allresult.Where(s => s.Type == 6 && s.IsPost == true).Sum(t => t.Credit) ?? 0;
+                    resultPayVoucher = Allresult.Where(s => s.Type == 5 && s.IsPost == true).Sum(t => t.Depit) ?? 0;
+                    resultInvoicePayVoucherCreditPaid = someVoucherCredit.Where(s => s.Type == 29 && s.IsPost == true && s.CustomerId == inv.CustomerId).Sum(t => t.PaidValue) ?? 0;
+
+                    resultEntryVoucher = Allresult.Where(s => s.Type == 8 && s.IsPost == true).Sum(t => (t.Credit - t.Depit)) ?? 0;
+                    resultInvoicePayVoucher = someVoucher.Where(s => s.Type == 2 && s.IsPost == true && s.CustomerId == inv.CustomerId).Sum(t => t.PaidValue) ?? 0;
+
+                    var PayVoucherCredit = Allresult.Where(s => s.Type == 29 && s.IsPost == true).ToList();
+                    foreach (var item in PayVoucherCredit)
                     {
-                        var Allresult = _transactionsService.GetAllTransByAccountId(AccountResult.AccountId, "", "", _globalshared.YearId_G).Result;
-
-                        resultReVoucher = Allresult.Where(s => s.Type == 6 && s.IsPost == true).Sum(t => t.Credit) ?? 0;
-
-                        resultEntryVoucher = Allresult.Where(s => s.Type == 8 && s.IsPost == true).Sum(t => (t.Credit - t.Depit)) ?? 0;
-                        resultInvoicePayVoucher = someVoucher.Where(s => s.Type == 2 && s.IsPost == true && s.CustomerId == inv.CustomerId).Sum(t => t.PaidValue) ?? 0;
-
-                        var PayVoucherCredit = Allresult.Where(s => s.Type == 29 && s.IsPost == true).ToList();
-                        foreach (var item in PayVoucherCredit)
+                        var NotiCredit = _voucherService.GetVoucherById(item.InvoiceId ?? 0).Result;
+                        if (NotiCredit != null)
                         {
-                            var NotiCredit = _voucherService.GetVoucherById(item.InvoiceId ?? 0).Result;
-                            if (NotiCredit != null)
-                            {
-                                var InvoiceNotiCredit = _voucherService.GetVoucherById(NotiCredit.CreditNotiId ?? 0).Result;
+                            var InvoiceNotiCredit = _voucherService.GetVoucherById(NotiCredit.CreditNotiId ?? 0).Result;
 
-                                if (InvoiceNotiCredit != null)
+                            if (InvoiceNotiCredit != null)
+                            {
+                                if (InvoiceNotiCredit.PayType == 8 && InvoiceNotiCredit.Rad != true)
                                 {
-                                    if (InvoiceNotiCredit.PayType == 8 && InvoiceNotiCredit.Rad != true)
-                                    {
-                                        resultInvoicePayVoucherCredit += item.Credit ?? 0;
-                                    }
+                                    resultInvoicePayVoucherCredit += item.Credit ?? 0;
                                 }
                             }
                         }
-
-                    }
-                    else
-                    {
-                        resultReVoucher = 0;
-                        resultEntryVoucher = 0;
-                        resultInvoicePayVoucher = 0;
-                        resultInvoicePayVoucherCredit = 0;
                     }
 
-
-                    TotalPaidPaymentResult = (resultReVoucher) + (resultEntryVoucher) + (resultInvoicePayVoucher);
-                    list.Add(new ContractsVM
-                    {
-                        //ContractNo = "",
-                        //Date = inv.Date,
-                        TotalValue = inv.TotalValue - resultInvoicePayVoucherCredit,
-                        CustomerName = inv.CustomerName ?? "",
-                        CustomerName_W = inv.CustomerName_W ?? "",
-                        CustomerMobile = inv.CustomerMobile ?? "",
-                        //ProjectDescription="",
-                        //ProjectName = inv.ProjectNo,
-                        TotalPaidPayment = TotalPaidPaymentResult,
-                        TotalRemainingPayment = ((inv.TotalValue - resultInvoicePayVoucherCredit) - TotalPaidPaymentResult),
-
-                    });
                 }
-                IEnumerable<ContractsVM> InvoicesList = list;
-                //var Vouchers = someContracts.Union(InvoicesList);
-                var Vouchers = InvoicesList;
+                else
+                {
+                    resultReVoucher = 0;
+                    resultPayVoucher = 0;
+                    resultEntryVoucher = 0;
+                    resultInvoicePayVoucher = 0;
+                    resultInvoicePayVoucherCredit = 0;
+                    resultInvoicePayVoucherCreditPaid = 0;
+                }
 
-                return Ok(Vouchers);
+
+                TotalPaidPaymentResult = (resultReVoucher) + (resultEntryVoucher) + (resultInvoicePayVoucher) - (resultPayVoucher) - (resultInvoicePayVoucherCreditPaid);
+                list.Add(new ContractsVM
+                {
+                    //ContractNo = "",
+                    //Date = inv.Date,
+                    TotalValue = inv.TotalValue - resultInvoicePayVoucherCredit,
+                    CustomerName = inv.CustomerName ?? "",
+                    CustomerName_W = inv.CustomerName_W ?? "",
+                    CustomerMobile = inv.CustomerMobile ?? "",
+                    //ProjectDescription="",
+                    //ProjectName = inv.ProjectNo,
+                    TotalPaidPayment = TotalPaidPaymentResult,
+                    TotalRemainingPayment = ((inv.TotalValue - resultInvoicePayVoucherCredit) - TotalPaidPaymentResult),
+
+                });
             }
+            IEnumerable<ContractsVM> InvoicesList = list;
+            //var Vouchers = someContracts.Union(InvoicesList);
+            var Vouchers = InvoicesList;
+
+            return Ok(Vouchers);
+        }
 
         [HttpPost("GetAllContractsBySearch")]
         public IActionResult GetAllContractsBySearch(ContractsVM contractsVM)
@@ -274,20 +286,28 @@ namespace TaamerProject.API.Controllers
 
         [HttpPost("GetAllContractsBySearchCustomer")]
         public IActionResult GetAllContractsBySearchCustomer(ContractsVM contractsVM)
-            {
-                List<ContractsVM> list = new List<ContractsVM>();
-                
-                HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-                //var someContracts = _contractservice.GetAllContractsBySearchCustomer(contractsVM, BranchId, _globalshared.YearId_G).ToList();
+        {
+            List<ContractsVM> list = new List<ContractsVM>();
 
-                VoucherFilterVM voucherFilterVM = new VoucherFilterVM();
-                voucherFilterVM.Type = 2;
-                voucherFilterVM.CustomerId = contractsVM.CustomerId;
-                voucherFilterVM.dateFrom = contractsVM.dateFrom;
-                voucherFilterVM.dateTo = contractsVM.dateTo;
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            //var someContracts = _contractservice.GetAllContractsBySearchCustomer(contractsVM, BranchId, _globalshared.YearId_G).ToList();
 
-                var someVoucher = _voucherService.GetAllVouchersSearchCustomer(voucherFilterVM, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
-                var result = someVoucher
+            VoucherFilterVM voucherFilterVM = new VoucherFilterVM();
+            voucherFilterVM.Type = 2;
+            voucherFilterVM.CustomerId = contractsVM.CustomerId;
+            voucherFilterVM.dateFrom = contractsVM.dateFrom;
+            voucherFilterVM.dateTo = contractsVM.dateTo;
+
+            VoucherFilterVM voucherFilterVM2 = new VoucherFilterVM();
+            voucherFilterVM2.Type = 29;
+            voucherFilterVM2.CustomerId = contractsVM.CustomerId;
+            voucherFilterVM2.dateFrom = contractsVM.dateFrom;
+            voucherFilterVM2.dateTo = contractsVM.dateTo;
+
+            var someVoucher = _voucherService.GetAllVouchersSearchCustomer(voucherFilterVM, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
+            var someVoucherCredit = _voucherService.GetAllVouchersSearchCustomer(voucherFilterVM2, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
+
+            var result = someVoucher
                     .GroupBy(s => new { s.CustomerId, s.CustomerMobile, s.CustomerName, s.CustomerName_W })
                     .Select(cl => new ContractsVM
                     {
@@ -297,75 +317,78 @@ namespace TaamerProject.API.Controllers
                         CustomerMobile = cl.First().CustomerMobile ?? "",
                         TotalValue = cl.Sum(c => c.TotalValue),
                     }).ToList();
-                foreach (var inv in result)
+            foreach (var inv in result)
+            {
+                decimal TotalPaidPaymentResult = 0;
+                decimal resultReVoucher = 0;
+                decimal resultEntryVoucher = 0;
+                decimal resultInvoicePayVoucher = 0;
+                decimal resultInvoicePayVoucherCredit = 0;
+                decimal resultPayVoucher = 0;
+                decimal resultInvoicePayVoucherCreditPaid = 0;
+
+
+                //var resultReVoucher = _voucherService.VousherRe_Sum(inv.InvoiceId);
+                var AccountResult = _customerservice.GetCustomersByCustomerId(inv.CustomerId ?? 0, _globalshared.Lang_G).Result;
+                if (AccountResult != null)
                 {
-                    decimal TotalPaidPaymentResult = 0;
-                    decimal resultReVoucher = 0;
-                    decimal resultEntryVoucher = 0;
-                    decimal resultInvoicePayVoucher = 0;
-                    decimal resultInvoicePayVoucherCredit = 0;
 
-
-                    //var resultReVoucher = _voucherService.VousherRe_Sum(inv.InvoiceId);
-                    var AccountResult = _customerservice.GetCustomersByCustomerId(inv.CustomerId ?? 0, _globalshared.Lang_G).Result;
-                    if (AccountResult != null)
+                    var Allresult = _transactionsService.GetAllTransByAccountId(AccountResult.AccountId, "", "", _globalshared.YearId_G).Result;
+                    resultReVoucher = Allresult.Where(s => s.Type == 6 && s.IsPost == true).Sum(t => t.Credit) ?? 0;
+                    resultEntryVoucher = Allresult.Where(s => s.Type == 8 && s.IsPost == true).Sum(t => (t.Credit - t.Depit)) ?? 0;
+                    resultInvoicePayVoucher = someVoucher.Where(s => s.Type == 2 && s.IsPost == true && s.CustomerId == inv.CustomerId).Sum(t => t.PaidValue) ?? 0;
+                    resultPayVoucher = Allresult.Where(s => s.Type == 5 && s.IsPost == true).Sum(t => t.Depit) ?? 0;
+                    resultInvoicePayVoucherCreditPaid = someVoucherCredit.Where(s => s.Type == 29 && s.IsPost == true && s.CustomerId == inv.CustomerId).Sum(t => t.PaidValue) ?? 0;
+                    var PayVoucherCredit = Allresult.Where(s => s.Type == 29 && s.IsPost == true).ToList();
+                    foreach (var item in PayVoucherCredit)
                     {
-
-                        var Allresult = _transactionsService.GetAllTransByAccountId(AccountResult.AccountId, "", "", _globalshared.YearId_G).Result;
-                        resultReVoucher = Allresult.Where(s => s.Type == 6 && s.IsPost == true).Sum(t => t.Credit) ?? 0;
-                        resultEntryVoucher = Allresult.Where(s => s.Type == 8 && s.IsPost == true).Sum(t => (t.Credit - t.Depit)) ?? 0;
-                        resultInvoicePayVoucher = someVoucher.Where(s => s.Type == 2 && s.IsPost == true && s.CustomerId == inv.CustomerId).Sum(t => t.PaidValue) ?? 0;
-                        var PayVoucherCredit = Allresult.Where(s => s.Type == 29 && s.IsPost == true).ToList();
-                        foreach (var item in PayVoucherCredit)
+                        var NotiCredit = _voucherService.GetVoucherById(item.InvoiceId ?? 0).Result;
+                        if (NotiCredit != null)
                         {
-                            var NotiCredit = _voucherService.GetVoucherById(item.InvoiceId ?? 0).Result;
-                            if (NotiCredit != null)
-                            {
-                                var InvoiceNotiCredit = _voucherService.GetVoucherById(NotiCredit.CreditNotiId ?? 0).Result;
+                            var InvoiceNotiCredit = _voucherService.GetVoucherById(NotiCredit.CreditNotiId ?? 0).Result;
 
-                                if (InvoiceNotiCredit != null)
+                            if (InvoiceNotiCredit != null)
+                            {
+                                if (InvoiceNotiCredit.PayType == 8 && InvoiceNotiCredit.Rad != true)
                                 {
-                                    if (InvoiceNotiCredit.PayType == 8 && InvoiceNotiCredit.Rad != true)
-                                    {
-                                        resultInvoicePayVoucherCredit += item.Credit ?? 0;
-                                    }
+                                    resultInvoicePayVoucherCredit += item.Credit ?? 0;
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        resultReVoucher = 0;
-                        resultEntryVoucher = 0;
-                        resultInvoicePayVoucher = 0;
-                        resultInvoicePayVoucherCredit = 0;
-
-
-                    }
-
-
-                    TotalPaidPaymentResult = (resultReVoucher) + (resultEntryVoucher) + (resultInvoicePayVoucher);
-                    list.Add(new ContractsVM
-                    {
-                        //ContractNo = "",
-                        //Date = inv.Date,
-                        TotalValue = inv.TotalValue - resultInvoicePayVoucherCredit,
-                        CustomerName = inv.CustomerName ?? "",
-                        CustomerName_W = inv.CustomerName_W ?? "",
-                        CustomerMobile = inv.CustomerMobile ?? "",
-                        //ProjectDescription="",
-                        //ProjectName = inv.ProjectNo,
-                        TotalPaidPayment = TotalPaidPaymentResult,
-                        TotalRemainingPayment = ((inv.TotalValue - resultInvoicePayVoucherCredit) - TotalPaidPaymentResult),
-
-                    });
                 }
-                IEnumerable<ContractsVM> InvoicesList = list;
-                //var Vouchers = someContracts.Union(InvoicesList);
-                var Vouchers = InvoicesList;
-                return Ok(Vouchers);
-            }
+                else
+                {
+                    resultReVoucher = 0;
+                    resultEntryVoucher = 0;
+                    resultInvoicePayVoucher = 0;
+                    resultInvoicePayVoucherCredit = 0;
+                    resultPayVoucher = 0;
+                    resultInvoicePayVoucherCreditPaid = 0;
+                }
 
+
+                TotalPaidPaymentResult = (resultReVoucher) + (resultEntryVoucher) + (resultInvoicePayVoucher) - (resultPayVoucher) - (resultInvoicePayVoucherCreditPaid);
+                list.Add(new ContractsVM
+                {
+                    //ContractNo = "",
+                    //Date = inv.Date,
+                    TotalValue = inv.TotalValue - resultInvoicePayVoucherCredit,
+                    CustomerName = inv.CustomerName ?? "",
+                    CustomerName_W = inv.CustomerName_W ?? "",
+                    CustomerMobile = inv.CustomerMobile ?? "",
+                    //ProjectDescription="",
+                    //ProjectName = inv.ProjectNo,
+                    TotalPaidPayment = TotalPaidPaymentResult,
+                    TotalRemainingPayment = ((inv.TotalValue - resultInvoicePayVoucherCredit) - TotalPaidPaymentResult),
+
+                });
+            }
+            IEnumerable<ContractsVM> InvoicesList = list;
+            //var Vouchers = someContracts.Union(InvoicesList);
+            var Vouchers = InvoicesList;
+            return Ok(Vouchers);
+        }
 
 
 

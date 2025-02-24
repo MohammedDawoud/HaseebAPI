@@ -365,7 +365,7 @@ namespace TaamerProject.API.Controllers
         }
 
         [HttpGet("GetInvoiceByNo")]
-        public IActionResult GetInvoiceByNo(int VoucherNo)
+        public IActionResult GetInvoiceByNo(string VoucherNo)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             var someVoucher = _voucherService.GetInvoiceByNo(VoucherNo, _globalshared.YearId_G).Result;
@@ -374,7 +374,7 @@ namespace TaamerProject.API.Controllers
         }
 
         [HttpGet("GetInvoiceByNo_purches")]
-        public IActionResult GetInvoiceByNo_purches(int VoucherNo)
+        public IActionResult GetInvoiceByNo_purches(string VoucherNo)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             var someVoucher = _voucherService.GetInvoiceByNo_purches(VoucherNo, _globalshared.YearId_G).Result;

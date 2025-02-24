@@ -2787,10 +2787,10 @@ namespace TaamerProject.Service.Services
             return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
         }
 
-        public GeneralMessage UpdateVoucherRecepient(int InvoiceId, int UserId, int BranchId,int YearId)
+        public GeneralMessage UpdateVoucherRecepient(string InvoiceId, int UserId, int BranchId,int YearId)
         {
 
-            var VoucherUpdated = _TaamerProContext.Invoices.Where(s => s.IsDeleted==false && Convert.ToInt32(s.InvoiceNumber )== InvoiceId &&s.Type==2 &&s.YearId== YearId).FirstOrDefault();
+            var VoucherUpdated = _TaamerProContext.Invoices.Where(s => s.IsDeleted==false && s.InvoiceNumber== InvoiceId &&s.Type==2 &&s.YearId== YearId).FirstOrDefault();
             if (VoucherUpdated != null)
             {
                 decimal sumValue = 0;

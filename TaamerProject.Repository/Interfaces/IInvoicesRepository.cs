@@ -88,7 +88,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<int> GetOpeningVoucherCount(int YearId, int BranchId);
         Task<int> GetOpeningBalanceCount(int YearId, int BranchId);
         Task<int> GetAllVouchersCount(int YearId, int BranchId);
-        Task<IEnumerable<InvoicesVM>> GetAllVoucherstoback();
+        Task<IEnumerable<InvoicesVM>> GetAllVoucherstoback(); 
 
         Task<IEnumerable<InvoicesVM>> GetAllVouchersfromcontractSearch(VoucherFilterVM voucherFilterVM, int YearId, int BranchId);
         Task<IEnumerable<ReturnInvoiceVM>> GetInvoiceReturnData_func(int InvoiceId,int YearId, int BranchId, string lang, string Con);

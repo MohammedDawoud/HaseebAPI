@@ -2778,7 +2778,7 @@ namespace TaamerProject.Service.Services
                     item.Type = 2;
                 }
             }
-            _TaamerProContext.SaveChanges();
+            _TaamerProContext.SaveChanges();//save
             //-----------------------------------------------------------------------------------------------------------------
             string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
             string ActionNote = " تعديل   " + GetVoucherType(VoucherUpdated.Type) + " " + VoucherUpdated.InvoiceNumber;

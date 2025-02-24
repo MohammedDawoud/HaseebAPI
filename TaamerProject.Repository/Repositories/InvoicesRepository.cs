@@ -8073,7 +8073,7 @@ namespace TaamerProject.Repository.Repositories
         }
 
 
-        public async Task<InvoicesVM> GetInvoiceByNo(string voucherNo, int YearId)
+        public async Task<InvoicesVM> GetInvoiceByNo(string voucherNo, int YearId) 
         {
             try
             {

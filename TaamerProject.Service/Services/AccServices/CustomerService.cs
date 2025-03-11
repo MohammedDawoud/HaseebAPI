@@ -260,31 +260,9 @@ namespace TaamerProject.Service.Services
                         {
                             var parentCustAcc = _accountsRepository.GetById((int)Branch.CustomersAccId);
                             var newCustAcc = new Accounts();
-                            //var substrCode = (_accountsRepository.GetMatching(s => s.IsDeleted == false && s.IsMain == false && s.Classification == 2 && s.ParentId == parentCustAcc.AccountId).Count() + 1).ToString();
-                            var substrCode = (_accountsRepository.GetMatching(s => s.IsMain == false && s.ParentId == parentCustAcc.AccountId).Count() + 1).ToString();
-                            if (int.Parse(substrCode.ToString()) < 10)
-                                substrCode = "0000" + substrCode;
-                            else if (int.Parse(substrCode.ToString()) < 100)
-                                substrCode = "000" + substrCode;
-                            else if (int.Parse(substrCode.ToString()) < 1000)
-                                substrCode = "00" + substrCode;
-                            else if (int.Parse(substrCode.ToString()) < 10000)
-                                substrCode = "0" + substrCode;
+                            var AccCode = _accountsRepository.GetNewCodeByParentId(Branch.CustomersAccId ?? 0, 1).Result;
+                            newCustAcc.Code = AccCode;
 
-                            var fullcode = parentCustAcc.Code + substrCode;
-                            var checkcode = _accountsRepository.GetMatching(s => s.IsDeleted == false && s.Code == fullcode);
-                            if (checkcode.Count() != 0)
-                            {
-                                var lastcode = _accountsRepository.GetMatching(s => s.IsMain == false && s.ParentId == parentCustAcc.AccountId).OrderByDescending(x => x.Code).FirstOrDefault().Code;
-                                fullcode = (int.Parse(lastcode.ToString()) + 1).ToString();
-                            }
-                            newCustAcc.Code = fullcode;
-
-                            var ValNewAccount = GetAccountCodeNewValue(parentCustAcc.AccountId, 0);
-                            newCustAcc.AccountCodeNew = ValNewAccount;
-
-
-                            //newCustAcc.Code = parentCustAcc.Code + substrCode;
                             newCustAcc.Classification = parentCustAcc.Classification?? 15;
                             newCustAcc.ParentId = parentCustAcc.AccountId;
                             newCustAcc.IsMain = false;

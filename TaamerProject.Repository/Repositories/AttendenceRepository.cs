@@ -1282,39 +1282,39 @@ namespace TaamerProject.Repository.Repositories
                         // loop for adding add from dataset to list<modeldata>  
                         {
 
-                            TimeSpan t1 = TimeSpan.Parse("00:00");
-                            var abs = 0;
-                            var att = 0;
-                            if (YearId != null)
-                            {
-                                var late = GetLateData(FromDate, ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US"), (int)dr[1], YearId, Shift, BranchId, lang, Con).Result.ToList();
-                                if (late.Count() > 0)
-                                {
-                                    foreach (var item in late)
-                                    {
-                                        if (item.MoveTimeStringJoin1 != null && item.MoveTimeStringJoin1 != "")
-                                        {
-                                            // t1. += int.Parse(item.MoveTimeStringJoin1.ToString().Substring(1));
-                                            var time = Convert.ToDateTime(item.MoveTimeStringJoin1).ToString("hh:mm");
+                            //TimeSpan t1 = TimeSpan.Parse("00:00");
+                            //var abs = 0;
+                            //var att = 0;
+                            //if (YearId != null)
+                            //{
+                            //    var late = GetLateData(FromDate, ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US"), (int)dr[1], YearId, Shift, BranchId, lang, Con).Result.ToList();
+                            //    if (late.Count() > 0)
+                            //    {
+                            //        foreach (var item in late)
+                            //        {
+                            //            if (item.MoveTimeStringJoin1 != null && item.MoveTimeStringJoin1 != "")
+                            //            {
+                            //                // t1. += int.Parse(item.MoveTimeStringJoin1.ToString().Substring(1));
+                            //                var time = Convert.ToDateTime(item.MoveTimeStringJoin1).ToString("hh:mm");
 
 
-                                           t1 = t1.Add(TimeSpan.Parse(item.MoveTimeStringJoin1));
-                                        }
-                                    }
-                                }
-                                t1.ToString();
-                            }
-                            if (YearId != null)
-                            {
-                                var result = GetAbsenceData(FromDate, ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US"), (int)dr[1], YearId, BranchId, lang, Con).Result;
-                                abs = result.Count();
-                            }
-                            AttendenceVM AttendenceSearch = new AttendenceVM();
-                            AttendenceSearch.StartDate = FromDate;
-                            AttendenceSearch.EndDate = ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US");
-                            AttendenceSearch.EmpId = (int)dr[1];
-                            AttendenceSearch.BranchId = BranchId;
-                            att = EmpAttendenceSearch(AttendenceSearch, BranchId).Result.ToList().DistinctBy(x => x.AttendenceDate).ToList().Count();
+                            //               t1 = t1.Add(TimeSpan.Parse(item.MoveTimeStringJoin1));
+                            //            }
+                            //        }
+                            //    }
+                            //    t1.ToString();
+                            //}
+                            //if (YearId != null)
+                            //{
+                            //    var result = GetAbsenceData(FromDate, ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US"), (int)dr[1], YearId, BranchId, lang, Con).Result;
+                            //    abs = result.Count();
+                            //}
+                            //AttendenceVM AttendenceSearch = new AttendenceVM();
+                            //AttendenceSearch.StartDate = FromDate;
+                            //AttendenceSearch.EndDate = ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US");
+                            //AttendenceSearch.EmpId = (int)dr[1];
+                            //AttendenceSearch.BranchId = BranchId;
+                            //att = EmpAttendenceSearch(AttendenceSearch, BranchId).Result.ToList().DistinctBy(x => x.AttendenceDate).ToList().Count();
 
                             lmd.Add(new LateVM
                             {
@@ -1327,9 +1327,9 @@ namespace TaamerProject.Repository.Repositories
                                 TimeJoin2 = (!String.IsNullOrWhiteSpace(dr[6].ToString())) ? Convert.ToDateTime(dr[6]).ToString("hh:mm tt") : dr[13].ToString() != 1.ToString() ? "----" : "",
                                 TimeLeave2 = (!String.IsNullOrWhiteSpace(dr[7].ToString())) ? Convert.ToDateTime(dr[7]).ToString("hh:mm tt") : dr[13].ToString() != 1.ToString() ? "----" : "",
                                 DateDay = ConvertDateCalendar((DateTime)dr[3], "Gregorian", "en-US"),
-                                Late = t1.ToString(),
-                                absence = abs.ToString(),
-                                attend = att.ToString(),
+                                Late = (dr[28]).ToString(),
+                                absence = (dr[29]).ToString(),
+                                attend = (dr[30]).ToString(),
 
                             });
 

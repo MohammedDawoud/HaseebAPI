@@ -92,8 +92,11 @@ namespace TaamerProject.Repository.Repositories
                 Subscrip_Domain=x.Subscrip_Domain ??false,
                 Subscrip_Hosting=x.Subscrip_Hosting ??false,
                 
-                
-                G_UID=x.G_UID ,
+                G_UID = x.G_UID,
+                ServerStorage = x.ServerStorage ?? "",
+                Cost = x.Cost ?? "",
+                TotalCost = x.TotalCost ?? "",
+                Tax = x.Tax ?? "",
 
             }).ToList();
             return Licences;

@@ -1939,26 +1939,18 @@ namespace TaamerProject.API.Controllers
         public IActionResult FillAllNotiVoucher(VoucherFilterVM voucherFilterVM)
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-
             voucherFilterVM.Type = 2;
-            var someVoucher = _voucherService.GetAllNotioucher(voucherFilterVM, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
-            //var serializer = new JavaScriptSerializer();
-            //serializer.MaxJsonLength = Int32.MaxValue;
-            //var result = new ContentResult
-            //{
-            //    Content = serializer.Serialize(someVoucher),
-            //    ContentType = "application/json"
-            //};
 
+            var Accyear = _globalshared.YearId_G;
+            if (voucherFilterVM.PrevInvoices == true)
+            {
+                Accyear = _globalshared.YearId_G - 1;
+            }
+            var someVoucher = _voucherService.GetAllNotioucher(voucherFilterVM, _globalshared.BranchId_G, Accyear).Result.ToList();
             var AlarmVoucher = someVoucher.Select(s => new {
                 Id = s.InvoiceId,
                 Name = " فاتورة رقم  " + s.InvoiceNumber + " - " + s.CustomerName
             });
-            //var result2 = new ContentResult
-            //{
-            //    Content = serializer.Serialize(AlarmVoucher),
-            //    ContentType = "application/json"
-            //};
             return Ok(AlarmVoucher);
 
         }

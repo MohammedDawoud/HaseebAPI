@@ -7673,7 +7673,66 @@ namespace TaamerProject.Repository.Repositories
                 return 1;
             }
         }
-         public async Task<int?> GenerateNextInvoiceNumberNotiCredit(int Type, int? YearId, int BranchId)
+        public async Task<List<GenerateNextVoucherNumberVM>> GenerateVoucherNumberNewPro(int Type, int? YearId, int BranchId, string codePrefix, bool InvoiceBranchSeparated, int Status, string Con)
+        {
+            try
+            {
+                List<GenerateNextVoucherNumberVM> lmd = new List<GenerateNextVoucherNumberVM>();
+                using (SqlConnection con = new SqlConnection(Con))
+                {
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GenerateNextVoucherNumberNew";
+                        command.Connection = con;
+                        command.Parameters.Add(new SqlParameter("@Type", Type));
+                        command.Parameters.Add(new SqlParameter("@YearId", YearId));
+                        if (BranchId == 0)
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@BranchId", BranchId));
+                        }
+                        if (Status == 0)
+                        {
+                            command.Parameters.Add(new SqlParameter("@Status", DBNull.Value));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("@Status", Status));
+                        }
+                        con.Open();
+
+                        SqlDataAdapter a = new SqlDataAdapter(command);
+                        DataSet ds = new DataSet();
+                        a.Fill(ds);
+
+                        lmd.Add(new GenerateNextVoucherNumberVM
+                        {
+                            InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNumber"]),
+                            BranchId = Convert.ToInt32(ds.Tables[0].Rows[0]["BranchId"]),
+                            Type = Convert.ToInt32(ds.Tables[0].Rows[0]["Type"]),
+                            YearId = Convert.ToInt32(ds.Tables[0].Rows[0]["YearId"]),
+                            NameAr = Convert.ToString(ds.Tables[0].Rows[0]["NameAr"]),
+                            InvoiceStartCode = Convert.ToString(ds.Tables[0].Rows[0]["InvoiceStartCode"]),
+                            InvoiceBranchSeparated = Convert.ToBoolean(ds.Tables[0].Rows[0]["InvoiceBranchSeparated"]),
+                            Newinvoicenumber = Convert.ToInt32(ds.Tables[0].Rows[0]["Newinvoicenumber"]),
+                        });
+                    }
+                }
+
+                return lmd;
+            }
+            catch (Exception ex)
+            {
+                List<GenerateNextVoucherNumberVM> lmd = new List<GenerateNextVoucherNumberVM>();
+                return lmd;
+            }
+        }
+
+        public async Task<int?> GenerateNextInvoiceNumberNotiCredit(int Type, int? YearId, int BranchId)
         {
             var invoices = _TaamerProContext.Invoices.Where(s => (s.Type == 29) && s.YearId == YearId && s.IsDeleted == false);
             if (invoices != null)

@@ -32,6 +32,7 @@ using System.Net.Http.Headers;
 using RestSharp;
 using static System.Net.WebRequestMethods;
 using Google.Apis.Auth.OAuth2;
+using System.Drawing;
 
 namespace TaamerProject.Service.Services
 {
@@ -5448,7 +5449,7 @@ namespace TaamerProject.Service.Services
             }
         }
 
-        public GeneralMessage SaveInvoiceForServicesNoti(Invoices voucher, int UserId, int BranchId, int? yearid)
+        public GeneralMessage SaveInvoiceForServicesNoti(Invoices voucher, int UserId, int BranchId, int? yearid, string Con)
         {
             try
             {
@@ -5593,14 +5594,17 @@ namespace TaamerProject.Service.Services
                         voucher.InvUUID = GET_UUID();
 
 
-                        var vouchercheck = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.YearId == yearid && s.Type == voucher.Type && s.InvoiceNumber == voucher.InvoiceNumber);
-                        if (vouchercheck.Count() > 0)
-                        {
-                            var NextInv = _InvoicesRepository.GenerateNextInvoiceNumberNotiCredit(voucher.Type, yearid, BranchId).Result;
-                            var NewNextInv = string.Format("{0:000000}", NextInv);
+                        //var vouchercheck = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.YearId == yearid && s.Type == voucher.Type && s.InvoiceNumber == voucher.InvoiceNumber);
+                        //if (vouchercheck.Count() > 0)
+                        //{
+                        //    var NextInv = _InvoicesRepository.GenerateNextInvoiceNumberNotiCredit(voucher.Type, yearid, BranchId).Result;
+                        //    var NewNextInv = string.Format("{0:000000}", NextInv);
 
-                            voucher.InvoiceNumber = NewNextInv.ToString();
-                        }
+                        //    voucher.InvoiceNumber = NewNextInv.ToString();
+                        //}
+                        //dawoudnoti
+                        var NewNextInvNotifCredit = GenerateVoucherNumberNewProNoti(voucher.Type, BranchId, yearid, 4, Con).Result;
+                        voucher.InvoiceRetId = NewNextInvNotifCredit.ToString();
 
                         if (voucher.ProjectId != null)
                         {
@@ -6127,7 +6131,10 @@ namespace TaamerProject.Service.Services
                         VoucherUpdatedCredit.FirstOrDefault().TotalValue = VoucherUpdatedCredit.FirstOrDefault().TotalValue + voucher.TotalValue;
 
                         VoucherUpdatedCredit.FirstOrDefault().InvoiceValueText = ConvertToWord_NEW(VoucherUpdatedCredit.FirstOrDefault().TotalValue.ToString());
-
+                        
+                        //dawoudnoti
+                        var NewNextInvNotifCredit = GenerateVoucherNumberNewProNoti(voucher.Type, BranchId, yearid, 4, Con).Result;
+                        VoucherUpdatedCredit.FirstOrDefault().InvoiceRetId = NewNextInvNotifCredit.ToString();
 
                         int? itemToAccountId = 0;
                         int? itemAccountId = 0;
@@ -9787,7 +9794,7 @@ namespace TaamerProject.Service.Services
                 return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
             }
         }
-        public GeneralMessage SavePurchaseForServicesNotiDepit(Invoices voucher, int UserId, int BranchId, int? yearid)
+        public GeneralMessage SavePurchaseForServicesNotiDepit(Invoices voucher, int UserId, int BranchId, int? yearid, string Con)
         {
             try
             {
@@ -9933,14 +9940,17 @@ namespace TaamerProject.Service.Services
                         voucher.InvUUID = GET_UUID();
 
 
-                        var vouchercheck = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.YearId == yearid && s.Type == voucher.Type && s.InvoiceNumber == voucher.InvoiceNumber);
-                        if (vouchercheck.Count() > 0)
-                        {
-                            var NextInv = _InvoicesRepository.GenerateNextInvoiceNumberPurchaseNotiDepit(voucher.Type, yearid, BranchId).Result;
-                            var NewNextInv = string.Format("{0:000000}", NextInv);
+                        //var vouchercheck = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.YearId == yearid && s.Type == voucher.Type && s.InvoiceNumber == voucher.InvoiceNumber);
+                        //if (vouchercheck.Count() > 0)
+                        //{
+                        //    var NextInv = _InvoicesRepository.GenerateNextInvoiceNumberPurchaseNotiDepit(voucher.Type, yearid, BranchId).Result;
+                        //    var NewNextInv = string.Format("{0:000000}", NextInv);
 
-                            voucher.InvoiceNumber = NewNextInv.ToString();
-                        }
+                        //    voucher.InvoiceNumber = NewNextInv.ToString();
+                        //}
+                        //dawoudnoti
+                        var NewNextInvNotifDepit = GenerateVoucherNumberNewProNoti(voucher.Type, BranchId, yearid, 4, Con).Result;
+                        voucher.InvoiceRetId = NewNextInvNotifDepit.ToString();
 
                         if (voucher.CostCenterId > 0)
                         {
@@ -10402,6 +10412,10 @@ namespace TaamerProject.Service.Services
                         VoucherUpdatedDepit.FirstOrDefault().TotalValue = VoucherUpdatedDepit.FirstOrDefault().TotalValue + voucher.TotalValue;
 
                         VoucherUpdatedDepit.FirstOrDefault().InvoiceValueText = ConvertToWord_NEW(VoucherUpdatedDepit.FirstOrDefault().TotalValue.ToString());
+                        //dawoudnoti
+                        var NewNextInvNotifDepit = GenerateVoucherNumberNewProNoti(voucher.Type, BranchId, yearid, 4, Con).Result;
+                        VoucherUpdatedDepit.FirstOrDefault().InvoiceRetId = NewNextInvNotifDepit.ToString();
+
 
 
                         int? itemToAccountId = 0;
@@ -13778,6 +13792,54 @@ namespace TaamerProject.Service.Services
                         item.Type = voucher.Type;
                         item.AddDate = DateTime.Now;
                         _TaamerProContext.Transactions.Add(item);
+                        if (item.Amounttax > 0)
+                        {
+                            var TransacItem = new Transactions();
+                            TransacItem.AccTransactionDate = voucher.Date;
+                            TransacItem.AccTransactionHijriDate = voucher.HijriDate;
+                            TransacItem.TransactionDate = voucher.Date;
+                            TransacItem.TransactionHijriDate = voucher.HijriDate;
+                            TransacItem.AccountType = _TaamerProContext.Accounts.Where(s => s.AccountId == item.AccountId)?.FirstOrDefault()?.Type;
+                            TransacItem.InvoiceId = item.InvoiceId;
+                            TransacItem.Invoices = item.Invoices;
+                            TransacItem.Details = item.Details;
+                            TransacItem.Notes = item.Notes;
+                            TransacItem.InvoiceReference = item.InvoiceReference;
+                            TransacItem.IsPost = false;
+                            TransacItem.YearId = yearid;
+                            TransacItem.CostCenterId = Convert.ToInt32(voucher.CostCenterId) > 0 ? voucher.CostCenterId : item.CostCenterId;
+                            TransacItem.AddUser = UserId;
+                            TransacItem.BranchId = BranchCost;
+                            TransacItem.AddDate = DateTime.Now;
+
+                            var Branch = _TaamerProContext.Branch.Where(s => s.BranchId == BranchId).FirstOrDefault();
+                            if (item.Credit > 0)
+                            {
+                                TransacItem.Credit = item.Amounttax;
+                                TransacItem.Depit = 0;
+                            }
+                            else
+                            {
+                                TransacItem.Credit = 0;
+                                TransacItem.Depit = item.Amounttax;
+                            }
+                            TransacItem.Type = 17;
+                            if (item.AccCalcIncome == true)
+                            {
+                                TransacItem.AccountId = Branch.TaxsAccId;
+                            }
+                            else if (item.AccCalcExpen == true)
+                            {
+                                TransacItem.AccountId = Branch.SuspendedFundAccId;
+                            }
+                            else
+                            {
+
+                            }
+                            //TansList.Add(TransacItem);
+                            _TaamerProContext.Transactions.Add(TransacItem);
+                        }
+
                     }
 
 
@@ -13871,6 +13933,52 @@ namespace TaamerProject.Service.Services
 
                         item.AddDate = DateTime.Now;
                         _TaamerProContext.Transactions.Add(item);
+                        if (item.Amounttax > 0)
+                        {
+                            var TransacItem = new Transactions();
+                            TransacItem.AccTransactionDate = voucher.Date;
+                            TransacItem.AccTransactionHijriDate = voucher.HijriDate;
+                            TransacItem.TransactionDate = voucher.Date;
+                            TransacItem.TransactionHijriDate = voucher.HijriDate;
+                            TransacItem.AccountType = _TaamerProContext.Accounts.Where(s => s.AccountId == item.AccountId)?.FirstOrDefault()?.Type;
+                            TransacItem.InvoiceId = voucher.InvoiceId;
+                            TransacItem.Details = item.Details;
+                            TransacItem.Notes = item.Notes;
+                            TransacItem.InvoiceReference = item.InvoiceReference;
+                            TransacItem.IsPost = false;
+                            TransacItem.YearId = yearid;
+                            TransacItem.CostCenterId = Convert.ToInt32(voucher.CostCenterId) > 0 ? voucher.CostCenterId : item.CostCenterId;
+                            TransacItem.AddUser = UserId;
+                            TransacItem.BranchId = BranchCost;
+                            TransacItem.AddDate = DateTime.Now;
+
+                            var Branch = _TaamerProContext.Branch.Where(s => s.BranchId == BranchId).FirstOrDefault();
+                            if (item.Credit > 0)
+                            {
+                                TransacItem.Credit = item.Amounttax;
+                                TransacItem.Depit = 0;
+                            }
+                            else
+                            {
+                                TransacItem.Credit = 0;
+                                TransacItem.Depit = item.Amounttax;
+                            }
+                            TransacItem.Type = 17;
+                            if (item.AccCalcIncome == true)
+                            {
+                                TransacItem.AccountId = Branch.TaxsAccId;
+                            }
+                            else if (item.AccCalcExpen == true)
+                            {
+                                TransacItem.AccountId = Branch.SuspendedFundAccId;
+                            }
+                            else
+                            {
+
+                            }
+                            _TaamerProContext.Transactions.Add(TransacItem);
+                        }
+
                     }
 
                     _TaamerProContext.SaveChanges();  
@@ -13979,6 +14087,53 @@ namespace TaamerProject.Service.Services
                         item.Type = voucher.Type;
                         item.AddDate = DateTime.Now;
                         _TaamerProContext.Transactions.Add(item);
+                        if (item.Amounttax > 0)
+                        {
+                            var TransacItem = new Transactions();
+                            TransacItem.AccTransactionDate = voucher.Date;
+                            TransacItem.AccTransactionHijriDate = voucher.HijriDate;
+                            TransacItem.TransactionDate = voucher.Date;
+                            TransacItem.TransactionHijriDate = voucher.HijriDate;
+                            TransacItem.AccountType = _TaamerProContext.Accounts.Where(s => s.AccountId == item.AccountId)?.FirstOrDefault()?.Type;
+                            TransacItem.InvoiceId = item.InvoiceId;
+                            TransacItem.Invoices = item.Invoices;
+                            TransacItem.Details = item.Details;
+                            TransacItem.Notes = item.Notes;
+                            TransacItem.InvoiceReference = item.InvoiceReference;
+                            TransacItem.IsPost = false;
+                            TransacItem.YearId = yearid;
+                            TransacItem.CostCenterId = Convert.ToInt32(voucher.CostCenterId) > 0 ? voucher.CostCenterId : item.CostCenterId;
+                            TransacItem.AddUser = UserId;
+                            TransacItem.BranchId = BranchCost;
+                            TransacItem.AddDate = DateTime.Now;
+
+                            var Branch = _TaamerProContext.Branch.Where(s => s.BranchId == BranchId).FirstOrDefault();
+                            if (item.Credit > 0)
+                            {
+                                TransacItem.Credit = item.Amounttax;
+                                TransacItem.Depit = 0;
+                            }
+                            else
+                            {
+                                TransacItem.Credit = 0;
+                                TransacItem.Depit = item.Amounttax;
+                            }
+                            TransacItem.Type = 17;
+                            if (item.AccCalcIncome == true)
+                            {
+                                TransacItem.AccountId = Branch.TaxsAccId;
+                            }
+                            else if (item.AccCalcExpen == true)
+                            {
+                                TransacItem.AccountId = Branch.SuspendedFundAccId;
+                            }
+                            else
+                            {
+
+                            }
+                            _TaamerProContext.Transactions.Add(TransacItem);
+                        }
+
                     }
 
 
@@ -14118,6 +14273,52 @@ namespace TaamerProject.Service.Services
 
                         item.AddDate = DateTime.Now;
                         _TaamerProContext.Transactions.Add(item);
+                        if (item.Amounttax > 0)
+                        {
+                            var TransacItem = new Transactions();
+                            TransacItem.AccTransactionDate = voucher.Date;
+                            TransacItem.AccTransactionHijriDate = voucher.HijriDate;
+                            TransacItem.TransactionDate = voucher.Date;
+                            TransacItem.TransactionHijriDate = voucher.HijriDate;
+                            TransacItem.AccountType = _TaamerProContext.Accounts.Where(s => s.AccountId == item.AccountId)?.FirstOrDefault()?.Type;
+                            TransacItem.InvoiceId = voucher.InvoiceId;
+                            TransacItem.Details = item.Details;
+                            TransacItem.Notes = item.Notes;
+                            TransacItem.InvoiceReference = item.InvoiceReference;
+                            TransacItem.IsPost = false;
+                            TransacItem.YearId = yearid;
+                            TransacItem.CostCenterId = Convert.ToInt32(voucher.CostCenterId) > 0 ? voucher.CostCenterId : item.CostCenterId;
+                            TransacItem.AddUser = UserId;
+                            TransacItem.BranchId = BranchCost;
+                            TransacItem.AddDate = DateTime.Now;
+
+                            var Branch = _TaamerProContext.Branch.Where(s => s.BranchId == BranchId).FirstOrDefault();
+                            if (item.Credit > 0)
+                            {
+                                TransacItem.Credit = item.Amounttax;
+                                TransacItem.Depit = 0;
+                            }
+                            else
+                            {
+                                TransacItem.Credit = 0;
+                                TransacItem.Depit = item.Amounttax;
+                            }
+                            TransacItem.Type = 17;
+                            if (item.AccCalcIncome == true)
+                            {
+                                TransacItem.AccountId = Branch.TaxsAccId;
+                            }
+                            else if (item.AccCalcExpen == true)
+                            {
+                                TransacItem.AccountId = Branch.SuspendedFundAccId;
+                            }
+                            else
+                            {
+
+                            }
+                            _TaamerProContext.Transactions.Add(TransacItem);
+                        }
+
                     }
 
                     _TaamerProContext.SaveChanges();
@@ -15415,6 +15616,71 @@ namespace TaamerProject.Service.Services
         {
             return await _InvoicesRepository.GenerateNextInvoiceNumber(Type, yearid, BranchId);
         }
+        public async Task<string> GenerateVoucherNumberNewPro(int Type, int BranchId, int? yearid, int Status, string Con)
+        {
+            var codePrefix = "";
+            var BranchObj = _BranchesRepository.GetById(BranchId);
+            if (BranchObj.InvoiceBranchSeparated == false)
+            {
+                BranchId = 0;
+            }
+            if (Type == 2)
+            {
+                if (BranchObj.InvoiceStartCode != null && BranchObj.InvoiceStartCode != "")
+                {
+                    codePrefix = BranchObj.InvoiceStartCode;
+                }
+            }
+            var ProList = await _InvoicesRepository.GenerateVoucherNumberNewPro(Type, yearid, BranchId, codePrefix, BranchObj.InvoiceBranchSeparated ?? false, Status, Con);
+            var Value = 0;
+            if (ProList.Count() > 0)
+            {
+                Value = ProList.FirstOrDefault()!.Newinvoicenumber ?? 1;
+            }
+            else
+            {
+                Value = 1;
+            }
+            var NewValue = string.Format("{0:000000}", Value);
+            if (codePrefix != "")
+            {
+                NewValue = codePrefix + NewValue;
+            }
+            return (NewValue);
+        }
+        public async Task<string> GenerateVoucherNumberNewProNoti(int Type, int BranchId, int? yearid, int Status, string Con)
+        {
+            var codePrefix = "";
+            var BranchObj = _BranchesRepository.GetById(BranchId);
+            if (BranchObj.InvoiceBranchSeparated == false)
+            {
+                BranchId = 0;
+            }
+            if (Type == 29)
+            {
+                if (BranchObj.InvoiceStartCode != null && BranchObj.InvoiceStartCode != "")
+                {
+                    codePrefix = BranchObj.InvoiceStartCode;
+                }
+            }
+            var ProList = await _InvoicesRepository.GenerateVoucherNumberNewPro(Type, yearid, BranchId, codePrefix, BranchObj.InvoiceBranchSeparated ?? false, Status, Con);
+            var Value = 0;
+            if (ProList.Count() > 0)
+            {
+                Value = ProList.FirstOrDefault()!.Newinvoicenumber ?? 1;
+            }
+            else
+            {
+                Value = 1;
+            }
+            var NewValue = string.Format("{0:000000}", Value);
+            if (codePrefix != "")
+            {
+                NewValue = codePrefix + NewValue;
+            }
+            return (NewValue);
+        }
+
         public async Task<int?> GenerateVoucherNumberOpening(int Type, int BranchId, int? yearid)
         {
             return await _InvoicesRepository.GenerateVoucherNumberOpening(Type, yearid, BranchId);

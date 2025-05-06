@@ -80,6 +80,8 @@ namespace TaamerProject.Service.Interfaces
 
         GeneralMessage SaveConvertVoucher(Invoices voucher, int UserId, int BranchId, int? yearid);
         Task<int?> GenerateVoucherNumber(int Type, int BranchId, int? yearid);
+        Task<string?> GenerateVoucherNumberNewPro(int Type, int BranchId, int? yearid, int Status, string Con); 
+
         Task<int?> GenerateVoucherNumberOpening(int Type, int BranchId, int? yearid);
         Task<int?> GenerateVoucherNumberClosing(int Type, int BranchId, int? yearid);
         GeneralMessage SaveDailyVoucher(Invoices voucher, int UserId, int BranchId, int? yearid);
@@ -100,7 +102,7 @@ namespace TaamerProject.Service.Interfaces
         GeneralMessage SaveInvoiceForServices(Invoices voucher, int UserId, int BranchId, int? yearid);
         GeneralMessage SaveInvoiceForServicesDraft(Invoices voucher, int UserId, int BranchId, int? yearid);
 
-        GeneralMessage SaveInvoiceForServicesNoti(Invoices voucher, int UserId, int BranchId, int? yearid);
+        GeneralMessage SaveInvoiceForServicesNoti(Invoices voucher, int UserId, int BranchId, int? yearid, string Con);
         GeneralMessage SaveInvoiceForServicesNotiDepit(Invoices voucher, int UserId, int BranchId, int? yearid);
 
 
@@ -116,7 +118,7 @@ namespace TaamerProject.Service.Interfaces
 
 
         GeneralMessage SavePurchaseForServices(Invoices voucher, int UserId, int BranchId, int? yearid);
-        GeneralMessage SavePurchaseForServicesNotiDepit(Invoices voucher, int UserId, int BranchId, int? yearid);
+        GeneralMessage SavePurchaseForServicesNotiDepit(Invoices voucher, int UserId, int BranchId, int? yearid, string Con);
 
         GeneralMessage SaveandPostPurchaseForServices(Invoices voucher, int UserId, int BranchId, int? yearid);
 

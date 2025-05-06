@@ -1343,7 +1343,7 @@ namespace TaamerProject.API.Controllers
                 var Msg = new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "لا يمكن حفظ تاريخ في سنة مالية مختلفة" };
                 return Ok(Msg);
             }
-            var result = _voucherService.SaveInvoiceForServicesNoti(voucher, _globalshared.UserId_G, _globalshared.BranchId_G, _globalshared.YearId_G);
+            var result = _voucherService.SaveInvoiceForServicesNoti(voucher, _globalshared.UserId_G, _globalshared.BranchId_G, _globalshared.YearId_G, Con ?? "");
             //var syssetting = _systemSettingsService.GetSystemSettingsByBranchId(BranchId);
             //if (syssetting.UploadInvZatca == true)
             //{
@@ -1489,7 +1489,7 @@ namespace TaamerProject.API.Controllers
                 var Msg = new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "لا يمكن حفظ تاريخ في سنة مالية مختلفة" };
                 return Ok(Msg);
             }
-            var result = _voucherService.SavePurchaseForServicesNotiDepit(voucher, _globalshared.UserId_G, _globalshared.BranchId_G, _globalshared.YearId_G);
+            var result = _voucherService.SavePurchaseForServicesNotiDepit(voucher, _globalshared.UserId_G, _globalshared.BranchId_G, _globalshared.YearId_G, Con ?? "");
             return Ok(new { result.StatusCode, result.ReasonPhrase, result.ReturnedParm });
         }
         [HttpPost("SaveandPostPurchaseForServices")]
@@ -1703,6 +1703,15 @@ namespace TaamerProject.API.Controllers
             var Value = _voucherService.GenerateVoucherNumber(Type, _globalshared.BranchId_G, _globalshared.YearId_G).Result;
             var NewValue = string.Format("{0:000000}", Value);
             var generatevalue = new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = NewValue };
+            return Ok(generatevalue);
+        }
+        [HttpGet("GenerateVoucherNumberNew")]
+
+        public ActionResult GenerateVoucherNumberNew(int Type)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var result = _voucherService.GenerateVoucherNumberNewPro(Type, _globalshared.BranchId_G, _globalshared.YearId_G, Type, Con ?? "").Result;
+            var generatevalue = new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = result };
             return Ok(generatevalue);
         }
         [HttpGet("GenerateVoucherNumberOpening")]
@@ -1927,29 +1936,21 @@ namespace TaamerProject.API.Controllers
 
         }
         [HttpPost("FillAllNotiVoucher")]
-        public IActionResult FillAllNotiVoucher(VoucherFilterVM voucherFilterVM)
+        public IActionResult FillAllNotiVoucher(VoucherFilterVM voucherFilterVM) 
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-
             voucherFilterVM.Type = 2;
-            var someVoucher = _voucherService.GetAllNotioucher(voucherFilterVM, _globalshared.BranchId_G, _globalshared.YearId_G).Result.ToList();
-            //var serializer = new JavaScriptSerializer();
-            //serializer.MaxJsonLength = Int32.MaxValue;
-            //var result = new ContentResult
-            //{
-            //    Content = serializer.Serialize(someVoucher),
-            //    ContentType = "application/json"
-            //};
 
+            var Accyear = _globalshared.YearId_G;
+            if (voucherFilterVM.PrevInvoices == true)
+            {
+                Accyear = _globalshared.YearId_G - 1;
+            }
+            var someVoucher = _voucherService.GetAllNotioucher(voucherFilterVM, _globalshared.BranchId_G, Accyear).Result.ToList();
             var AlarmVoucher = someVoucher.Select(s => new {
                 Id = s.InvoiceId,
                 Name = " فاتورة رقم  " + s.InvoiceNumber + " - " + s.CustomerName
             });
-            //var result2 = new ContentResult
-            //{
-            //    Content = serializer.Serialize(AlarmVoucher),
-            //    ContentType = "application/json"
-            //};
             return Ok(AlarmVoucher);
 
         }

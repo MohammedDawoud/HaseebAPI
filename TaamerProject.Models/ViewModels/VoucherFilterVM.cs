@@ -23,7 +23,7 @@ namespace TaamerProject.Models
 
         public int? PageInsert { get; set; }
         public string? BranchName { get; set; }
-        public bool? PrevInvoices { get; set; }
+        public bool? PrevInvoices { get; set; } 
 
 
 

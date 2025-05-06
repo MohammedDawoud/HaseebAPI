@@ -80,7 +80,7 @@ namespace TaamerProject.Service.Interfaces
 
         GeneralMessage SaveConvertVoucher(Invoices voucher, int UserId, int BranchId, int? yearid);
         Task<int?> GenerateVoucherNumber(int Type, int BranchId, int? yearid);
-        Task<string?> GenerateVoucherNumberNewPro(int Type, int BranchId, int? yearid, int Status, string Con);
+        Task<string?> GenerateVoucherNumberNewPro(int Type, int BranchId, int? yearid, int Status, string Con); 
 
         Task<int?> GenerateVoucherNumberOpening(int Type, int BranchId, int? yearid);
         Task<int?> GenerateVoucherNumberClosing(int Type, int BranchId, int? yearid);

@@ -1936,7 +1936,7 @@ namespace TaamerProject.API.Controllers
 
         }
         [HttpPost("FillAllNotiVoucher")]
-        public IActionResult FillAllNotiVoucher(VoucherFilterVM voucherFilterVM)
+        public IActionResult FillAllNotiVoucher(VoucherFilterVM voucherFilterVM) 
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
             voucherFilterVM.Type = 2;

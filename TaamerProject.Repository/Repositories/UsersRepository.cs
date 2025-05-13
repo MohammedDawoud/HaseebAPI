@@ -543,7 +543,7 @@ namespace TaamerProject.Repository.Repositories
                     BranchId = s.BranchId,
                     ImgUrl = s.ImgUrl ?? "/distnew/images/userprofile.png",
 
-                    EmpId = _TaamerProContext.Employees.Where(x => x.UserId == s.UserId).FirstOrDefault()?.EmployeeId ?? 0,
+                    EmpId = _TaamerProContext.Employees.Where(x => x.UserId == s.UserId && x.IsDeleted==false).FirstOrDefault()?.EmployeeId ?? 0,
                     UserName = s.UserName,
                     Password = s.Password,
                     Status = s.Status,
@@ -632,7 +632,7 @@ namespace TaamerProject.Repository.Repositories
                     GroupId = s.GroupId,
                     BranchId = s.BranchId,
                     ImgUrl = s.ImgUrl ?? "/distnew/images/userprofile.png",
-                    EmpId = _TaamerProContext.Employees.Where(x => x.UserId == s.UserId).FirstOrDefault()?.EmployeeId ?? 0,
+                    EmpId = _TaamerProContext.Employees.Where(x => x.UserId == s.UserId && x.IsDeleted == false).FirstOrDefault()?.EmployeeId ?? 0,
                     UserName = s.UserName,
                     Password = s.Password,
                     Status = s.Status,

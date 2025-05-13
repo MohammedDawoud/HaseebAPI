@@ -225,19 +225,15 @@ namespace TaamerProject.Service.Services.EmpServices
                 var permission = _TaamerProContext.Permissions.Where(x => x.PermissionId == PermissionId).FirstOrDefault();
                 if(permission != null)
                 {
-                    
-                    if (Type == (int)PermissionStatus.Accepted)
-                    {
 
-                    }
-                    else
+                    if (Type != (int)PermissionStatus.AtManagement)
                     {
-
+                        permission.AcceptedDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        permission.AcceptedUser = UserId;
                     }
                     permission.Status = Type;
-                    permission.AcceptedDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                     permission.UpdateUser = UserId;
-                    permission.AcceptedUser = UserId;
+
 
                 }
 

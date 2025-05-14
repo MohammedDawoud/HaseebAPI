@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaamerProject.Models.DomainObjects;
 
 namespace TaamerProject.Models
 {
@@ -159,6 +160,7 @@ namespace TaamerProject.Models
 
         public virtual List<PayrollMarches>? PayrollMarches { get; set; }
         public virtual List<EmpLocations>? EmployeeLocations { get; set; }
+        public virtual List<Permissions>? Permissions { get; set; }
 
     }
 }

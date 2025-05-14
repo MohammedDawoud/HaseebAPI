@@ -483,11 +483,11 @@ namespace TaamerProject.Repository.Repositories
             return user;
 
         }
-
         public async Task<UsersVM> GetUserById(int UserId, string Lang)
         {
-            if(UserId==1)
+            if (UserId == 1)
             {
+
                 var user = _TaamerProContext.Users.Where(s => s.UserId == 1).Select(x => new
                 {
                     x.UserId,
@@ -526,7 +526,9 @@ namespace TaamerProject.Repository.Repositories
                     x.AppearWelcome,
                     x.QrCodeUrl,
                     x.AppearInInvoicePrint,
-
+                    x.DeviceId,
+                    x.DeviceType,
+                    x.DeviceTokenId
 
 
                 }).ToList().Select(s => new UsersVM
@@ -541,7 +543,7 @@ namespace TaamerProject.Repository.Repositories
                     BranchId = s.BranchId,
                     ImgUrl = s.ImgUrl ?? "/distnew/images/userprofile.png",
 
-                    EmpId = s.EmpId,
+                    EmpId = _TaamerProContext.Employees.Where(x => x.UserId == s.UserId && x.IsDeleted==false).FirstOrDefault()?.EmployeeId ?? 0,
                     UserName = s.UserName,
                     Password = s.Password,
                     Status = s.Status,
@@ -565,10 +567,13 @@ namespace TaamerProject.Repository.Repositories
                     AccStatusConfirm = s.AccStatusConfirm ?? "",
                     FullNameAr = s.FullNameAr ?? "",
                     IsActivated = s.IsActivated,
-                     AppearWelcome=s.AppearWelcome,
-                     QrCodeUrl=s.QrCodeUrl??"",
-                     AppearInInvoicePrint=s.AppearInInvoicePrint,
-                     FullNameEn=s.FullName,
+                    AppearWelcome = s.AppearWelcome,
+                    QrCodeUrl = s.QrCodeUrl ?? "",
+                    AppearInInvoicePrint = s.AppearInInvoicePrint,
+                    FullNameEn = s.FullName,
+                    DeviceId = s.DeviceId,
+                    DeviceTokenId = s.DeviceTokenId,
+                    DeviceType = s.DeviceType,
 
                 }).FirstOrDefault();
                 return user;
@@ -613,7 +618,9 @@ namespace TaamerProject.Repository.Repositories
                     x.AppearWelcome,
                     x.QrCodeUrl,
                     x.AppearInInvoicePrint,
-                    
+                    x.DeviceId,
+                    x.DeviceType,
+                    x.DeviceTokenId
                 }).ToList().Select(s => new UsersVM
                 {
                     UserId = s.UserId,
@@ -625,7 +632,7 @@ namespace TaamerProject.Repository.Repositories
                     GroupId = s.GroupId,
                     BranchId = s.BranchId,
                     ImgUrl = s.ImgUrl ?? "/distnew/images/userprofile.png",
-                    EmpId = s.EmpId,
+                    EmpId = _TaamerProContext.Employees.Where(x => x.UserId == s.UserId && x.IsDeleted == false).FirstOrDefault()?.EmployeeId ?? 0,
                     UserName = s.UserName,
                     Password = s.Password,
                     Status = s.Status,
@@ -648,12 +655,14 @@ namespace TaamerProject.Repository.Repositories
                     TimeId = s.TimeId,
                     AccStatusConfirm = s.AccStatusConfirm ?? "",
                     FullNameAr = s.FullNameAr ?? "",
-                    IsActivated = s.IsActivated ,
-                    AppearWelcome=s.AppearWelcome,
-                     QrCodeUrl=s.QrCodeUrl??"",
-                     AppearInInvoicePrint=s.AppearInInvoicePrint,
-                     FullNameEn=s.FullName??"",
-                     
+                    IsActivated = s.IsActivated,
+                    AppearWelcome = s.AppearWelcome,
+                    QrCodeUrl = s.QrCodeUrl ?? "",
+                    AppearInInvoicePrint = s.AppearInInvoicePrint,
+                    FullNameEn = s.FullName ?? "",
+                    DeviceId = s.DeviceId,
+                    DeviceTokenId = s.DeviceTokenId,
+                    DeviceType = s.DeviceType,
                 }).FirstOrDefault();
                 return user;
             }

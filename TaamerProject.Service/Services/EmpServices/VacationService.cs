@@ -403,7 +403,7 @@ namespace TaamerProject.Service.Services
                         vacation.DecisionType = vacation.DecisionType;
 
                         vacation.BranchId = BranchId;
-                        vacation.UserId = emp.UserId;
+                        vacation.UserId = vacation.UserId = emp.UserId == null || emp.UserId == 0 ? UserId : emp.UserId;
                         vacation.AddDate = DateTime.Now;
                         _TaamerProContext.Vacation.Add(vacation);
 
@@ -738,7 +738,7 @@ namespace TaamerProject.Service.Services
                     }
             }
         }
-        public GeneralMessage SaveVacationWorkers(Vacation vacation, int UserId, int BranchId, string Lang, string Url, string ImgUrl)
+        public GeneralMessage   SaveVacationWorkers(Vacation vacation, int UserId, int BranchId, string Lang, string Url, string ImgUrl)
         {
             try
             {
@@ -797,7 +797,7 @@ namespace TaamerProject.Service.Services
                     vacation.DecisionType = 0;
 
                     vacation.BranchId = BranchId;
-                    vacation.UserId = emp.UserId;
+                    vacation.UserId = emp.UserId==null || emp.UserId==0 ?UserId: emp.UserId;
                     vacation.AddDate = DateTime.Now;
                     _TaamerProContext.Vacation.Add(vacation);
                     _TaamerProContext.SaveChanges();

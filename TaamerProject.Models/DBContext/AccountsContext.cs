@@ -451,13 +451,13 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.DepitNotiId).HasColumnName("DepitNotiId");
                 entity.Property(t => t.InvUUID).HasColumnName("InvUUID");
                 entity.Property(t => t.VoucherAdjustment).HasColumnName("VoucherAdjustment");
-                entity.Property(t => t.InvoiceHash).HasColumnName("InvoiceHash");
-                entity.Property(t => t.SingedXML).HasColumnName("SingedXML");
-                entity.Property(t => t.EncodedInvoice).HasColumnName("EncodedInvoice");
-                entity.Property(t => t.ZatcaUUID).HasColumnName("ZatcaUUID");
-                entity.Property(t => t.QRCode).HasColumnName("QRCode");
-                entity.Property(t => t.PIH).HasColumnName("PIH");
-                entity.Property(t => t.SingedXMLFileName).HasColumnName("SingedXMLFileName");
+                //entity.Property(t => t.InvoiceHash).HasColumnName("InvoiceHash");
+                //entity.Property(t => t.SingedXML).HasColumnName("SingedXML");
+                //entity.Property(t => t.EncodedInvoice).HasColumnName("EncodedInvoice");
+                //entity.Property(t => t.ZatcaUUID).HasColumnName("ZatcaUUID");
+                //entity.Property(t => t.QRCode).HasColumnName("QRCode");
+                //entity.Property(t => t.PIH).HasColumnName("PIH");
+                //entity.Property(t => t.SingedXMLFileName).HasColumnName("SingedXMLFileName");
 
                 modelBuilder.Entity<Invoices>().HasMany<VoucherDetails>(s => s.VoucherDetails).WithOne(g => g.Invoices).HasForeignKey(s => s.InvoiceId);
                 modelBuilder.Entity<Invoices>().HasMany<Transactions>(s => s.TransactionDetails).WithOne(g => g.Invoices).HasForeignKey(s => s.InvoiceId);

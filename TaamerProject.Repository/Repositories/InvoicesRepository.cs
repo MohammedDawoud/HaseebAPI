@@ -199,7 +199,20 @@ namespace TaamerProject.Repository.Repositories
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
                 AddInvoiceImg=x.AddUsers!.ImgUrl?? "/distnew/images/userprofile.png",
-
+                InvoicesRequests = x.InvoicesRequests!.Where(s => s.InvoiceId == x.InvoiceId).Select(w => new Acc_InvoicesRequestsVM
+                {
+                    InvoiceReqId = w.InvoiceReqId,
+                    InvoiceId = w.InvoiceId,
+                    InvoiceNoRequest = w.InvoiceNoRequest,
+                    IsSent = w.IsSent,
+                    StatusCode = w.StatusCode,
+                    SendingStatus = w.SendingStatus,
+                    warningmessage = w.warningmessage,
+                    ClearedInvoice = w.ClearedInvoice,
+                    errormessage = w.errormessage,
+                    PIH = w.PIH,
+                    BranchId = w.BranchId,
+                }).ToList(),
                 VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                 {
                     VoucherDetailsId = z.VoucherDetailsId,
@@ -414,7 +427,20 @@ namespace TaamerProject.Repository.Repositories
                 CreditNotiId = x.CreditNotiId ?? 0,
                 DepitNotiId = x.DepitNotiId ?? 0,
                 AddInvoiceImg=x.AddUsers!.ImgUrl?? "/distnew/images/userprofile.png",
-
+                InvoicesRequests = x.InvoicesRequests!.Where(s => s.InvoiceId == x.InvoiceId).Select(w => new Acc_InvoicesRequestsVM
+                {
+                    InvoiceReqId = w.InvoiceReqId,
+                    InvoiceId = w.InvoiceId,
+                    InvoiceNoRequest = w.InvoiceNoRequest,
+                    IsSent = w.IsSent,
+                    StatusCode = w.StatusCode,
+                    SendingStatus = w.SendingStatus,
+                    warningmessage = w.warningmessage,
+                    ClearedInvoice = w.ClearedInvoice,
+                    errormessage = w.errormessage,
+                    PIH = w.PIH,
+                    BranchId = w.BranchId,
+                }).ToList(),
                 //CreditDepitNotiTotal=x.InvoicesNoti.Where(s => s.CreditDepitNotiId != null && s.InvoicesNoti.Any(a => a.IsDeleted == false)).Sum(q => q.TotalValue),
                 VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                 {
@@ -4865,6 +4891,21 @@ namespace TaamerProject.Repository.Repositories
                     CreditNotiId = x.CreditNotiId ?? 0,
                     DepitNotiId = x.DepitNotiId ?? 0,
                     AddInvoiceImg=x.AddUsers!.ImgUrl?? "/distnew/images/userprofile.png",
+                    InvoicesRequests = x.InvoicesRequests!.Where(s => s.InvoiceId == x.InvoiceId).Select(w => new Acc_InvoicesRequestsVM
+                    {
+                        InvoiceReqId = w.InvoiceReqId,
+                        InvoiceId = w.InvoiceId,
+                        InvoiceNoRequest = w.InvoiceNoRequest,
+                        IsSent = w.IsSent,
+                        StatusCode = w.StatusCode,
+                        SendingStatus = w.SendingStatus,
+                        warningmessage = w.warningmessage,
+                        ClearedInvoice = w.ClearedInvoice,
+                        errormessage = w.errormessage,
+                        PIH = w.PIH,
+                        BranchId = w.BranchId,
+                    }).ToList(),
+
                     //CreditDepitNotiTotal = x.InvoicesNoti.Where(s => s.CreditDepitNotiId != null && s.InvoicesNoti.Any(a => a.IsDeleted == false)).Sum(q => q.TotalValue),
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                     {
@@ -4971,6 +5012,7 @@ namespace TaamerProject.Repository.Repositories
                         IsSendAlarm = x.IsSendAlarm ?? 0,
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
+                        InvoicesRequests = x.InvoicesRequests,
                         VoucherDetails = x.VoucherDetails,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
 
@@ -5043,6 +5085,7 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
+                        InvoicesRequests = x.InvoicesRequests,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
                 }
 
@@ -5110,6 +5153,7 @@ namespace TaamerProject.Repository.Repositories
                             InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
 
                             VoucherDetails = x.VoucherDetails,
+                            InvoicesRequests = x.InvoicesRequests,
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
 
                     }
@@ -5178,6 +5222,7 @@ namespace TaamerProject.Repository.Repositories
                             InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                             AddInvoiceImg = x.AddInvoiceImg,
                             VoucherDetails = x.VoucherDetails,
+                            InvoicesRequests = x.InvoicesRequests,
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
                     }
 
@@ -5245,6 +5290,7 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
+                        InvoicesRequests = x.InvoicesRequests,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
                 }
                 if (!String.IsNullOrEmpty(Convert.ToString(voucherFilterVM!.CustomerId)) && voucherFilterVM!.CustomerId > 0)
@@ -5310,6 +5356,7 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
+                        InvoicesRequests = x.InvoicesRequests,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
                  
                 }
@@ -5377,6 +5424,7 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg,
                         VoucherDetails = x.VoucherDetails,
+                        InvoicesRequests = x.InvoicesRequests,
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
 
                 }
@@ -5445,6 +5493,20 @@ namespace TaamerProject.Repository.Repositories
                     IsSendAlarm = x.IsSendAlarm ?? 0,
                     InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
+                    InvoicesRequests = x.InvoicesRequests!.Where(s => s.InvoiceId == x.InvoiceId).Select(w => new Acc_InvoicesRequestsVM
+                    {
+                        InvoiceReqId = w.InvoiceReqId,
+                        InvoiceId = w.InvoiceId,
+                        InvoiceNoRequest = w.InvoiceNoRequest,
+                        IsSent = w.IsSent,
+                        StatusCode = w.StatusCode,
+                        SendingStatus = w.SendingStatus,
+                        warningmessage = w.warningmessage,
+                        ClearedInvoice = w.ClearedInvoice,
+                        errormessage = w.errormessage,
+                        PIH = w.PIH,
+                        BranchId = w.BranchId,
+                    }).ToList(),
 
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                     {
@@ -6189,7 +6251,20 @@ namespace TaamerProject.Repository.Repositories
                 DepitNotiId = x.DepitNotiId ?? 0,
                 //CreditDepitNotiTotal = x.InvoicesNoti.Where(s => s.CreditDepitNotiId != null && s.InvoicesNoti.Any(a => a.IsDeleted == false)).Sum(q => q.TotalValue),
                 PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
-
+                InvoicesRequests = x.InvoicesRequests!.Where(s => s.InvoiceId == x.InvoiceId).Select(w => new Acc_InvoicesRequestsVM
+                {
+                    InvoiceReqId = w.InvoiceReqId,
+                    InvoiceId = w.InvoiceId,
+                    InvoiceNoRequest = w.InvoiceNoRequest,
+                    IsSent = w.IsSent,
+                    StatusCode = w.StatusCode,
+                    SendingStatus = w.SendingStatus,
+                    warningmessage = w.warningmessage,
+                    ClearedInvoice = w.ClearedInvoice,
+                    errormessage = w.errormessage,
+                    PIH = w.PIH,
+                    BranchId = w.BranchId,
+                }).ToList(),
                 VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                 {
                     VoucherDetailsId = z.VoucherDetailsId,
@@ -6296,7 +6371,20 @@ namespace TaamerProject.Repository.Repositories
                 AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                 //CreditDepitNotiTotal = x.InvoicesNoti.Where(s => s.CreditDepitNotiId != null && s.InvoicesNoti.Any(a => a.IsDeleted == false)).Sum(q => q.TotalValue),
                 PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.PayType == 6) ? "حوالة" : (x.PayType == 3) ? "عهده" : (x.PayType == 4) ? "خصم مكتسب" : (x.PayType == 5) ? "خصم مسموح به" : (x.PayType == 8) ? "أجل" : (x.PayType == 9) ? "شبكة" : (x.PayType == 17) ? "نقدا - نقاط البيع" : "",
-
+                InvoicesRequests = x.InvoicesRequests!.Where(s => s.InvoiceId == x.InvoiceId).Select(w => new Acc_InvoicesRequestsVM
+                {
+                    InvoiceReqId = w.InvoiceReqId,
+                    InvoiceId = w.InvoiceId,
+                    InvoiceNoRequest = w.InvoiceNoRequest,
+                    IsSent = w.IsSent,
+                    StatusCode = w.StatusCode,
+                    SendingStatus = w.SendingStatus,
+                    warningmessage = w.warningmessage,
+                    ClearedInvoice = w.ClearedInvoice,
+                    errormessage = w.errormessage,
+                    PIH = w.PIH,
+                    BranchId = w.BranchId,
+                }).ToList(),
                 VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                 {
                     VoucherDetailsId = z.VoucherDetailsId,
@@ -7729,6 +7817,28 @@ namespace TaamerProject.Repository.Repositories
             {
                 List<GenerateNextVoucherNumberVM> lmd = new List<GenerateNextVoucherNumberVM>();
                 return lmd;
+            }
+        }
+
+        public async Task<int?> GenerateVoucherZatcaNumber(int? YearId, int BranchId)
+        {
+            var invoices = _TaamerProContext.Acc_InvoicesRequests.Where(s => s.BranchId == BranchId);
+            if (invoices != null)
+            {
+                var lastRow = invoices.OrderByDescending(u => u.InvoiceNoRequest).Take(1).FirstOrDefault();
+                if (lastRow != null)
+                {
+                    var last = Convert.ToInt32(lastRow.InvoiceNoRequest);
+                    return last + 1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                return 1;
             }
         }
 

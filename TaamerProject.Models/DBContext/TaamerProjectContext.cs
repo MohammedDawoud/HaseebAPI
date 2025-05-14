@@ -36,6 +36,7 @@ namespace TaamerProject.Models.DBContext
         public virtual DbSet<Acc_Clauses> Acc_Clauses { get; set; }
         public virtual DbSet<Acc_Debentures> Acc_Debentures { get; set; }
         public virtual DbSet<Acc_EmpFinYears> Acc_EmpFinYears { get; set; }
+        public virtual DbSet<Acc_InvoicesRequests> Acc_InvoicesRequests { get; set; }
         public virtual DbSet<Acc_Floors> Acc_Floors { get; set; }
         public virtual DbSet<Acc_ServiceTypes> Acc_ServiceTypes { get; set; }
         public virtual DbSet<Acc_Packages> Acc_Packages { get; set; }
@@ -2028,15 +2029,9 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.DepitNotiId).HasColumnName("DepitNotiId");
                 entity.Property(t => t.InvUUID).HasColumnName("InvUUID");
                 entity.Property(t => t.VoucherAdjustment).HasColumnName("VoucherAdjustment");
-                entity.Property(t => t.InvoiceHash).HasColumnName("InvoiceHash");
-                entity.Property(t => t.SingedXML).HasColumnName("SingedXML");
-                entity.Property(t => t.EncodedInvoice).HasColumnName("EncodedInvoice");
-                entity.Property(t => t.ZatcaUUID).HasColumnName("ZatcaUUID");
-                entity.Property(t => t.QRCode).HasColumnName("QRCode");
-                entity.Property(t => t.PIH).HasColumnName("PIH");
-                entity.Property(t => t.SingedXMLFileName).HasColumnName("SingedXMLFileName");
                 entity.Property(t => t.StorehouseId).HasColumnName("StorehouseId");
 
+                modelBuilder.Entity<Invoices>().HasMany<Acc_InvoicesRequests>(s => s.InvoicesRequests).WithOne(g => g.Invoice).HasForeignKey(s => s.InvoiceId);
                 modelBuilder.Entity<Invoices>().HasMany<VoucherDetails>(s => s.VoucherDetails).WithOne(g => g.Invoices).HasForeignKey(s => s.InvoiceId);
                 modelBuilder.Entity<Invoices>().HasMany<Transactions>(s => s.TransactionDetails).WithOne(g => g.Invoices).HasForeignKey(s => s.InvoiceId);
                 modelBuilder.Entity<Invoices>().HasOne(s => s.AddUsers).WithMany().HasForeignKey(e => e.AddUser);
@@ -2049,6 +2044,30 @@ namespace TaamerProject.Models.DBContext
                 modelBuilder.Entity<Invoices>().HasOne(s => s.Invoices_Credit).WithMany().HasForeignKey(e => e.CreditNotiId);
                 modelBuilder.Entity<Invoices>().HasOne(s => s.Invoices_Depit).WithMany().HasForeignKey(e => e.DepitNotiId);
 
+            });
+
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<Acc_InvoicesRequests>(entity =>
+            {
+                entity.HasKey(e => e.InvoiceReqId);
+                entity.ToTable("Acc_InvoicesRequests");
+
+                entity.Property(t => t.InvoiceId).HasColumnName("InvoiceId");
+                entity.Property(t => t.InvoiceNoRequest).HasColumnName("InvoiceNoRequest");
+                entity.Property(t => t.IsSent).HasColumnName("IsSent");
+                entity.Property(t => t.StatusCode).HasColumnName("StatusCode");
+                entity.Property(t => t.SendingStatus).HasColumnName("SendingStatus");
+                entity.Property(t => t.warningmessage).HasColumnName("warningmessage");
+                entity.Property(t => t.ClearedInvoice).HasColumnName("ClearedInvoice");
+                entity.Property(t => t.errormessage).HasColumnName("errormessage");
+                entity.Property(t => t.InvoiceHash).HasColumnName("InvoiceHash");
+                entity.Property(t => t.SingedXML).HasColumnName("SingedXML");
+                entity.Property(t => t.EncodedInvoice).HasColumnName("EncodedInvoice");
+                entity.Property(t => t.ZatcaUUID).HasColumnName("ZatcaUUID");
+                entity.Property(t => t.QRCode).HasColumnName("QRCode");
+                entity.Property(t => t.PIH).HasColumnName("PIH");
+                entity.Property(t => t.SingedXMLFileName).HasColumnName("SingedXMLFileName");
+                //modelBuilder.Entity<Acc_InvoicesRequests>().HasOne(s => s.Invoice).WithMany().HasForeignKey(e => e.InvoiceId);
             });
 
             //--------------------------------END--------------------------------------------------

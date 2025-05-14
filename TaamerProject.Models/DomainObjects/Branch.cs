@@ -97,7 +97,10 @@ namespace TaamerProject.Models
 
         public int? BublicRevenue { get; set; }
         public int? OtherRevenue { get; set; }
-
+        public string? CSR { get; set; }
+        public string? PrivateKey { get; set; }
+        public string? PublicKey { get; set; }
+        public string? SecreteKey { get; set; }
 
         public Organizations? Organizations { get;set;}
         public virtual Banks? Bank { get; set; }

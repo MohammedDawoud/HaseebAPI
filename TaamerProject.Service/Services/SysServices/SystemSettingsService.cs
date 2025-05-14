@@ -410,11 +410,11 @@ namespace TaamerProject.Service.Services
         {
             try
             {
-               // var branch = _BranchesRepository.GetById(BranchId).OrganizationId;
-                Branch? branch =   _TaamerProContext.Branch.Where(s => s.BranchId == BranchId).FirstOrDefault();
+                // var branch = _BranchesRepository.GetById(BranchId).OrganizationId;
+                Branch? branch = _TaamerProContext.Branch.Where(s => s.BranchId == BranchId).FirstOrDefault();
 
                 //var org = _OrganizationsRepository.GetById(branch);
-                Organizations? org =   _TaamerProContext.Organizations.Where(s => s.BranchId == branch.BranchId).FirstOrDefault();
+                Organizations? org = _TaamerProContext.Organizations.Where(s => s.BranchId == branch.BranchId).FirstOrDefault();
 
                 string formattedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
@@ -442,18 +442,16 @@ namespace TaamerProject.Service.Services
                     title = "لقد طلبت الغاء تفعيل منصة فاتورة التابعة لهيئة الزكاة والضريبة والجمارك - (فاتورة)";
                     body = PopulateBody(textBody, _IUsersRepository.GetUserById(ReceivedUser, "rtl").Result.FullName, title, "مع تمنياتنا لكم بالتوفيق", Url, org.NameAr);
                 }
-           
+
 
                 LinkedResource logo = new LinkedResource(ImgUrl);
                 logo.ContentId = "companylogo";
-                // done HTML formatting in the next line to display my bayanatech logo
                 AlternateView av1 = AlternateView.CreateAlternateViewFromString(body.Replace("{Header}", title), null, MediaTypeNames.Text.Html);
                 av1.LinkedResources.Add(logo);
                 mail.AlternateViews.Add(av1);
-              //  mail.To.Add(new MailAddress(_IUsersRepository.GetById(ReceivedUser).Email));
 
 
-                var userReciver =   _TaamerProContext.Users.Where(s => s.UserId == ReceivedUser).FirstOrDefault();
+                var userReciver = _TaamerProContext.Users.Where(s => s.UserId == ReceivedUser).FirstOrDefault();
                 mail.To.Add(new MailAddress(userReciver?.Email ?? ""));
 
                 mail.Subject = Subject;

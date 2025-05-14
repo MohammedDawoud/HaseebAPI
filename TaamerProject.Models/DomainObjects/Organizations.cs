@@ -74,5 +74,7 @@ namespace TaamerProject.Models
         public string? SupportMessageAr { get; set; }
         public string? SupportMessageEn { get; set; }
         public string? TameerAPIURL { get; set; }
+        public int? ModeType { get; set; }
+
     }
 }

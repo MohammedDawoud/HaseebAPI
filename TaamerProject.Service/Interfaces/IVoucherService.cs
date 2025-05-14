@@ -53,6 +53,7 @@ namespace TaamerProject.Service.Interfaces
         Task<VoucherDetailsVM> GetInvoiceIDByProjectID(int? ProjectId);
 
         Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceId(int? voucherId);
+        Task<VoucherDetailsVM> GetAllDetailsByVoucherDetailsId(int? VoucherDetailsId);
 
         Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceIdFirstOrDef(int? voucherId);
 
@@ -80,7 +81,8 @@ namespace TaamerProject.Service.Interfaces
 
         GeneralMessage SaveConvertVoucher(Invoices voucher, int UserId, int BranchId, int? yearid);
         Task<int?> GenerateVoucherNumber(int Type, int BranchId, int? yearid);
-        Task<string?> GenerateVoucherNumberNewPro(int Type, int BranchId, int? yearid, int Status, string Con); 
+        Task<string?> GenerateVoucherNumberNewPro(int Type, int BranchId, int? yearid, int Status, string Con);
+        Task<int?> GenerateVoucherZatcaNumber(int BranchId, int? yearid);
 
         Task<int?> GenerateVoucherNumberOpening(int Type, int BranchId, int? yearid);
         Task<int?> GenerateVoucherNumberClosing(int Type, int BranchId, int? yearid);
@@ -186,7 +188,7 @@ namespace TaamerProject.Service.Interfaces
         Task<IEnumerable<TransactionsVM>> GetAllJournals(int? FromJournal, int? ToJournal, string FromDate, string ToDate, int BranchId, int? yearid);
         Task<IEnumerable<TransactionsVM>> GetAllTotalJournals(int? FromJournal, int? ToJournal, string FromDate, string ToDate, int BranchId, int? yearid);
         Task<IEnumerable<InvoicesVM>> GetProjectManagerRevene(int? ManagerId, string dateFrom, string dateTo, int BranchId, int? yearid);
-        GeneralMessage UpdateInvoiceWithZatcaData(Invoices voucher, int UserId, int BranchId);
+        //GeneralMessage UpdateInvoiceWithZatcaData(Invoices voucher, int UserId, int BranchId);
         Task<IEnumerable<InvoicesVM>> GetAllVouchersback();
 
         Task<IEnumerable<InvoicesVM>> GetAllVouchersfromcontractSearch(VoucherFilterVM voucherFilterVM, int BranchId, int? yearid);

@@ -660,6 +660,10 @@ namespace TaamerProject.Service.Services
         {
             return _VoucherDetailsRepository.GetAllDetailsByInvoiceId(voucherId);
         }
+        public Task<VoucherDetailsVM> GetAllDetailsByVoucherDetailsId(int? VoucherDetailsId)
+        {
+            return _VoucherDetailsRepository.GetAllDetailsByVoucherDetailsId(VoucherDetailsId);
+        }
         public Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceIdFirstOrDef(int? voucherId)
         {
             return _VoucherDetailsRepository.GetAllDetailsByInvoiceIdFirstOrDef(voucherId);
@@ -682,46 +686,46 @@ namespace TaamerProject.Service.Services
             return _VoucherDetailsRepository.GetAllTrans(VouDetailsID);
         }
 
-        public GeneralMessage UpdateInvoiceWithZatcaData(Invoices voucher, int UserId, int BranchId)
-        {
-            try
-            {
-                // var VoucherUpdated = _TaamerProContext.Invoices.Where(s=>s.InvoiceId==voucher.InvoiceId)?.FirstOrDefault();
-                Invoices? VoucherUpdated = _TaamerProContext.Invoices.Where(s => s.InvoiceId == voucher.InvoiceId).FirstOrDefault();
-                if (VoucherUpdated != null)
-                {
-                    VoucherUpdated.InvoiceHash = voucher.InvoiceHash;
-                    //VoucherUpdated.SingedXML = voucher.SingedXML;
-                    VoucherUpdated.EncodedInvoice = voucher.EncodedInvoice;
-                    VoucherUpdated.ZatcaUUID = voucher.ZatcaUUID;
-                    VoucherUpdated.QRCode = voucher.QRCode;
-                    VoucherUpdated.PIH = voucher.PIH;
-                    VoucherUpdated.SingedXMLFileName = voucher.SingedXMLFileName;
+        //public GeneralMessage UpdateInvoiceWithZatcaData(Invoices voucher, int UserId, int BranchId)
+        //{
+        //    try
+        //    {
+        //        // var VoucherUpdated = _TaamerProContext.Invoices.Where(s=>s.InvoiceId==voucher.InvoiceId)?.FirstOrDefault();
+        //        Invoices? VoucherUpdated = _TaamerProContext.Invoices.Where(s => s.InvoiceId == voucher.InvoiceId).FirstOrDefault();
+        //        if (VoucherUpdated != null)
+        //        {
+        //            VoucherUpdated.InvoiceHash = voucher.InvoiceHash;
+        //            //VoucherUpdated.SingedXML = voucher.SingedXML;
+        //            VoucherUpdated.EncodedInvoice = voucher.EncodedInvoice;
+        //            VoucherUpdated.ZatcaUUID = voucher.ZatcaUUID;
+        //            VoucherUpdated.QRCode = voucher.QRCode;
+        //            VoucherUpdated.PIH = voucher.PIH;
+        //            VoucherUpdated.SingedXMLFileName = voucher.SingedXMLFileName;
 
-                    _TaamerProContext.SaveChanges();
+        //            _TaamerProContext.SaveChanges();
 
-                    //-----------------------------------------------------------------------------------------------------------------
-                    string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
-                    string ActionNote2 = " تم تعديل الفاتورة";
-                    _SystemAction.SaveAction("UpdateInvoiceWithZatcaData", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
-                    //-----------------------------------------------------------------------------------------------------------------
+        //            //-----------------------------------------------------------------------------------------------------------------
+        //            string ActionDate2 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+        //            string ActionNote2 = " تم تعديل الفاتورة";
+        //            _SystemAction.SaveAction("UpdateInvoiceWithZatcaData", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate2, UserId, BranchId, ActionNote2, 0);
+        //            //-----------------------------------------------------------------------------------------------------------------
 
-                }
+        //        }
 
-                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
-            }
-            catch (Exception ex)
-            {
-                //-----------------------------------------------------------------------------------------------------------------
-                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
-                string ActionNote = "فشل في تعديل الفاتورة";
-                _SystemAction.SaveAction("UpdateInvoiceWithZatcaData", "VoucherService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
-                //-----------------------------------------------------------------------------------------------------------------
+        //        return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //-----------------------------------------------------------------------------------------------------------------
+        //        string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+        //        string ActionNote = "فشل في تعديل الفاتورة";
+        //        _SystemAction.SaveAction("UpdateInvoiceWithZatcaData", "VoucherService", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+        //        //-----------------------------------------------------------------------------------------------------------------
 
-                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
-            }
+        //        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+        //    }
 
-        }
+        //}
         public GeneralMessage SaveVoucher(Invoices voucher, int UserId, int BranchId, int? yearid)
         {
             try
@@ -2780,12 +2784,18 @@ namespace TaamerProject.Service.Services
                 }
             }
             _TaamerProContext.SaveChanges();//save
+            var voucherDet = _TaamerProContext.VoucherDetails.Where(s => s.IsDeleted == false && s.InvoiceId == VoucherUpdated.InvoiceId).ToList();
+            List<int> voDetIds = new List<int>();
+            foreach (var itemV in voucherDet)
+            {
+                voDetIds.Add(itemV.VoucherDetailsId);
+            }
             //-----------------------------------------------------------------------------------------------------------------
             string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
             string ActionNote = " تعديل   " + GetVoucherType(VoucherUpdated.Type) + " " + VoucherUpdated.InvoiceNumber;
             _SystemAction.SaveAction("UpdateVoucher", "VoucherService", 2, Resources.General_EditedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
             //-----------------------------------------------------------------------------------------------------------------
-            return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+            return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, voucherDetObj = voDetIds };
         }
 
         public GeneralMessage UpdateVoucherRecepient(string InvoiceId, int UserId, int BranchId,int YearId)
@@ -4351,8 +4361,12 @@ namespace TaamerProject.Service.Services
                     string ActionNote = "اضافة فاتورة جديد" + " برقم " + voucher.InvoiceNumber; ;
                     _SystemAction.SaveAction("SaveInvoiceForServices", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully,ReturnedParm= voucher.InvoiceId,InvoiceIsDeleted=voucher.IsDeleted };
+                    List<int> voDetIds = new List<int>();
+                    foreach (var itemV in voucher.VoucherDetails)
+                    {
+                        voDetIds.Add(itemV.VoucherDetailsId);
+                    }
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully,ReturnedParm= voucher.InvoiceId,InvoiceIsDeleted=voucher.IsDeleted, voucherDetObj = voDetIds };
                 }
                 else
                 {
@@ -4944,8 +4958,12 @@ namespace TaamerProject.Service.Services
                     string ActionNote = "اضافة مسودة جديد" + " برقم " + voucher.InvoiceNumber; ;
                     _SystemAction.SaveAction("SaveInvoiceForServices", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted };
+                    List<int> voDetIds = new List<int>();
+                    foreach (var itemV in voucher.VoucherDetails)
+                    {
+                        voDetIds.Add(itemV.VoucherDetailsId);
+                    }
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted, voucherDetObj = voDetIds };
                 }
                 else
                 {
@@ -5427,8 +5445,12 @@ namespace TaamerProject.Service.Services
                         string ActionNote = "اضافة مسودة جديد" + " برقم " + voucher.InvoiceNumber; ;
                         _SystemAction.SaveAction("SaveInvoiceForServices", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                         //-----------------------------------------------------------------------------------------------------------------
-
-                        return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted };
+                        List<int> voDetIds = new List<int>();
+                        foreach (var itemV in voucher.VoucherDetails)
+                        {
+                            voDetIds.Add(itemV.VoucherDetailsId);
+                        }
+                        return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted, voucherDetObj = voDetIds };
                     }
                     else
                     {
@@ -6549,8 +6571,12 @@ namespace TaamerProject.Service.Services
                     string ActionNote = "اضافة اشعار دائن لفاتورة " + " برقم " + voucher.InvoiceNumber; ;
                     _SystemAction.SaveAction("SaveInvoiceForServices", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully , ReturnedParm = voucher.InvoiceId };
+                    List<int> voDetIds = new List<int>();
+                    foreach (var itemV in voucher.VoucherDetails)
+                    {
+                        voDetIds.Add(itemV.VoucherDetailsId);
+                    }
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully , ReturnedParm = voucher.InvoiceId, voucherDetObj = voDetIds };
                 }
                 return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
 
@@ -8195,8 +8221,12 @@ namespace TaamerProject.Service.Services
                     string ActionNote = "اضافة فاتورة جديد" + " برقم " + voucher.InvoiceNumber; ;
                     _SystemAction.SaveAction("SaveandPostInvoiceForServices", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted };
+                    List<int> voDetIds = new List<int>();
+                    foreach (var itemV in voucher.VoucherDetails)
+                    {
+                        voDetIds.Add(itemV.VoucherDetailsId);
+                    }
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted, voucherDetObj = voDetIds };
                 }
                 else
                 {
@@ -8775,8 +8805,9 @@ namespace TaamerProject.Service.Services
         public GeneralMessage SaveInvoiceForServicesRetNEW_func(Invoices voucher, int UserId, int BranchId, int? yearid, string lang, string Con)
         {
             try
-            { 
-                 
+            {
+                var VoucherDetCredit = new List<VoucherDetails>();
+                var VoucherDetails = new List<VoucherDetails>();
                 var ToAccount = 0;
                 var Branch = _TaamerProContext.Branch.Where(s=>s.BranchId==BranchId).FirstOrDefault();
                 if (Branch == null || Branch.PurchaseReturnCashAccId == null)
@@ -8909,7 +8940,7 @@ namespace TaamerProject.Service.Services
                     int? itemTaxType = 0;
                     // add new details
                     var ObjList = new List<object>();
-                    var VoucherDetails = _TaamerProContext.VoucherDetails.Where(s => s.InvoiceId == VoucherUpdated.InvoiceId).ToList();
+                    VoucherDetails = _TaamerProContext.VoucherDetails.Where(s => s.InvoiceId == VoucherUpdated.InvoiceId).ToList();
                     foreach (var item in VoucherDetails)
                     {
 
@@ -9041,6 +9072,7 @@ namespace TaamerProject.Service.Services
                     var VoucherCredit = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.CreditNotiId == voucher.InvoiceId).ToList();
                     if (VoucherCredit.Count() > 0)
                     {
+                        VoucherDetCredit = _TaamerProContext.VoucherDetails.Where(s => s.InvoiceId == VoucherCredit.FirstOrDefault().InvoiceId).ToList();
                         VoucherCredit.FirstOrDefault().Rad = true;                   
                     }
 
@@ -9052,14 +9084,64 @@ namespace TaamerProject.Service.Services
 
                 }
                 _TaamerProContext.SaveChanges();
+                var VoucherDetailsV = _VoucherDetailsRepository.GetAllDetailsByInvoiceId(VoucherUpdated.InvoiceId).Result;
+                var ObjDet = new List<ObjRet>();
 
+
+                if (VoucherDetCredit.Count() > 0)
+                {
+                    foreach (var item in VoucherDetailsV)
+                    {
+                        var ObjDetInst = new ObjRet();
+                        foreach (var itemC in VoucherDetCredit)
+                        {
+                            if (item.ServicesPriceId == itemC.ServicesPriceId)
+                            {
+
+                                item.TaxAmount = item.TaxAmount - itemC.TaxAmount;
+                                item.Amount = item.Amount - itemC.Amount;
+                                item.TotalAmount = item.TotalAmount - itemC.TotalAmount;
+
+                            }
+                        }
+                        ObjDetInst.TaxAmount = item.TaxAmount;
+                        ObjDetInst.Amount = item.Amount;
+                        ObjDetInst.TotalAmount = item.TotalAmount;
+                        ObjDetInst.Qty = item.Qty;
+                        ObjDetInst.ServicesPriceName = item.ServicesPriceName;
+                        ObjDetInst.DiscountValue_Det = item.DiscountValue_Det;
+                        ObjDetInst.DiscountPercentage_Det = item.DiscountPercentage_Det;
+                        ObjDetInst.InvoiceId = item.InvoiceId;
+                        ObjDetInst.VoucherDetailsId = item.VoucherDetailsId;
+                        ObjDetInst.Type = 4;
+                        ObjDet.Add(ObjDetInst);
+                    }
+                }
+                else
+                {
+                    foreach (var item in VoucherDetailsV)
+                    {
+                        var ObjDetInst = new ObjRet();
+                        ObjDetInst.TaxAmount = item.TaxAmount;
+                        ObjDetInst.Amount = item.Amount;
+                        ObjDetInst.TotalAmount = item.TotalAmount;
+                        ObjDetInst.Qty = item.Qty;
+                        ObjDetInst.ServicesPriceName = item.ServicesPriceName;
+                        ObjDetInst.DiscountValue_Det = item.DiscountValue_Det;
+                        ObjDetInst.DiscountPercentage_Det = item.DiscountPercentage_Det;
+                        ObjDetInst.InvoiceId = item.InvoiceId;
+                        ObjDetInst.VoucherDetailsId = item.VoucherDetailsId;
+                        ObjDetInst.Type = 4;
+                        ObjDet.Add(ObjDetInst);
+                    }
+                }
                 //-----------------------------------------------------------------------------------------------------------------
                 string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                 string ActionNote = " تعديل فاتورة رقم " + voucher.InvoiceId;
                 _SystemAction.SaveAction("SaveInvoiceForServicesRet", "VoucherService", 2, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                 //-----------------------------------------------------------------------------------------------------------------
 
-                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, ObjRetDet = ObjDet };
             }
             catch (Exception ex)
             {
@@ -11404,8 +11486,12 @@ namespace TaamerProject.Service.Services
                 string ActionNote = "اضافة فاتورة مشتريات جديد" + " برقم " + voucher.InvoiceNumber; ;
                 _SystemAction.SaveAction("SaveandPostInvoiceForServices", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                 //-----------------------------------------------------------------------------------------------------------------
-
-                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted };
+                List<int> voDetIds = new List<int>();
+                foreach (var itemV in voucher.VoucherDetails)
+                {
+                    voDetIds.Add(itemV.VoucherDetailsId);
+                }
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted, voucherDetObj = voDetIds };
             }
             catch (Exception ex)
             {
@@ -13028,8 +13114,12 @@ namespace TaamerProject.Service.Services
                     string ActionNote = "اضافة فاتورة جديد" + " برقم " + voucher.InvoiceNumber; ;
                     _SystemAction.SaveAction("SaveInvoiceForServices2", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted };
+                    List<int> voDetIds = new List<int>();
+                    foreach (var itemV in voucher.VoucherDetails)
+                    {
+                        voDetIds.Add(itemV.VoucherDetailsId);
+                    }
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted, voucherDetObj = voDetIds };
                 }
                 else
                 {
@@ -13682,8 +13772,12 @@ namespace TaamerProject.Service.Services
                     string ActionNote = "اضافة فاتورة جديد" + " برقم " + voucher.InvoiceNumber; ;
                     _SystemAction.SaveAction("SaveInvoiceForServices2", "VoucherService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, UserId, BranchId, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted };
+                    List<int> voDetIds = new List<int>();
+                    foreach (var itemV in voucher.VoucherDetails)
+                    {
+                        voDetIds.Add(itemV.VoucherDetailsId);
+                    }
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = voucher.InvoiceId, InvoiceIsDeleted = voucher.IsDeleted, voucherDetObj = voDetIds };
                 }
                else
                 {
@@ -15647,6 +15741,10 @@ namespace TaamerProject.Service.Services
                 NewValue = codePrefix + NewValue;
             }
             return (NewValue);
+        }
+        public async Task<int?> GenerateVoucherZatcaNumber(int BranchId, int? yearid)
+        {
+            return await _InvoicesRepository.GenerateVoucherZatcaNumber(yearid, BranchId);
         }
         public async Task<string> GenerateVoucherNumberNewProNoti(int Type, int BranchId, int? yearid, int Status, string Con)
         {

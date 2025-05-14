@@ -46,6 +46,7 @@
     <ProjectReference Include="..\TaamerProject.Models\Haseeb.Models.csproj" />
     <ProjectReference Include="..\TaamerProject.Repository\Haseeb.Repository.csproj" />
     <ProjectReference Include="..\TaamerProject.Service\Haseeb.Service.csproj" />
+    <ProjectReference Include="..\ZatcaIntegrationSDK\ZatcaIntegrationSDK.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,9 +64,6 @@
     </Reference>
     <Reference Include="Spire.Doc">
       <HintPath>bin\Debug\net7.0\Spire.Doc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Extensions">
-      <HintPath>bin\Debug\net7.0\System.Web.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
 

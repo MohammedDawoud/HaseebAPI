@@ -75,6 +75,8 @@ namespace TaamerProject.Models
         public string? TameerAPIURL { get; set; }
         public bool? SendCustomerMail { get; set; }
         public bool? SendCustomerSMS { get; set; }
+        public int? ModeType { get; set; }
+
 
     }
 }

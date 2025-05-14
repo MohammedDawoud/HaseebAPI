@@ -13,6 +13,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<VoucherDetailsVM> GetInvoiceIDByProjectID(int? ProjectId);
 
         Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceId(int? voucherId);
+        Task<VoucherDetailsVM> GetAllDetailsByVoucherDetailsId(int? VoucherDetailsId);
         Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceIdFirstOrDef(int? voucherId);
 
         Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceIdPurchase(int? voucherId);

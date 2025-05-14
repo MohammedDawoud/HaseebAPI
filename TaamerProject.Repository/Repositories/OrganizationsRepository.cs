@@ -68,12 +68,11 @@ namespace TaamerProject.Repository.Repositories
                 BankId2ImgURL = x.Bank2 != null ? x.Bank2.BanckLogo : "",
                 ApiBaseUri = x.ApiBaseUri ?? "",
                 TameerAPIURL=x.TameerAPIURL ??"",
-
-                //CSR = x.CSR ?? "",
-                //PrivateKey = x.PrivateKey ?? "",
-                //PublicKey = x.PublicKey ?? "",
-                //SecreteKey = x.SecreteKey ?? "",
-
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
+                ModeType = x.ModeType ?? 1,
 
             }).FirstOrDefault();
             return organizations;
@@ -122,11 +121,11 @@ namespace TaamerProject.Repository.Repositories
                 BankId2ImgURL = x.Bank2 != null ? x.Bank2.BanckLogo : "",
                 ApiBaseUri = x.ApiBaseUri ?? "",
                 TameerAPIURL = x.TameerAPIURL ?? "",
-
-                //CSR = x.CSR ?? "",
-                //PrivateKey = x.PrivateKey ?? "",
-                //PublicKey = x.PublicKey ?? "",
-                //SecreteKey = x.SecreteKey ?? "",
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
+                ModeType = x.ModeType ?? 1,
 
 
             }).FirstOrDefault();
@@ -183,11 +182,11 @@ namespace TaamerProject.Repository.Repositories
                 TameerAPIURL = x.TameerAPIURL ?? "",
                 ComDomainAddress=x.ComDomainAddress??"",
                  SendCustomerMail=x.SendCustomerMail??false,
-
-                //CSR = x.CSR ?? "",
-                //PrivateKey = x.PrivateKey ?? "",
-                //PublicKey = x.PublicKey ?? "",
-                //SecreteKey = x.SecreteKey ?? "",
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
+                ModeType = x.ModeType ?? 1,
 
             })
             .FirstOrDefault();
@@ -280,11 +279,11 @@ namespace TaamerProject.Repository.Repositories
                 ApiBaseUri = x.ApiBaseUri ?? "",
                 TameerAPIURL = x.TameerAPIURL ?? "",
                  SendCustomerMail=x.SendCustomerMail??false,
-                //CSR = x.CSR ?? "",
-                //PrivateKey = x.PrivateKey ?? "",
-                //PublicKey = x.PublicKey ?? "",
-                //SecreteKey = x.SecreteKey ?? "",
-
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
+                ModeType = x.ModeType ?? 1,
 
             })
             .FirstOrDefault();
@@ -352,12 +351,11 @@ namespace TaamerProject.Repository.Repositories
                 BankId2ImgURL = x.Bank2 != null ? x.Bank2.BanckLogo : "",
                 ApiBaseUri = x.ApiBaseUri ?? "",
                 TameerAPIURL = x.TameerAPIURL ?? "",
-
-                //CSR = x.CSR ?? "",
-                //PrivateKey = x.PrivateKey ?? "",
-                //PublicKey = x.PublicKey ?? "",
-                //SecreteKey = x.SecreteKey ?? "",
-
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
+                ModeType = x.ModeType ?? 1,
             })
             .FirstOrDefault();
             return organizations;
@@ -403,12 +401,11 @@ namespace TaamerProject.Repository.Repositories
                 BankId2ImgURL = x.Bank2 != null ? x.Bank2.BanckLogo : "",
                 ApiBaseUri = x.ApiBaseUri ?? "",
                 TameerAPIURL = x.TameerAPIURL ?? "",
-
-                //CSR = x.CSR ?? "",
-                //PrivateKey = x.PrivateKey ?? "",
-                //PublicKey = x.PublicKey ?? "",
-                //SecreteKey = x.SecreteKey ?? "",
-
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
+                ModeType = x.ModeType ?? 1,
 
             }).FirstOrDefault();
             return organizations;

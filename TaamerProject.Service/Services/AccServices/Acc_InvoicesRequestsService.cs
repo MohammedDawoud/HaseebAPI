@@ -30,6 +30,11 @@ namespace TaamerProject.Service.Services
             _SystemAction = systemAction;
             _Acc_InvoicesRequestsRepository = acc_InvoicesRequestsRepository;
         }
+        public Task<Acc_InvoicesRequestsVM> GetInvoiceReqByReqId(int InvoiceReqId)
+        {
+            var Request = _Acc_InvoicesRequestsRepository.GetInvoiceReqByReqId(InvoiceReqId);
+            return Request;
+        }
         public Task<Acc_InvoicesRequestsVM> GetInvoiceReq(int InvoiceId)
         {
             var Request = _Acc_InvoicesRequestsRepository.GetInvoiceReq(InvoiceId);
@@ -46,20 +51,21 @@ namespace TaamerProject.Service.Services
             return Requests;
         }
 
-        public GeneralMessage SaveInvoicesRequest(int InvoiceReqId, int InvoiceId, string InvoiceHash, string SingedXML, string EncodedInvoice
+        public GeneralMessage SaveInvoicesRequest(int InvoiceReqId, int InvoiceId, int Type, string InvoiceHash, string SingedXML, string EncodedInvoice
             , string ZatcaUUID, string QRCode, string PIH, string SingedXMLFileName, int InvoiceNoRequest
-            , bool IsSent,int? StatusCode, string? SendingStatus, string? warningmessage, string? ClearedInvoice, string? errormessage,int BranchId)
+            , bool IsSent, int? StatusCode, string? SendingStatus, string? warningmessage, string? ClearedInvoice, string? errormessage, int BranchId)
         {
             try
             {
                 Acc_InvoicesRequests InvoicesRequest = new Acc_InvoicesRequests();
                 InvoicesRequest.InvoiceReqId = InvoiceReqId;
-                if(InvoiceId!=0){InvoicesRequest.InvoiceId = InvoiceId;}             
+                if (InvoiceId != 0) { InvoicesRequest.InvoiceId = InvoiceId; }
+                if (Type != 0) { InvoicesRequest.Type = Type; }
                 InvoicesRequest.InvoiceHash = InvoiceHash;
                 InvoicesRequest.SingedXML = SingedXML;
                 InvoicesRequest.EncodedInvoice = EncodedInvoice;
                 InvoicesRequest.ZatcaUUID = ZatcaUUID;
-                if (QRCode != null){InvoicesRequest.QRCode = QRCode;}
+                if (QRCode != null) { InvoicesRequest.QRCode = QRCode; }
                 InvoicesRequest.PIH = PIH;
                 InvoicesRequest.SingedXMLFileName = SingedXMLFileName;
                 if (InvoiceNoRequest != 0) { InvoicesRequest.InvoiceNoRequest = InvoiceNoRequest; }
@@ -75,14 +81,32 @@ namespace TaamerProject.Service.Services
 
                 if (InvoicesRequest.InvoiceReqId == 0)
                 {
-                    _TaamerProContext.Acc_InvoicesRequests.Add(InvoicesRequest);
+                    var reqUpdatedInvoice = _TaamerProContext.Acc_InvoicesRequests.Where(s => s.InvoiceId == InvoiceId).FirstOrDefault();
+
+                    if (reqUpdatedInvoice != null && Type != 4)
+                    {
+                        reqUpdatedInvoice.IsSent = InvoicesRequest.IsSent;
+                        reqUpdatedInvoice.StatusCode = InvoicesRequest.StatusCode;
+                        reqUpdatedInvoice.SendingStatus = InvoicesRequest.SendingStatus;
+                        reqUpdatedInvoice.warningmessage = InvoicesRequest.warningmessage;
+                        reqUpdatedInvoice.ClearedInvoice = InvoicesRequest.ClearedInvoice;
+                        reqUpdatedInvoice.errormessage = InvoicesRequest.errormessage;
+                        if (InvoicesRequest.QRCode != null)
+                        {
+                            reqUpdatedInvoice.QRCode = InvoicesRequest.QRCode;
+                        }
+                    }
+                    else
+                    {
+                        _TaamerProContext.Acc_InvoicesRequests.Add(InvoicesRequest);
+                    }
                     _TaamerProContext.SaveChanges();
                     //-----------------------------------------------------------------------------------------------------------------
                     string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                     string ActionNote = "حفظ بيانات الفاتورة";
                     _SystemAction.SaveAction("SaveInvoicesRequest", "Acc_InvoicesRequestsService", 1, Resources.General_SavedSuccessfully, "", "", ActionDate, 1, 1, ActionNote, 1);
                     //-----------------------------------------------------------------------------------------------------------------
-                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully,ReturnedParm= InvoicesRequest.InvoiceReqId };
+                    return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully, ReturnedParm = InvoicesRequest.InvoiceReqId };
 
                 }
                 else
@@ -123,7 +147,7 @@ namespace TaamerProject.Service.Services
                 _SystemAction.SaveAction("SaveInvoicesRequest", "Acc_InvoicesRequestsService", 1, Resources.General_SavedFailed, "", "", ActionDate, 1, 1, ActionNote, 0);
                 //-----------------------------------------------------------------------------------------------------------------
 
-                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed, ReturnedParm = 0};
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed, ReturnedParm = 0 };
             }
         }
     }

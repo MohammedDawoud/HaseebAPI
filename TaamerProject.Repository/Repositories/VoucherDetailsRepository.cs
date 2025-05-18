@@ -131,6 +131,55 @@ namespace TaamerProject.Repository.Repositories
 
             return details;
         }
+        public async Task<VoucherDetailsVM> GetAllDetailsByVoucherDetailsId(int? VoucherDetailsId)
+        {
+
+            var details = _TaamerProContext.VoucherDetails.Where(s => s.IsDeleted == false && s.VoucherDetailsId == VoucherDetailsId).Select(x => new VoucherDetailsVM
+            {
+                VoucherDetailsId = x.VoucherDetailsId,
+                InvoiceId = x.InvoiceId,
+                LineNumber = x.LineNumber,
+                AccountId = x.AccountId,
+                PayType = x.PayType,
+                PayTypeName = (x.PayType == 1) ? "نقدي" : (x.PayType == 2) ? "شيك" : (x.TaxType == 6) ? "حوالة" : (x.TaxType == 3) ? "عهده" : (x.TaxType == 4) ? "خصم مكتسب" : (x.TaxType == 5) ? "خصم مسموح به" : "",
+                TaxType = x.TaxType,
+                TaxTypeName = x.TaxType == 1 ? "غير شامل الضريبة" : "شامل الضريبة",
+                //AccountName = x.Accounts == null ? "" : x.AccountId == null ? "" : x.Accounts.NameAr,
+                AccountName = "",
+                Amount = x.Amount,
+                Qty = x.Qty ?? 1,
+                CostCenterId = x.CostCenterId,
+                TaxAmount = x.TaxAmount ?? 0,
+                CostCenterName = x.CostCenters == null ? "" : x.CostCenters.NameAr ?? "",
+                Description = x.Description,
+                ReferenceNumber = x.ReferenceNumber ?? "",
+                ToAccountId = x.ToAccountId,
+                ToAccountName = x.ToAccounts == null ? "" : x.ToAccountId == null ? "" : x.ToAccounts.NameAr,
+                //TotalAmount = (x.Amount * x.Qty) + x.TaxAmount ?? 0,
+                TotalAmount = x.TotalAmount ?? 0,
+
+                CheckNo = (x.CheckNo == "null") ? "" : (x.CheckNo == null) ? "" : x.CheckNo,
+                CheckDate = x.CheckDate,
+                BankName = x.Banks == null ? "" : x.Banks.NameAr,
+                BankId = x.BankId,
+                MoneyOrderDate = x.MoneyOrderDate,
+                MoneyOrderNo = x.MoneyOrderNo == null ? 0 : x.MoneyOrderNo,
+                ServicesPriceId = x.ServicesPriceId,
+                ServicesPriceName = x.ServicesPrice == null ? "" : x.ServicesPrice.ServicesName ?? "",
+                ServiceTypeName = x.ServicesPrice != null ? x.ServicesPrice.ServiceType == 2 ? "تقرير" : "خدمة" : "خدمة",
+
+                QRCode = x.Invoices.QRCodeNum ?? "",
+                IsRetrieve = x.IsRetrieve ?? 0,
+                DiscountPercentage_Det = x.DiscountPercentage_Det ?? 0,
+                DiscountValue_Det = x.DiscountValue_Det ?? 0,
+
+                //Reference=x.Invoices.Reference,
+                //PaidValue = x.Invoices.PaidValue
+            }).FirstOrDefault();
+
+            return details;
+        }
+
         public async Task<IEnumerable<VoucherDetailsVM>> GetAllDetailsByInvoiceIdFirstOrDef(int? voucherId)
         {
 

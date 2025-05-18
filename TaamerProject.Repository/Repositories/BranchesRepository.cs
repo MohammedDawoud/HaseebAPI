@@ -117,6 +117,10 @@ namespace TaamerProject.Repository.Repositories
                 headerPrintrevoucher=x.headerPrintrevoucher??false,
                 BublicRevenue=x.BublicRevenue??0,
                 OtherRevenue=x.OtherRevenue??0,
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
             });
             return branches;
         }
@@ -227,6 +231,10 @@ namespace TaamerProject.Repository.Repositories
                 headerPrintrevoucher = x.headerPrintrevoucher ?? false,
                 BublicRevenue = x.BublicRevenue ?? 0,
                 OtherRevenue = x.OtherRevenue ?? 0,
+                CSR = x.CSR ?? "",
+                PrivateKey = x.PrivateKey ?? "",
+                PublicKey = x.PublicKey ?? "",
+                SecreteKey = x.SecreteKey ?? "",
             });
             return branches;
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Web.Script.Serialization;
 using TaamerProject.API.Helper;
 using TaamerProject.Models;
 using TaamerProject.Models.Common;

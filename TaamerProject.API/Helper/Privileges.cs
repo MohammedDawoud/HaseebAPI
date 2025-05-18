@@ -641,6 +641,7 @@ namespace TaamerProject.API.Helper
                           new Privilege { Id = 13180813 , ParentId = 131808 , Name =  " المبيعات والارباح والمردود الشهريه", Description = " المبيعات والارباح والمردور الشهريه" },
                           new Privilege { Id = 13180814 , ParentId = 131808 , Name =  " ارباح المبيعات والمردود السنوي", Description = " ارباح المبيعات والمردود السنوي" },
                           new Privilege { Id = 13180815 , ParentId = 131808 , Name =  " المندوبين ", Description = " المندوبين " },
+                           new Privilege { Id = 13180816 , ParentId = 131808 , Name =  "متابعة فواتير الهيئة", Description = "متابعة فواتير الهيئة" },
 
 
 

@@ -456,6 +456,35 @@ namespace TaamerProject.Service.Services
             }
         }
 
+        public GeneralMessage SaveCSIDBranch(int BranchId, string CSR, string PrivateKey, string CSID, string SecretKey, int UserId, int BranchIdO)
+        {
+            try
+            {
+                var Branchobj = _BranchesRepository.GetById(BranchId);
+
+                Branchobj.CSR = CSR;
+                Branchobj.PrivateKey = PrivateKey;
+                Branchobj.PublicKey = CSID;
+                Branchobj.SecreteKey = SecretKey;
+
+                _TaamerProContext.SaveChanges();
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = "تم الحفظ ";
+                _SystemAction.SaveAction("SaveCSIDBranch", "BranchesService", 1, "تم حفظ المفتاح العام", "", "", ActionDate, UserId, BranchId, ActionNote, 1);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+            }
+            catch (Exception ex)
+            {
+                //-----------------------------------------------------------------------------------------------------------------
+                string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                string ActionNote = Resources.General_SavedFailed;
+                _SystemAction.SaveAction("SaveCSIDBranch", "BranchesService", 1, "فشل في حفظ المفتاح العام", "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                //-----------------------------------------------------------------------------------------------------------------
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
 
         public GeneralMessage DeleteBranches(int BranchId, int UserId, string Lang)
         {

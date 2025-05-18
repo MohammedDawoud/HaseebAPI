@@ -67,6 +67,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IAcc_CategoriesService, Acc_CategoriesService>();
             builder.Services.AddTransient<IAcc_CategorTypeService, Acc_CategorTypeService>();
             builder.Services.AddTransient<IAcc_ClausesService, Acc_ClausesService>();
+            builder.Services.AddTransient<IAcc_InvoicesRequestsService, Acc_InvoicesRequestsService>();
             builder.Services.AddTransient<IFiscalyearsService, FiscalyearsService>();
             builder.Services.AddTransient<IUserPrivilegesRepository, UserPrivilegesRepository>();
             builder.Services.AddTransient<IAcc_EmpFinYearsService, Acc_EmpFinYearsService>();
@@ -248,6 +249,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IAcc_CategoriesRepository, Acc_CategoriesRepository>();
             builder.Services.AddTransient<IAcc_CategorTypeRepository, Acc_CategorTypeRepository>();
             builder.Services.AddTransient<IAcc_ClausesRepository, Acc_ClausesRepository>();
+            builder.Services.AddTransient<IAcc_InvoicesRequestsRepository, Acc_InvoicesRequestsRepository>();
             builder.Services.AddTransient<IFiscalyearsRepository, FiscalyearsRepository>();
             builder.Services.AddTransient<IUserPrivilegesRepository, UserPrivilegesRepository>();
             builder.Services.AddTransient<IAcc_EmpFinYearsRepository, Acc_EmpFinYearsRepository>();

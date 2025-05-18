@@ -117,13 +117,13 @@ namespace TaamerProject.Models
         public string? AddInvoiceImg { get; set; }
 
 
-        public string? InvoiceHash { get; set; }
-        public string? SingedXML { get; set; }
-        public string? EncodedInvoice { get; set; }
-        public string? ZatcaUUID { get; set; }
-        public string? QRCode { get; set; }
-        public string? PIH { get; set; }
-        public string? SingedXMLFileName { get; set; }
+        //public string? InvoiceHash { get; set; }
+        //public string? SingedXML { get; set; }
+        //public string? EncodedInvoice { get; set; }
+        //public string? ZatcaUUID { get; set; }
+        //public string? QRCode { get; set; }
+        //public string? PIH { get; set; }
+        //public string? SingedXMLFileName { get; set; }
 
         public int? AppearUser { get; set; }
 
@@ -135,6 +135,8 @@ namespace TaamerProject.Models
 
         public List<VoucherDetailsVM> VoucherDetails { get; set; }
         public List<TransactionsVM> Transactions { get; set; }
+        public int? InvoicesRequestsCount { get; set; }
+        public List<Acc_InvoicesRequestsVM>? InvoicesRequests { get; set; }
 
     }
 }

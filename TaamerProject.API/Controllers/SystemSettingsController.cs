@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Web.Script.Serialization;
 using TaamerProject.API.Helper;
 using TaamerProject.Models;
 using TaamerProject.Service.Interfaces;
@@ -46,27 +45,13 @@ namespace TaamerProject.API.Controllers
         {
 
             var Res = _sys_SystemActionsService.GetAllSystemActionsAll().Result;
-            var serializer = new JavaScriptSerializer();
-            serializer.MaxJsonLength = Int32.MaxValue;
-            var result = new ContentResult
-            {
-                Content = serializer.Serialize(Res),
-                ContentType = "application/json"
-            };
-            return result;
+            return Ok(Res);
         }
         [HttpGet("GetSystemActions")]
 
         public IActionResult GetSystemActions(string? Searchtxt, string? DateFrom, string? DateTo, int? UserId, int? ActionType)
         {
             var Res = _sys_SystemActionsService.GetAllSystemActions(Searchtxt, DateFrom, DateTo, _globalshared.BranchId_G, UserId.Value, ActionType.Value).Result;
-            //var serializer = new JavaScriptSerializer();
-            //serializer.MaxJsonLength = Int32.MaxValue;
-            //var result = new ContentResult
-            //{
-            //    Content = serializer.Serialize(Res),
-            //    ContentType = "application/json"
-            //};
             return Ok(Res);
         }
 
@@ -109,15 +94,17 @@ namespace TaamerProject.API.Controllers
 
         public IActionResult ValidateZatcaRequest(bool Isuploadzatca)
         {
+            Isuploadzatca = !Isuploadzatca;
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
 
             var barnchData = _branchesService.GetBranchById(_globalshared.BranchId_G).Result;
             //var url = Server.MapPath("~/Email/MailStamp.html");
-            var url = Path.Combine("/Email/MailStamp.html/");
+            var url = Path.Combine("Email/MailStamp.html");
             //var file = Server.MapPath("~/dist/assets/images/logo.png");
             var org = _organizationsservice.GetOrganizationDataLogin(_globalshared.Lang_G).Result;
             //var file = Server.MapPath("~") + org.LogoUrl;
-            var file = Path.Combine(org.LogoUrl);
+            string resultLogoUrl = org.LogoUrl.Remove(0, 1);
+            var file = Path.Combine(resultLogoUrl);
 
             var result = _systemSettingsservice.ValidateZatcaRequests(Isuploadzatca, _globalshared.UserId_G, barnchData.OrganizationId, url, file);
             return Ok(result);

@@ -6,7 +6,6 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Data;
 using Newtonsoft.Json;
-using System.Web.Script.Serialization;
 using System.Configuration;
 using System.IO;
 using System.Globalization;

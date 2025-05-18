@@ -81,13 +81,13 @@ namespace TaamerProject.Models
         public bool? VoucherAdjustment { get; set; }
 
 
-        public string? InvoiceHash { get; set; }
-        public string? SingedXML { get; set; }
-        public string? EncodedInvoice { get; set; }
-        public string? ZatcaUUID { get; set; }
-        public string? QRCode { get; set; }
-        public string? PIH { get; set; }
-        public string? SingedXMLFileName { get; set; }
+        //public string? InvoiceHash { get; set; }
+        //public string? SingedXML { get; set; }
+        //public string? EncodedInvoice { get; set; }
+        //public string? ZatcaUUID { get; set; }
+        //public string? QRCode { get; set; }
+        //public string? PIH { get; set; }
+        //public string? SingedXMLFileName { get; set; }
         public int? StorehouseId { get; set; } 
 
 
@@ -96,6 +96,8 @@ namespace TaamerProject.Models
 
         public virtual Users? AddUsers { get; set; }
         public virtual List<VoucherDetails>? VoucherDetails { get; set; }
+        public List<Acc_InvoicesRequests>? InvoicesRequests { get; set; }
+
         public virtual Invoices? Invoices_Credit { get; set; }
         public virtual Invoices? Invoices_Depit { get; set; }
         public virtual List<Transactions>? TransactionDetails { get; set; }

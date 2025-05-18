@@ -14,7 +14,6 @@ using Newtonsoft.Json;
 using System.Reflection;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System.Web.Script.Serialization;
 using System.Globalization;
 using TaamerProject.Service.Interfaces;
 using TaamerProject.API.Helper;

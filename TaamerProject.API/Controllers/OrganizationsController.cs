@@ -10,6 +10,9 @@ using TaamerProject.Models;
 using TaamerProject.Models.Common;
 using TaamerProject.Service.Interfaces;
 using TaamerProject.Service.Services;
+using ZatcaIntegrationSDK.HelperContracts;
+using ZatcaIntegrationSDK;
+using ZatcaIntegrationSDK.APIHelper;
 
 namespace TaamerProject.API.Controllers
 {
@@ -30,6 +33,8 @@ namespace TaamerProject.API.Controllers
         public GlobalShared _globalshared;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private string Con;
+        private Mode mode = Mode.developer;
+
         public OrganizationsController(IOrganizationsService organizationsService, IBranchesService branchesService, IEmailSettingService emailSettingService, ISMSSettingsService sMSSettingsService,
                 IWhatsAppSettingsService whatsAppSettingsService, IAttDeviceService attDeviceService, IUsersService usersService, IConfiguration _configuration, IWebHostEnvironment webHostEnvironment)
         {
@@ -51,9 +56,26 @@ namespace TaamerProject.API.Controllers
         public ActionResult GetBranchOrganization()
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
-            int orgId = _BranchesService.GetOrganizationId(_globalshared.BranchId_G).Result;
-            return Ok(_organizationsservice.GetBranchOrganizationData(orgId));
+            return Ok(_organizationsservice.GetBranchOrganization());
         }
+
+        [HttpGet("GetBranchOrganizationZatca")]
+        public ActionResult GetBranchOrganizationZatca()
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var OrgData = _organizationsservice.GetBranchOrganization().Result;
+            var branchData = _BranchesService.GetBranchByBranchId("rtl", _globalshared.BranchId_G).Result!.FirstOrDefault() ?? new BranchesVM();
+            if (branchData.PrivateKey == "" || branchData.PrivateKey == null)
+            {
+                return Ok(OrgData);
+            }
+            else
+            {
+                branchData.ModeType = OrgData.ModeType;
+                return Ok(branchData);
+            }
+        }
+
         [HttpGet("GetComDomainLink_Org")]
         public ActionResult GetComDomainLink_Org()
         {
@@ -224,6 +246,344 @@ namespace TaamerProject.API.Controllers
             }
             return Ok(result);
         }
+
+        [HttpPost("GenerateCSID")]
+        public IActionResult GenerateCSID(int OrganizationId, string OTP)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var objBranch = _BranchesService.GetBranchByBranchId("rtl", _globalshared.BranchId_G).Result.FirstOrDefault();
+            var objOrganization = _organizationsservice.GetBranchOrganization().Result;
+
+            //string Address1 = "";
+            //string BuildingNumber1 = "";
+            //string StreetName1 = "";
+            //string Neighborhood1 = "";
+            //string CityName1 = "";
+            //string Country1 = "";
+            //string PostalCode1 = "";
+            //string PostalCodeFinal1 = "";
+            //string ExternalPhone1 = "";
+            //string TaxCode1 = "";
+
+            //Address1 = objBranch.Address ?? objOrganization.Address;
+            //BuildingNumber1 = objBranch.BuildingNumber ?? objOrganization.BuildingNumber;
+            //StreetName1 = objBranch.StreetName ?? objOrganization.StreetName;
+            //Neighborhood1 = objBranch.Neighborhood ?? objOrganization.Neighborhood;
+            //CityName1 = objBranch.CityName ?? objOrganization.CityName;
+            //Country1 = objBranch.Country ?? objOrganization.Country;
+            //PostalCode1 = objBranch.PostalCode ?? objOrganization.PostalCode;
+            //PostalCodeFinal1 = objBranch.PostalCodeFinal ?? objOrganization.PostalCodeFinal;
+            //ExternalPhone1 = objBranch.ExternalPhone ?? objOrganization.ExternalPhone;
+            //TaxCode1 = objBranch.TaxCode ?? objOrganization.TaxCode;
+
+            Invoice inv = new Invoice();
+            inv.ID = "INV00001"; // مثال SME00010
+
+            //inv.IssueDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+            inv.IssueDate = DateTime.Now.ToString("yyyy-MM-dd");
+            inv.IssueTime = DateTime.Now.ToString("HH:mm:ss"); // "09:32:40"
+
+            inv.DocumentCurrencyCode = "SAR";
+            inv.TaxCurrencyCode = "SAR";
+            //if (inv.invoiceTypeCode.id == 383 || inv.invoiceTypeCode.id == 381)
+            //{
+            //    // فى حالة ان اشعار دائن او مدين فقط هانكتب رقم الفاتورة اللى اصدرنا الاشعار ليها
+            //    InvoiceDocumentReference invoiceDocumentReference = new InvoiceDocumentReference();
+            //    invoiceDocumentReference.ID = "Invoice Number: 354; Invoice Issue Date: 2021-02-10"; // اجبارى
+            //    inv.billingReference.invoiceDocumentReferences.Add(invoiceDocumentReference);
+            //}
+            inv.AdditionalDocumentReferencePIH.EmbeddedDocumentBinaryObject = "NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==";
+
+            inv.AdditionalDocumentReferenceICV.UUID = 1;
+            PaymentMeans paymentMeans = new PaymentMeans();
+            paymentMeans.PaymentMeansCode = "10";
+            paymentMeans.InstructionNote = "Payment Notes";
+            inv.paymentmeans.Add(paymentMeans);
+            // بيانات البائع 
+            inv.SupplierParty.partyIdentification.ID = objOrganization.PostalCode; //هنا رقم السجل التجارى للشركة
+            inv.SupplierParty.partyIdentification.schemeID = "CRN";
+            inv.SupplierParty.postalAddress.StreetName = objOrganization.StreetName; // اجبارى
+            inv.SupplierParty.postalAddress.AdditionalStreetName = "شارع اضافى"; // اختيارى
+            inv.SupplierParty.postalAddress.BuildingNumber = objOrganization.BuildingNumber; // اجبارى رقم المبنى
+            inv.SupplierParty.postalAddress.PlotIdentification = "9833";
+            inv.SupplierParty.postalAddress.CityName = objOrganization.CityName;
+            inv.SupplierParty.postalAddress.PostalZone = objOrganization.PostalCodeFinal; // الرقم البريدي
+            inv.SupplierParty.postalAddress.CountrySubentity = objOrganization.CityName; // اسم المحافظة او المدينة مثال (مكة) اختيارى
+            inv.SupplierParty.postalAddress.CitySubdivisionName = objOrganization.Neighborhood; // اسم المنطقة او الحى 
+            inv.SupplierParty.postalAddress.country.IdentificationCode = "SA";
+            inv.SupplierParty.partyLegalEntity.RegistrationName = objOrganization.NameAr; // "شركة الصناعات الغذائية المتحده"; // اسم الشركة المسجل فى الهيئة
+            inv.SupplierParty.partyTaxScheme.CompanyID = objOrganization.TaxCode;// "300518376300003";  // رقم التسجيل الضريبي
+
+            inv.CustomerParty.partyIdentification.ID = "1234567"; // رقم القومى الخاض بالمشترى
+            inv.CustomerParty.partyIdentification.schemeID = "CRN"; // الرقم القومى
+            inv.CustomerParty.postalAddress.StreetName = "شارع تجريبي"; // اجبارى
+            inv.CustomerParty.postalAddress.AdditionalStreetName = "شارع اضافى"; // اختيارى
+            inv.CustomerParty.postalAddress.BuildingNumber = "1234"; // اجبارى رقم المبنى
+            inv.CustomerParty.postalAddress.PlotIdentification = "9833"; // اختيارى رقم القطعة
+            inv.CustomerParty.postalAddress.CityName = "Jeddah"; // اسم المدينة
+            inv.CustomerParty.postalAddress.PostalZone = "12345"; // الرقم البريدي
+            inv.CustomerParty.postalAddress.CountrySubentity = "Makkah"; // اسم المحافظة او المدينة مثال (مكة) اختيارى
+            inv.CustomerParty.postalAddress.CitySubdivisionName = "اسم المنطقة او الحى "; // اسم المنطقة او الحى 
+            inv.CustomerParty.postalAddress.country.IdentificationCode = "SA";
+            inv.CustomerParty.partyLegalEntity.RegistrationName = "اسم شركة المشترى"; // اسم الشركة المسجل فى الهيئة
+            inv.CustomerParty.partyTaxScheme.CompanyID = "310424415000003"; // رقم التسجيل الضريبي
+
+
+            inv.legalMonetaryTotal.PrepaidAmount = 0;
+            inv.legalMonetaryTotal.PayableAmount = 0;
+
+            InvoiceLine invline = new InvoiceLine();
+            invline.InvoiceQuantity = 1;
+            invline.item.Name = "منتج تجريبي";
+            invline.item.classifiedTaxCategory.ID = "S"; // كود الضريبة
+            invline.taxTotal.TaxSubtotal.taxCategory.ID = "S"; // كود الضريبة
+            invline.item.classifiedTaxCategory.Percent = 15; // نسبة الضريبة
+            invline.taxTotal.TaxSubtotal.taxCategory.Percent = 15; // نسبة الضريبة
+            invline.price.PriceAmount = 1;
+            inv.InvoiceLines.Add(invline);
+
+
+            CertificateRequest certrequest = GetCSRRequest(OTP, objOrganization, objBranch);
+
+            if (objOrganization.ModeType == 2) { mode = Mode.Simulation; }
+            else if (objOrganization.ModeType == 3) { mode = Mode.Production; }
+            else { mode = Mode.developer; }
+
+            CSIDGenerator generator = new CSIDGenerator(mode);
+            //var path = Directory.GetCurrentDirectory();
+            //path = path + "\\" + "cert";
+
+            var path = Path.Combine("cert");
+
+            //path = "D:\\Bayanatech\\Web Application\\APINew\\Bayanatech.OnionArchitecture\\TaamerProject.API\\cert";
+            //path = System.IO.Path.Combine("cert");
+            CertificateResponse response = generator.GenerateCSID(certrequest, inv, path);
+            //CertificateResponse response = generator.GenerateCSR(certrequest);
+
+            if (response.IsSuccess)
+            {
+
+                var result = _organizationsservice.SaveCSIDOrganizations(OrganizationId, response.CSR, response.PrivateKey, response.CSID, response.SecretKey, _globalshared.UserId_G, _globalshared.BranchId_G);
+                return Ok(result);
+            }
+            else
+            {
+                var result = _organizationsservice.SaveErrorMessageCSIDOrganizations(OrganizationId, response.ErrorMessage, _globalshared.UserId_G, _globalshared.BranchId_G);
+                return Ok(new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = response.ErrorMessage });
+            }
+        }
+        [HttpGet("GetCSRRequest")]
+        private CertificateRequest GetCSRRequest(string otp, OrganizationsVM ORG, BranchesVM branch)
+        {
+            //فاتورة ضريبية & مبسطة 1100
+            //فاتورة ضريبية فقط 1000
+            //فاتورة مبسطة فقط 0100
+
+            //var Serial = "1-Tameer" + "|" + "2-version2.0.1" + "|" + "3-" + Guid.NewGuid().ToString();
+            var Serial = "1-" + ORG.NameEn + "|" + "2-version2.0.1" + "|" + "3-" + Guid.NewGuid().ToString();
+
+            CertificateRequest certrequest = new CertificateRequest();
+            certrequest.OTP = otp;
+            certrequest.CommonName = branch.NameEn!.Trim() + GenerateRandomNo();//System.Guid.NewGuid();
+            certrequest.OrganizationName = ORG.NameAr!.Trim();
+            certrequest.OrganizationUnitName = branch.NameEn!.Trim(); //branch name
+            certrequest.CountryName = "SA";
+            certrequest.SerialNumber = Serial!.Trim();
+            certrequest.OrganizationIdentifier = ORG.TaxCode!.Trim();
+            certrequest.Location = ORG.Address!.Trim();
+            certrequest.BusinessCategory = "Engineering consultant";
+            certrequest.InvoiceType = "1100";
+            return certrequest;
+        }
+
+        [HttpPost("GenerateCSID_Branch")]
+        public IActionResult GenerateCSID_Branch(int BranchId, string OTP)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var objBranch = _BranchesService.GetBranchByBranchId("rtl", BranchId).Result.FirstOrDefault();
+            var objOrganization = _organizationsservice.GetBranchOrganization().Result;
+
+            string Address1 = "";
+            string BuildingNumber1 = "";
+            string StreetName1 = "";
+            string Neighborhood1 = "";
+            string CityName1 = "";
+            string Country1 = "";
+            string PostalCode1 = "";
+            string PostalCodeFinal1 = "";
+            string ExternalPhone1 = "";
+            string TaxCode1 = "";
+
+
+            if (objBranch.Address == null || objBranch.Address == "")
+                Address1 = objOrganization.Address!.Trim();
+            else
+                Address1 = objBranch.Address!.Trim();
+            if (objBranch.BuildingNumber == null || objBranch.BuildingNumber == "")
+                BuildingNumber1 = objOrganization.BuildingNumber!.Trim();
+            else
+                BuildingNumber1 = objBranch.BuildingNumber!.Trim();
+            if (objBranch.StreetName == null || objBranch.StreetName == "")
+                StreetName1 = objOrganization.StreetName!.Trim();
+            else
+                StreetName1 = objBranch.StreetName!.Trim();
+            if (objBranch.Neighborhood == null || objBranch.Neighborhood == "")
+                Neighborhood1 = objOrganization.Neighborhood!.Trim();
+            else
+                Neighborhood1 = objBranch.Neighborhood!.Trim();
+            if (objBranch.CityName == null || objBranch.CityName == "")
+                CityName1 = objOrganization.CityName!.Trim();
+            else
+                CityName1 = objBranch.CityName!.Trim();
+            if (objBranch.Country == null || objBranch.Country == "")
+                Country1 = objOrganization.Country!.Trim();
+            else
+                Country1 = objBranch.Country!.Trim();
+            if (objBranch.PostalCode == null || objBranch.PostalCode == "")
+                PostalCode1 = objOrganization.PostalCode!.Trim();
+            else
+                PostalCode1 = objBranch.PostalCode.Trim();
+            if (objBranch.PostalCodeFinal == null || objBranch.PostalCodeFinal == "")
+                PostalCodeFinal1 = objOrganization.PostalCodeFinal!.Trim();
+            else
+                PostalCodeFinal1 = objBranch.PostalCodeFinal!.Trim();
+            if (objBranch.ExternalPhone == null || objBranch.ExternalPhone == "")
+                ExternalPhone1 = objOrganization.ExternalPhone!.Trim();
+            else
+                ExternalPhone1 = objOrganization.ExternalPhone!.Trim();
+            if (objBranch.TaxCode == null || objBranch.TaxCode == "")
+            {
+                TaxCode1 = objOrganization.TaxCode!.Trim();
+            }
+            else
+                TaxCode1 = objBranch.TaxCode.Trim();
+
+
+
+
+
+
+            Invoice inv = new Invoice();
+            inv.ID = "INV00001"; // مثال SME00010
+
+            //inv.IssueDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+            inv.IssueDate = DateTime.Now.ToString("yyyy-MM-dd");
+            inv.IssueTime = DateTime.Now.ToString("HH:mm:ss"); // "09:32:40"
+
+            inv.DocumentCurrencyCode = "SAR";
+            inv.TaxCurrencyCode = "SAR";
+            //if (inv.invoiceTypeCode.id == 383 || inv.invoiceTypeCode.id == 381)
+            //{
+            //    // فى حالة ان اشعار دائن او مدين فقط هانكتب رقم الفاتورة اللى اصدرنا الاشعار ليها
+            //    InvoiceDocumentReference invoiceDocumentReference = new InvoiceDocumentReference();
+            //    invoiceDocumentReference.ID = "Invoice Number: 354; Invoice Issue Date: 2021-02-10"; // اجبارى
+            //    inv.billingReference.invoiceDocumentReferences.Add(invoiceDocumentReference);
+            //}
+            inv.AdditionalDocumentReferencePIH.EmbeddedDocumentBinaryObject = "NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==";
+
+            inv.AdditionalDocumentReferenceICV.UUID = 1;
+            PaymentMeans paymentMeans = new PaymentMeans();
+            paymentMeans.PaymentMeansCode = "10";
+            paymentMeans.InstructionNote = "Payment Notes";
+            inv.paymentmeans.Add(paymentMeans);
+
+            // بيانات البائع 
+            inv.SupplierParty.partyIdentification.ID = PostalCode1 ?? ""; //هنا رقم السجل التجارى للشركة
+            inv.SupplierParty.partyIdentification.schemeID = "CRN";
+            inv.SupplierParty.postalAddress.StreetName = StreetName1 ?? ""; // اجبارى
+            //inv.SupplierParty.postalAddress.AdditionalStreetName = "شارع اضافى"; // اختيارى
+            inv.SupplierParty.postalAddress.BuildingNumber = BuildingNumber1 ?? "0000"; // اجبارى رقم المبنى
+            //inv.SupplierParty.postalAddress.PlotIdentification = "9833";
+            inv.SupplierParty.postalAddress.CityName = CityName1 ?? "";
+            inv.SupplierParty.postalAddress.PostalZone = PostalCodeFinal1 ?? "00000"; // الرقم البريدي
+            inv.SupplierParty.postalAddress.CountrySubentity = CityName1 ?? ""; // اسم المحافظة او المدينة مثال (مكة) اختيارى
+            inv.SupplierParty.postalAddress.CitySubdivisionName = Neighborhood1 ?? ""; // اسم المنطقة او الحى 
+            inv.SupplierParty.postalAddress.country.IdentificationCode = "SA";
+            inv.SupplierParty.partyLegalEntity.RegistrationName = objOrganization.NameAr; // "شركة الصناعات الغذائية المتحده"; // اسم الشركة المسجل فى الهيئة
+            inv.SupplierParty.partyTaxScheme.CompanyID = TaxCode1;// "300518376300003";  // رقم التسجيل الضريبي
+
+
+            inv.CustomerParty.partyIdentification.ID = "1234567"; // رقم القومى الخاض بالمشترى
+            inv.CustomerParty.partyIdentification.schemeID = "CRN"; // الرقم القومى
+            inv.CustomerParty.postalAddress.StreetName = "شارع تجريبي"; // اجبارى
+            inv.CustomerParty.postalAddress.AdditionalStreetName = "شارع اضافى"; // اختيارى
+            inv.CustomerParty.postalAddress.BuildingNumber = "1234"; // اجبارى رقم المبنى
+            inv.CustomerParty.postalAddress.PlotIdentification = "9833"; // اختيارى رقم القطعة
+            inv.CustomerParty.postalAddress.CityName = "Jeddah"; // اسم المدينة
+            inv.CustomerParty.postalAddress.PostalZone = "12345"; // الرقم البريدي
+            inv.CustomerParty.postalAddress.CountrySubentity = "Makkah"; // اسم المحافظة او المدينة مثال (مكة) اختيارى
+            inv.CustomerParty.postalAddress.CitySubdivisionName = "اسم المنطقة او الحى "; // اسم المنطقة او الحى 
+            inv.CustomerParty.postalAddress.country.IdentificationCode = "SA";
+            inv.CustomerParty.partyLegalEntity.RegistrationName = "اسم شركة المشترى"; // اسم الشركة المسجل فى الهيئة
+            inv.CustomerParty.partyTaxScheme.CompanyID = "310424415000003"; // رقم التسجيل الضريبي
+
+
+            inv.legalMonetaryTotal.PrepaidAmount = 0;
+            inv.legalMonetaryTotal.PayableAmount = 0;
+
+            InvoiceLine invline = new InvoiceLine();
+            invline.InvoiceQuantity = 1;
+            invline.item.Name = "منتج تجريبي";
+            invline.item.classifiedTaxCategory.ID = "S"; // كود الضريبة
+            invline.taxTotal.TaxSubtotal.taxCategory.ID = "S"; // كود الضريبة
+            invline.item.classifiedTaxCategory.Percent = 15; // نسبة الضريبة
+            invline.taxTotal.TaxSubtotal.taxCategory.Percent = 15; // نسبة الضريبة
+            invline.price.PriceAmount = 1;
+            inv.InvoiceLines.Add(invline);
+
+
+            CertificateRequest certrequest = GetCSRRequest_Branch(OTP, objOrganization, objBranch);
+
+            if (objOrganization.ModeType == 2) { mode = Mode.Simulation; }
+            else if (objOrganization.ModeType == 3) { mode = Mode.Production; }
+            else { mode = Mode.developer; }
+            CSIDGenerator generator = new CSIDGenerator(mode);
+            //var path = Directory.GetCurrentDirectory();
+            //path = path + "\\" + "cert";
+            var path = Path.Combine("cert");
+            //path = "D:\\Bayanatech\\Web Application\\APINew\\Bayanatech.OnionArchitecture\\TaamerProject.API\\cert";
+            //path = System.IO.Path.Combine("cert");
+            CertificateResponse response = generator.GenerateCSID(certrequest, inv, path);
+            //CertificateResponse response = generator.GenerateCSR(certrequest);
+
+            if (response.IsSuccess)
+            {
+
+                //var result = _organizationsservice.SaveCSIDOrganizations(OrganizationId, response.CSR, response.PrivateKey, response.CSID, response.SecretKey, _globalshared.UserId_G, _globalshared.BranchId_G);
+                var result = _BranchesService.SaveCSIDBranch(BranchId, response.CSR, response.PrivateKey, response.CSID, response.SecretKey, _globalshared.UserId_G, _globalshared.BranchId_G);
+                return Ok(result);
+            }
+            else
+            {
+                return Ok(new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = response.ErrorMessage });
+            }
+        }
+        [HttpGet("GetCSRRequest_Branch")]
+        private CertificateRequest GetCSRRequest_Branch(string otp, OrganizationsVM ORG, BranchesVM branch)
+        {
+            //فاتورة ضريبية & مبسطة 1100
+            //فاتورة ضريبية فقط 1000
+            //فاتورة مبسطة فقط 0100
+
+            //var Serial = "1-Tameer" + "|" + "2-version2.0.1" + "|" + "3-" + Guid.NewGuid().ToString();
+            var Serial = "1-" + ORG.NameEn + "|" + "2-version2.0.1" + "|" + "3-" + Guid.NewGuid().ToString();
+
+            CertificateRequest certrequest = new CertificateRequest();
+            certrequest.OTP = otp;
+            certrequest.CommonName = branch.NameEn!.Trim() + GenerateRandomNo(); //+ System.Guid.NewGuid();
+            certrequest.OrganizationName = ORG.NameAr!.Trim();
+            certrequest.OrganizationUnitName = branch.NameEn!.Trim(); //branch name
+            certrequest.CountryName = "SA";
+            certrequest.SerialNumber = Serial!.Trim();
+            certrequest.OrganizationIdentifier = (branch.TaxCode ?? ORG.TaxCode)!.Trim();
+            certrequest.Location = (branch.Address ?? ORG.Address)!.Trim();
+            certrequest.BusinessCategory = "Engineering consultant";
+            certrequest.InvoiceType = "1100";
+            return certrequest;
+        }
+
+
+
         [HttpPost("SaveEmailSetting")]
         public ActionResult SaveEmailSetting(EmailSetting EmailSetting)
         {

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web;
 //using System.Web.Mvc;
 using System.IO;
-using System.Web.Script.Serialization;
 using TaamerProject.API.Helper;
 using TaamerProject.Service.Interfaces;
 using TaamerProject.Models;

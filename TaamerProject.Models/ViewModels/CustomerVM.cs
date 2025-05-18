@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaamerProject.Models.DomainObjects;
 
 namespace TaamerProject.Models
 {
@@ -27,13 +28,13 @@ namespace TaamerProject.Models
         public string? Notes { get; set; }
         public string? LogoUrl { get; set; }
         public string? AttachmentUrl { get; set; }
-        public string? CommercialActivity { get; set; }
+        public int? CommercialActivity { get; set; }
         public string? CommercialRegister { get; set; }
         public string? CommercialRegDate { get; set; }
         public string? CommercialRegHijriDate { get; set; }
         public int? AccountId { get; set; }
         public string? ProjectNo { get; set; }
-        public string? GeneralManager { get; set; }
+        public int? GeneralManager { get; set; }
         public string? AgentName { get; set; }
         public int? AgentType { get; set; }
         public string? AgentNumber { get; set; }
@@ -63,6 +64,9 @@ namespace TaamerProject.Models
         public string? AccountCodee { get; set; }
         public decimal? TotalRevenue {get; set;}
         public decimal? TotalExpenses { get; set; }
+        public string? CommercialActivityName { get; set; }
+        public string? BranchActivityName { get; set; }
+        public string? MyProperty { get; set; }
         public List<InvoicesVM> Invoices { get; set; }
         public List<TransactionsVM> Transactions { get; set; }
     }

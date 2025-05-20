@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using TaamerProject.Service.Services.EmpServices;
 using TaamerProject.Service.Services.ProjServices;
 using TaamerProject.Service.Services.SysServices;
+using TaamerProject.Service.Services.AccServices;
 
 namespace TaamerProject.API
 {
@@ -239,6 +240,7 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IAttendenceLocationSettingsService, AttendenceLocationSettingsService>();
             builder.Services.AddTransient<IPermissionService, PermissionService>();
             builder.Services.AddTransient<IPermissionTypeService, PermissionTypeService>();
+            builder.Services.AddTransient<ICommercialActivityService, CommercialActivityService>();
 
 
             #endregion
@@ -426,6 +428,8 @@ namespace TaamerProject.API
             builder.Services.AddTransient<IEmpLocationsRepository, EmpLocationsRepository>();
             builder.Services.AddTransient<IPermissionsRepository, PermissionsRepository>();
             builder.Services.AddTransient<IPermissionTypeRepository, PermissionTypeRepository>();
+            builder.Services.AddTransient<ICommercialActivityRepository, CommercialActivityRepository>();
+
             #endregion
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -565,239 +569,239 @@ namespace TaamerProject.API
             });
 
 
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Attachment")),
-       //         RequestPath = "/Uploads/Attachment",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/BackupDb")),
-       //         RequestPath = "/Uploads/BackupDb",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Banks")),
-       //         RequestPath = "/Uploads/Banks",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ChatGroup")),
-       //         RequestPath = "/Uploads/ChatGroup",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Contract")),
-       //         RequestPath = "/Uploads/Contract",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ContractFileExtra")),
-       //         RequestPath = "/Uploads/ContractFileExtra",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Customers")),
-       //         RequestPath = "/Uploads/Customers",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/CustomersMails")),
-       //         RequestPath = "/Uploads/CustomersMails",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //        Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Drafts")),
-       //         RequestPath = "/Uploads/Drafts",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Employees")),
-       //         RequestPath = "/Uploads/Employees",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Financefile")),
-       //         RequestPath = "/Uploads/Financefile",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Invoices")),
-       //         RequestPath = "/Uploads/Invoices",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Items")),
-       //         RequestPath = "/Uploads/Items",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/News")),
-       //         RequestPath = "/Uploads/News",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Notifications")),
-       //         RequestPath = "/Uploads/Notifications",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Organizations")),
-       //         RequestPath = "/Uploads/Organizations",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ProjectRequirements")),
-       //         RequestPath = "/Uploads/ProjectRequirements",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Projects")),
-       //         RequestPath = "/Uploads/Projects",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ProjectTasks")),
-       //         RequestPath = "/Uploads/ProjectTasks",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Service")),
-       //         RequestPath = "/Uploads/Service",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Supervision")),
-       //         RequestPath = "/Uploads/Supervision",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Users")),
-       //         RequestPath = "/Uploads/Users",
-       //         ContentTypeProvider = provider
-       //     });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Attachment")),
+                RequestPath = "/Uploads/Attachment",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/BackupDb")),
+                RequestPath = "/Uploads/BackupDb",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Banks")),
+                RequestPath = "/Uploads/Banks",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ChatGroup")),
+                RequestPath = "/Uploads/ChatGroup",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Contract")),
+                RequestPath = "/Uploads/Contract",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ContractFileExtra")),
+                RequestPath = "/Uploads/ContractFileExtra",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Customers")),
+                RequestPath = "/Uploads/Customers",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/CustomersMails")),
+                RequestPath = "/Uploads/CustomersMails",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+               Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Drafts")),
+                RequestPath = "/Uploads/Drafts",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Employees")),
+                RequestPath = "/Uploads/Employees",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Financefile")),
+                RequestPath = "/Uploads/Financefile",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Invoices")),
+                RequestPath = "/Uploads/Invoices",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Items")),
+                RequestPath = "/Uploads/Items",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/News")),
+                RequestPath = "/Uploads/News",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Notifications")),
+                RequestPath = "/Uploads/Notifications",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Organizations")),
+                RequestPath = "/Uploads/Organizations",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ProjectRequirements")),
+                RequestPath = "/Uploads/ProjectRequirements",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Projects")),
+                RequestPath = "/Uploads/Projects",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/ProjectTasks")),
+                RequestPath = "/Uploads/ProjectTasks",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Service")),
+                RequestPath = "/Uploads/Service",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Supervision")),
+                RequestPath = "/Uploads/Supervision",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Users")),
+                RequestPath = "/Uploads/Users",
+                ContentTypeProvider = provider
+            });
 
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Ticket")),
-       //         RequestPath = "/Uploads/Ticket",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //        Path.Combine(Directory.GetCurrentDirectory(), "Files/SuperDetailesFile")),
-       //         RequestPath = "/Files/SuperDetailesFile",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Files/somefiles")),
-       //         RequestPath = "/Files/somefiles",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Files/ProjectFiles")),
-       //         RequestPath = "/Files/ProjectFiles",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "TempFiles")),
-       //         RequestPath = "/TempFiles",
-       //         ContentTypeProvider = provider
-       //     });
-       //     //app.UseStaticFiles(new StaticFileOptions
-       //     //{
-       //     //    FileProvider = new PhysicalFileProvider(
-       //     //    Path.Combine(Directory.GetCurrentDirectory(), "distnew/images")),
-       //     //    RequestPath = "/distnew/images"
-       //     //});
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //        Path.Combine(Directory.GetCurrentDirectory(), "distnew")),
-       //         RequestPath = "/distnew",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "ServicePriceFormPDF")),
-       //         RequestPath = "/ServicePriceFormPDF",
-       //         ContentTypeProvider = provider
-       //     });
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //         Path.Combine(Directory.GetCurrentDirectory(), "Reports")),
-       //         RequestPath = "/Reports",
-       //         ContentTypeProvider = provider
-       //     });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+       Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Ticket")),
+                RequestPath = "/Uploads/Ticket",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+               Path.Combine(Directory.GetCurrentDirectory(), "Files/SuperDetailesFile")),
+                RequestPath = "/Files/SuperDetailesFile",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Files/somefiles")),
+                RequestPath = "/Files/somefiles",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Files/ProjectFiles")),
+                RequestPath = "/Files/ProjectFiles",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "TempFiles")),
+                RequestPath = "/TempFiles",
+                ContentTypeProvider = provider
+            });
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //    Path.Combine(Directory.GetCurrentDirectory(), "distnew/images")),
+            //    RequestPath = "/distnew/images"
+            //});
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+               Path.Combine(Directory.GetCurrentDirectory(), "distnew")),
+                RequestPath = "/distnew",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "ServicePriceFormPDF")),
+                RequestPath = "/ServicePriceFormPDF",
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Reports")),
+                RequestPath = "/Reports",
+                ContentTypeProvider = provider
+            });
 
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //  Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Organizations/DomainLink")),
-       //         RequestPath = "/Uploads/Organizations/DomainLink",
-       //         ContentTypeProvider = provider
-       //     });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+         Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Organizations/DomainLink")),
+                RequestPath = "/Uploads/Organizations/DomainLink",
+                ContentTypeProvider = provider
+            });
 
-       //     app.UseStaticFiles(new StaticFileOptions
-       //     {
-       //         FileProvider = new PhysicalFileProvider(
-       //  Path.Combine(Directory.GetCurrentDirectory(), "Backup")),
-       //         RequestPath = "/Backup",
-       //         ContentTypeProvider = provider
-       //     });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+         Path.Combine(Directory.GetCurrentDirectory(), "Backup")),
+                RequestPath = "/Backup",
+                ContentTypeProvider = provider
+            });
 
             app.MapControllers();
             //app.MapControllerRoute("LocalizedDefault", "{culture:cultrue}/{controller=Home}/{action=Index}/{id?}");

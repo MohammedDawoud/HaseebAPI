@@ -218,6 +218,7 @@ namespace TaamerProject.Models.DBContext
         public virtual DbSet<EmpLocations> EmpLocations { get; set; }
         public virtual DbSet<Permissions> Permissions { get; set; }
         public virtual DbSet<PermissionType> PermissionTypes { get; set; }
+        public virtual DbSet<CommercialActivity> CommercialActivities { get; set; }
 
         public string GetDatabaseName()
         {
@@ -1253,6 +1254,8 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.StreetName).HasColumnName("StreetName");
                 entity.Property(t => t.BuildingNumber).HasColumnName("BuildingNumber");
                 entity.Property(t => t.CityId).HasColumnName("CityId");
+                modelBuilder.Entity<Customer>().HasOne(s => s.commercialActivities).WithMany().HasForeignKey(e => e.CommercialActivity);
+                modelBuilder.Entity<Customer>().HasOne(s => s.BranchActivity).WithMany().HasForeignKey(e => e.GeneralManager);
 
                 modelBuilder.Entity<Customer>().HasOne(s => s.city).WithMany().HasForeignKey(e => e.CityId);
                 modelBuilder.Entity<Customer>().HasOne(s => s.Branch).WithMany().HasForeignKey(e => e.BranchId);
@@ -4267,8 +4270,15 @@ namespace TaamerProject.Models.DBContext
                 entity.Property(t => t.Notes).HasColumnName("Notes");
             });
 
-            //--------------------------------END--------------------------------------------------
 
+            //--------------------------------END--------------------------------------------------
+            modelBuilder.Entity<CommercialActivity>(entity =>
+            {
+                entity.HasKey(e => e.CommercialActivityId);
+                entity.ToTable("Acc_CommercialActivity");
+            });
+
+            //--------------------------------END--------------------------------------------------
             #endregion
 
             OnModelCreatingPartial(modelBuilder);

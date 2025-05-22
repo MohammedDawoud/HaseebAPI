@@ -880,6 +880,8 @@ namespace TaamerProject.Repository.Repositories
                 InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                 AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                 DepitNotiId = x.DepitNotiId ?? 0,
+                PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
 
 
                 VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
@@ -5616,6 +5618,8 @@ namespace TaamerProject.Repository.Repositories
                     InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
                     DepitNotiId = x.DepitNotiId ?? 0,
+                    PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                    PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
 
 
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
@@ -5724,6 +5728,9 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                         VoucherDetails = x.VoucherDetails,
+                        PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                        PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
+
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
 
                 }
@@ -5795,6 +5802,9 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                         VoucherDetails = x.VoucherDetails,
+                        PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                        PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
+
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
                 }
 
@@ -5863,6 +5873,9 @@ namespace TaamerProject.Repository.Repositories
                             AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
 
                             VoucherDetails = x.VoucherDetails,
+                            PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                            PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
+
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
 
                     }
@@ -5931,6 +5944,9 @@ namespace TaamerProject.Repository.Repositories
                             InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                             AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                             VoucherDetails = x.VoucherDetails,
+                            PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                            PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
+
                         }).OrderByDescending(s => s.InvoiceNumber).ToList();
                     }
 
@@ -5998,6 +6014,9 @@ namespace TaamerProject.Repository.Repositories
                         InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                         AddInvoiceImg = x.AddInvoiceImg ?? "/distnew/images/userprofile.png",
                         VoucherDetails = x.VoucherDetails,
+                        PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                        PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
+
                     }).OrderByDescending(s => s.InvoiceNumber).ToList();
 
                 }
@@ -6066,6 +6085,9 @@ namespace TaamerProject.Repository.Repositories
                     IsSendAlarm = x.IsSendAlarm ?? 0,
                     InvUUID = x.InvUUID ?? "",StorehouseId=x.StorehouseId,
                     AddInvoiceImg = x.AddUsers!.ImgUrl ?? "/distnew/images/userprofile.png",
+                    PurchaseOrderNo = x.PurchaseOrderNo ?? "",
+                    PurchaseOrderStatus = x.PurchaseOrderNo == null || x.PurchaseOrderNo == "" ? "تحت المراجعه" : "تم التحويل الي فاتورة",
+
                     VoucherDetails = x.VoucherDetails!.Where(s => s.InvoiceId == x.InvoiceId && s.IsDeleted == false).Select(z => new VoucherDetailsVM
                     {
                         VoucherDetailsId = z.VoucherDetailsId,

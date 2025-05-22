@@ -12,7 +12,9 @@ namespace TaamerProject.Models.Enums
         public enum VoucherType
         {
             Purches = 1,
-        
-        }
+        PurchesOrder = 35,
+
 
     }
+
+}

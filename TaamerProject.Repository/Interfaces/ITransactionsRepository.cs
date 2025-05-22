@@ -54,6 +54,7 @@ namespace TaamerProject.Repository.Interfaces
         Task<IEnumerable<TransactionsVM>> gettransbyid(int? jornal);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearch_New_withChild(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId, bool? isCheckedBranch);
         Task<IEnumerable<TransactionsVM>> GetAllTransSearchByAccIDandCostId_New_whithchild(int? AccountId, string FromDate, string ToDate, int? CostCenterId, int YearId, int BranchId);
+        Task<IEnumerable<TransactionsVM>> GetAllJournalsByInvIDPurchaseOrder(int? invId, int? YearId, int BranchId);
 
 
     }

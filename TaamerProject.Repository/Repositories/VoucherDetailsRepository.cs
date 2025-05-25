@@ -268,6 +268,10 @@ namespace TaamerProject.Repository.Repositories
                 IsRetrieve = x.IsRetrieve ?? 0,
                 DiscountPercentage_Det = x.DiscountPercentage_Det ?? 0,
                 DiscountValue_Det = x.DiscountValue_Det ?? 0,
+                ServicesPriceId = x.ServicesPriceId,
+                ServicesPriceName = x.ServicesPrice != null ? x.ServicesPrice.ServicesName : "",
+                ServiceTypeName = x.ServicesPrice != null ? x.ServicesPrice.ServiceType == 2 ? "تقرير" : "صنف" : "صنف",
+
 
             }).ToList();
 

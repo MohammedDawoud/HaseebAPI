@@ -129,6 +129,9 @@ namespace TaamerProject.Service.Interfaces
 
         GeneralMessage SavePayVoucherForServicesRet(Invoices voucher, int UserId, int BranchId, int? yearid);
 
+        GeneralMessage SaveandPostPurchaseOrderForServices(Invoices voucher, int UserId, int BranchId, int? yearid, string Con);
+        GeneralMessage ConverOrderToInvoice(int voucherId, int UserId, int BranchId, int? yearid, string Con);
+        Task<IEnumerable<TransactionsVM>> GetAllJournalsByInvIDPurchaseOrder(int? invId, int BranchId, int? yearid);
 
         GeneralMessage SaveInvoiceForServices2(Invoices voucher, int UserId, int BranchId, int? yearid);
         GeneralMessage SaveandPostInvoiceForServices2(Invoices voucher, int UserId, int BranchId, int? yearid);

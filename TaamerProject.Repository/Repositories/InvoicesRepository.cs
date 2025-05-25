@@ -7411,7 +7411,7 @@ namespace TaamerProject.Repository.Repositories
                     InvoiceNumber = x.InvoiceNumber,
                     InvoiceId = x.InvoiceId,
                     Type = x.Type,
-                    Date = x.Date,
+                    Date = x.Date, 
                 }).First();
                 return inv;
             }

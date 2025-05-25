@@ -4683,6 +4683,7 @@ namespace TaamerProject.API.Controllers
             else
             {
                 var errormsg = res.ErrorMessage;
+                result = _invoicesRequestsService.SaveInvoicesRequest(InvoiceReqId ?? 0, invoiceIdV, InvoicesVM.Type, res.InvoiceHash, "", res.EncodedInvoice, res.UUID, res.QRCode, res.PIH, res.SingedXMLFileName, zatcaVoucherNumber ?? 0, false, 400, null, null, null, errormsg, Branchid);
                 //-----------------------------------------------------------------------------------------------------------------
                 string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
                 string ActionNote = "GenerateInvoiceXML InValid";
@@ -4987,6 +4988,87 @@ namespace TaamerProject.API.Controllers
                 InvoiceObjDet.voucherDetObjRet = ObjDet;
             }
             var Result = ZatcaInvoiceIntegration(InvoiceObjDet, _globalshared.BranchId_G, InvoiceObjDet.voucherDetObjRet ?? new List<ObjRet>(), InvoiceReqId);
+            return Ok(Result);
+        }
+
+        [HttpPost("ReSendZatcaInvoiceIntegrationFuncByInvoiceId")]
+        public IActionResult ReSendZatcaInvoiceIntegrationFuncByInvoiceId(int InvoiceId)
+        {
+            HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
+            var org = _organizationsservice.GetBranchOrganization().Result;
+            var InvoiceReqData = _voucherService.GetInvoiceDateById(InvoiceId).Result;
+            InvoiceObjDet InvoiceObjDet = new InvoiceObjDet();
+
+            if (InvoiceReqData.Type == 2 || InvoiceReqData.Type == 29)
+            {
+                var voucherDet = _TaamerProContext.VoucherDetails.Where(s => s.IsDeleted == false && s.InvoiceId == InvoiceReqData.InvoiceId).ToList();
+                List<int> voDetIds = new List<int>();
+                foreach (var itemV in voucherDet)
+                {
+                    voDetIds.Add(itemV.VoucherDetailsId);
+                }
+                InvoiceObjDet.voucherDetObj = voDetIds;
+            }
+            else if (InvoiceReqData.Type == 4)
+            {
+                var VoucherDetailsV = _voucherService.GetAllDetailsByInvoiceId(InvoiceReqData.InvoiceId).Result;
+                var ObjDet = new List<ObjRet>();
+                var VoucherDetCredit = new List<VoucherDetails>();
+                var VoucherCredit = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.CreditNotiId == InvoiceReqData.InvoiceId).ToList();
+                if (VoucherCredit.Count() > 0)
+                {
+                    VoucherDetCredit = _TaamerProContext.VoucherDetails.Where(s => s.InvoiceId == VoucherCredit.FirstOrDefault().InvoiceId).ToList();
+                }
+                if (VoucherDetCredit.Count() > 0)
+                {
+                    foreach (var item in VoucherDetailsV)
+                    {
+                        var ObjDetInst = new ObjRet();
+                        foreach (var itemC in VoucherDetCredit)
+                        {
+                            if (item.ServicesPriceId == itemC.ServicesPriceId)
+                            {
+
+                                item.TaxAmount = item.TaxAmount - itemC.TaxAmount;
+                                item.Amount = item.Amount - itemC.Amount;
+                                item.TotalAmount = item.TotalAmount - itemC.TotalAmount;
+
+                            }
+                        }
+                        ObjDetInst.TaxAmount = item.TaxAmount;
+                        ObjDetInst.Amount = item.Amount;
+                        ObjDetInst.TotalAmount = item.TotalAmount;
+                        ObjDetInst.Qty = item.Qty;
+                        ObjDetInst.ServicesPriceName = item.ServicesPriceName;
+                        ObjDetInst.DiscountValue_Det = item.DiscountValue_Det;
+                        ObjDetInst.DiscountPercentage_Det = item.DiscountPercentage_Det;
+                        ObjDetInst.InvoiceId = item.InvoiceId;
+                        ObjDetInst.VoucherDetailsId = item.VoucherDetailsId;
+                        ObjDetInst.Type = 4;
+                        ObjDet.Add(ObjDetInst);
+                    }
+                }
+                else
+                {
+                    foreach (var item in VoucherDetailsV)
+                    {
+                        var ObjDetInst = new ObjRet();
+                        ObjDetInst.TaxAmount = item.TaxAmount;
+                        ObjDetInst.Amount = item.Amount;
+                        ObjDetInst.TotalAmount = item.TotalAmount;
+                        ObjDetInst.Qty = item.Qty;
+                        ObjDetInst.ServicesPriceName = item.ServicesPriceName;
+                        ObjDetInst.DiscountValue_Det = item.DiscountValue_Det;
+                        ObjDetInst.DiscountPercentage_Det = item.DiscountPercentage_Det;
+                        ObjDetInst.InvoiceId = item.InvoiceId;
+                        ObjDetInst.VoucherDetailsId = item.VoucherDetailsId;
+                        ObjDetInst.Type = 4;
+                        ObjDet.Add(ObjDetInst);
+                    }
+                }
+                InvoiceObjDet.voucherDetObjRet = ObjDet;
+            }
+            var Result = ZatcaInvoiceIntegration(InvoiceObjDet, _globalshared.BranchId_G, InvoiceObjDet.voucherDetObjRet ?? new List<ObjRet>(), null);
             return Ok(Result);
         }
 

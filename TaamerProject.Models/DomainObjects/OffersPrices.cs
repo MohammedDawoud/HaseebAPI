@@ -51,6 +51,12 @@ namespace TaamerProject.Models
         public int? NotDisCustPrint { get; set; }
         public int? CustomerMailCode { get; set; }
 
+        public bool? IsCertified { get; set; }
+        public string? CertifiedCode { get; set; }
+        public string? ProjectName { get; set; }
+        public int? ImplementationDuration { get; set; }
+        public int? OfferValidity { get; set; }
+
         public virtual List<CustomerPayments>? CustomerPayments { get; set; }
         public virtual List<OffersConditions>? OffersConditions { get; set; }
         public virtual List<OfferService>? OfferService { get; set; }

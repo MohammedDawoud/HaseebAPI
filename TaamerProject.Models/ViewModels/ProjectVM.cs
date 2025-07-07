@@ -305,6 +305,11 @@ namespace TaamerProject.Models
         public int? FilterType { get; set; }
 
 
+        public bool? IsCertified { get; set; }
+        public string? CertifiedCode { get; set; }
+        public int? ImplementationDuration { get; set; }
+        public int? OfferValidity { get; set; }
+
         public List<ProjectWorkersVM>? ProjectWorkers { get; set; }
         public List<ProjectPhasesTasksVM>? ProjectPhasesTasks { get; set; }
     }

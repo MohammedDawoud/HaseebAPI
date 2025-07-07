@@ -32,13 +32,13 @@ namespace TaamerProject.Service.Services
         private readonly IOfferServiceRepository _offerServiceRepository;
         private readonly IBranchesRepository _branchesRepository;
         private readonly ISystemSettingsRepository _SystemSettingsRepository;
-
+        private readonly ICustomerMailService _customerMailService;
 
 
         public OffersPricesService(TaamerProjectContext dataContext, ISystemAction systemAction, ICustomerPaymentsRepository customerPaymentsRepository,
             ISystemSettingsRepository systemSettingsRepository, IBranchesRepository branchesRepository,
             IProjectRepository projectRepository, IOffersPricesRepository offersPricesRepository, IOfferpriceconditionRepository offerpriceconditionRepository,
-            IOfferServiceRepository offerServiceRepository)
+            IOfferServiceRepository offerServiceRepository, ICustomerMailService customerMailService)
         {
             _TaamerProContext = dataContext;
             _SystemAction = systemAction;
@@ -49,6 +49,7 @@ namespace TaamerProject.Service.Services
             _offerServiceRepository = offerServiceRepository;
             _branchesRepository = branchesRepository;
             _SystemSettingsRepository = systemSettingsRepository;
+            _customerMailService = customerMailService;
         }
 
 
@@ -489,7 +490,9 @@ namespace TaamerProject.Service.Services
                     offer.ServQty = offerprice.ServQty;
                     offer.OfferNoType = offerprice.OfferNoType;
                     offer.NotDisCustPrint = offerprice.NotDisCustPrint;
-
+                    offer.ProjectName = offerprice.ProjectName;
+                    offer.ImplementationDuration = offerprice.ImplementationDuration;
+                    offer.OfferValidity = offerprice.OfferValidity;
 
                     if (offerprice.setIntroduction == 1)
                     {
@@ -654,7 +657,9 @@ namespace TaamerProject.Service.Services
                     offer.setIntroduction = offerprice.setIntroduction;
                     offer.ServQty = offerprice.ServQty;
                     offer.NotDisCustPrint = offerprice.NotDisCustPrint;
-
+                    offer.ProjectName = offerprice.ProjectName;
+                    offer.ImplementationDuration = offerprice.ImplementationDuration;
+                    offer.OfferValidity = offerprice.OfferValidity;
                     if (offerprice.setIntroduction == 1)
                     {
                         var offers = _offersPricesRepository.GetMatching(x => x.IsDeleted == false && x.setIntroduction == 1).ToList();
@@ -850,6 +855,116 @@ namespace TaamerProject.Service.Services
             }
 
             return codePrefix;
+        }
+
+
+
+        public GeneralMessage CertifyOffer(int offerpriceid, int UserId, int BranchId, string Url)
+        {
+            try
+            {
+                string message = "";
+                if (offerpriceid != 0)
+                {
+                    var offer = _offersPricesRepository.GetById(offerpriceid);
+                    var code = GenerateRandomNo();
+
+                    offer.UpdateDate = DateTime.Now;
+                    offer.CertifiedCode = code.ToString();
+                    var strbody = @"<!DOCTYPE html>
+                                            <html>
+                                             <head></head>
+                                            <body  style='direction: rtl;'>
+                                    
+                                           <label style='font-size:23px;'>  رقم عرض السعر : <input type='text' name='name' value=" + offer.OfferNo + @" disabled style='margin-right: 19%;width: 38%;font-size: 30px;text-align: center;border-radius: 17px;'/></label>
+                                                                    <br/>
+                                           <label style='font-size:23px;'>   مقدم للعميل  : <span>" + offer.CustomerName + @"</span></label>
+                                                                    <br/>
+                                           <label style='font-size:23px;'>  كود الاعتماد هو : <input type='text' name='name' value=" + code + @" disabled style='margin-right: 18%;width: 40%;font-weight: bold;color: red;font-size: 30px;text-align: center;border-radius: 17px;'/></label>
+                                                                    <br/>
+                                                </table>
+                                            </body>
+                                            </html>";
+                    _customerMailService.SendMail_SysNotification(BranchId, UserId, UserId, "كود تأكيد إعتماد عرض السعر", strbody, true);
+                    _TaamerProContext.SaveChanges();
+
+                }
+                var user = _TaamerProContext.Users.Where(x => x.UserId == UserId).FirstOrDefault();
+                if (user != null && user.Email != null)
+                {
+                    message = "لإعتماد عرض السعر يرجي ادخال كود التحقق المرسل إلي البريد " + "  " + MaskEmail(user.Email);
+                }
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = message };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
+
+
+        public GeneralMessage ConfirmCertifyOffer(int offerpriceid, int UserId, int BranchId, string Code)
+        {
+            try
+            {
+                if (offerpriceid != 0)
+                {
+                    var offer = _offersPricesRepository.GetById(offerpriceid);
+                    if (Code != offer.CertifiedCode)
+                    {
+                        string ActionDate = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote = "فشل في اعتماد  عرض سعر";
+                        _SystemAction.SaveAction("Intoduceoffer", "ConfirmCertifyOffer", 1, Resources.General_SavedFailed, "", "", ActionDate, UserId, BranchId, ActionNote, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+
+
+                        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "الكود غير صحيح" };
+
+                    }
+
+                    offer.UpdateDate = DateTime.Now;
+                    offer.IsCertified = true;
+                    _TaamerProContext.SaveChanges();
+
+                }
+                return new GeneralMessage { StatusCode = HttpStatusCode.OK, ReasonPhrase = Resources.General_SavedSuccessfully };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = Resources.General_SavedFailed };
+            }
+        }
+        public string MaskEmail(string email)
+        {
+            var parts = email.Split('@');
+            if (parts.Length != 2) return email; // invalid email
+
+            string local = parts[0];
+            string domain = parts[1];
+
+            if (local.Length <= 4)
+                return email; // too short to mask meaningfully
+
+            string firstTwo = local.Substring(0, 2);
+            string lastVisible = "";
+
+            // Get last segment after last dot or last 2-3 letters
+            int lastDotIndex = local.LastIndexOf('.');
+            if (lastDotIndex != -1 && lastDotIndex < local.Length - 1)
+            {
+                lastVisible = local.Substring(lastDotIndex);
+            }
+            else
+            {
+                lastVisible = local.Substring(local.Length - 3); // last 3 letters
+            }
+
+            int starsCount = local.Length - (firstTwo.Length + lastVisible.Length);
+            if (starsCount < 1) starsCount = 1;
+
+            string stars = new string('*', starsCount);
+
+            return $"{firstTwo}{stars}{lastVisible}@{domain}";
         }
 
     }

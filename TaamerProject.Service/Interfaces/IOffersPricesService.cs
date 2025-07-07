@@ -36,5 +36,7 @@ namespace TaamerProject.Service.Interfaces
         Task<IEnumerable<OffersPricesVM>> GetAllOfferByCustomerId(int CustomerId);
         Task<IEnumerable<OffersPricesVM>> Getofferconestintroduction();
         Task<IEnumerable<OffersPricesVM>> GetOfferByid2(int offerid);
+        GeneralMessage CertifyOffer(int offerpriceid, int UserId, int BranchId, string Url);
+        GeneralMessage ConfirmCertifyOffer(int offerpriceid, int UserId, int BranchId, string Code);
     }
 }

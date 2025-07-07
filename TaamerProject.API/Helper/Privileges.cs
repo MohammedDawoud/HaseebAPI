@@ -165,6 +165,8 @@ namespace TaamerProject.API.Helper
                        new Privilege { Id = 121401 , ParentId = 1214 , Name =  Resources.General_Add , Description =  Resources.General_Add},
                         new Privilege { Id = 121402 , ParentId = 1214 , Name =  Resources.General_Edit , Description =  Resources.General_Edit},
                          new Privilege { Id = 121403 , ParentId = 1214 , Name =  Resources.General_Delete , Description =  Resources.General_Delete},
+                                                  new Privilege { Id = 1213104 , ParentId = 12131 , Name =  "صلاحية اعتماد عرض السعر" , Description =  "صلاحية اعتماد عرض السعر" },
+
 
                              //new Privilege { Id = 121306 , ParentId = 1213 , Name =  Resources.Pro_PrivateCustomer , Description =  Resources.Pro_PrivateCustomer},
 

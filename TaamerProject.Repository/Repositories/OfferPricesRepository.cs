@@ -66,7 +66,10 @@ namespace TaamerProject.Repository.Repositories
                 NotDisCustPrint = x.NotDisCustPrint ?? 0,
                 CustomerMailCode = x.CustomerMailCode ?? 0,
                 ProjectId=x.ProjectId ?? 0,
-
+                IsCertified = x.IsCertified ?? false,
+                ImplementationDuration = x.ImplementationDuration ?? 0,
+                OfferValidity = x.OfferValidity ?? 0,
+                ProjectName = x.ProjectName ?? "",
             }).ToList();
      
             return Offers;
@@ -135,7 +138,10 @@ namespace TaamerProject.Repository.Repositories
                 NotDisCustPrint = x.NotDisCustPrint ?? 0,
                 CustomerMailCode = x.CustomerMailCode ?? 0,
                 ProjectId = x.ProjectId ?? 0,
-
+                IsCertified = x.IsCertified ?? false,
+                ImplementationDuration = x.ImplementationDuration ?? 0,
+                OfferValidity = x.OfferValidity ?? 0,
+                ProjectName = x.ProjectName ?? "",
 
             }).ToList();
             return Offers;
@@ -240,7 +246,10 @@ namespace TaamerProject.Repository.Repositories
                 NotDisCustPrint = x.NotDisCustPrint ?? 0,
                 CustomerMailCode = x.CustomerMailCode ?? 0,
                 ProjectId = x.ProjectId ?? 0,
-
+                IsCertified = x.IsCertified ?? false,
+                ImplementationDuration = x.ImplementationDuration ?? 0,
+                OfferValidity = x.OfferValidity ?? 0,
+                ProjectName = x.ProjectName ?? "",
 
             }).ToList();
             return Offers;
@@ -289,7 +298,10 @@ namespace TaamerProject.Repository.Repositories
                 NotDisCustPrint = x.NotDisCustPrint ?? 0,
                 CustomerMailCode = x.CustomerMailCode ?? 0,
                 ProjectId = x.ProjectId ?? 0,
-
+                IsCertified = x.IsCertified ?? false,
+                ImplementationDuration = x.ImplementationDuration ?? 0,
+                OfferValidity = x.OfferValidity ?? 0,
+                ProjectName = x.ProjectName ?? "",
 
             }).ToList();
             return Offers;
@@ -338,7 +350,10 @@ namespace TaamerProject.Repository.Repositories
                 NotDisCustPrint = x.NotDisCustPrint ?? 0,
                 CustomerMailCode = x.CustomerMailCode ?? 0,
                 ProjectId = x.ProjectId ?? 0,
-
+                IsCertified = x.IsCertified ?? false,
+                ImplementationDuration = x.ImplementationDuration ?? 0,
+                OfferValidity = x.OfferValidity ?? 0,
+                ProjectName = x.ProjectName ?? "",
 
             }).ToList();
             return Offers;
@@ -393,7 +408,10 @@ namespace TaamerProject.Repository.Repositories
                 NotDisCustPrint = x.NotDisCustPrint ?? 0,
                 CustomerMailCode = x.CustomerMailCode ?? 0,
                 ProjectId = x.ProjectId ?? 0,
-
+                IsCertified = x.IsCertified ?? false,
+                ImplementationDuration = x.ImplementationDuration ?? 0,
+                OfferValidity = x.OfferValidity ?? 0,
+                ProjectName = x.ProjectName ?? "",
 
 
             }).OrderByDescending(x => x.OffersPricesId).ToList();

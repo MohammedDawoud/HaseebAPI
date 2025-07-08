@@ -79,10 +79,10 @@
 
   <ItemGroup>
     <Reference Include="itextsharp">
-      <HintPath>..\..\..\TameerAPI\newdlls\itextsharp.dll</HintPath>
+      <HintPath>..\..\..\Configuration\dlls\zatcadllsnew\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp.pdfa">
-      <HintPath>..\..\..\TameerAPI\newdlls\itextsharp.pdfa.dll</HintPath>
+      <HintPath>..\..\..\Configuration\dlls\zatcadllsnew\itextsharp.pdfa.dll</HintPath>
     </Reference>
   </ItemGroup>
 

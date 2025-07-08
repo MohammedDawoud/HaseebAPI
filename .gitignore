@@ -23,6 +23,16 @@ TaamerProject.Repository/bin
 TaamerProject.Repository/obj
 TaamerProject.Service/bin
 TaamerProject.Service/obj
+
+Haseeb.API/bin
+Haseeb.API/obj
+Haseeb.Models/bin
+Haseeb.Models/obj
+Haseeb.Repository/bin
+Haseeb.Repository/obj
+Haseeb.Service/bin
+Haseeb.Service/obj
+
 # User-specific files
 *.rsuser
 *.suo
@@ -426,3 +436,10 @@ FodyWeavers.xsd
 /TaamerProject.API/appsettings.json
 /TaamerProject.API/TempFiles
 /TaamerProject.API/Uploads
+
+/Haseeb.Service/Haseeb.Service.csproj
+/Haseeb.Service/Services/AccServices/AccountsService.cs
+/Haseeb.API/Haseeb.API.csproj
+/Haseeb.API/appsettings.json
+/Haseeb.API/TempFiles
+/Haseeb.API/Uploads

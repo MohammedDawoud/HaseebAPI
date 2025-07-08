@@ -43,16 +43,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="LocalResources\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="SMSManagerDll">
-      <HintPath>..\TaamerProject.API\bin\Debug\net7.0\SMSManagerDll.dll</HintPath>
+      <HintPath>..\..\..\TameerAPI\newdlls\SMSManagerDll.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Extensions">
       <HintPath>..\..\..\Configuration\dlls\newdlls\System.Web.Extensions.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="LocalResources\" />
   </ItemGroup>
 
   <ItemGroup>

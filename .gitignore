@@ -430,16 +430,14 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-/TaamerProject.Service/Haseeb.Service.csproj
-/TaamerProject.Service/Services/AccServices/AccountsService.cs
-/TaamerProject.API/Haseeb.API.csproj
-/TaamerProject.API/appsettings.json
+/TaamerProject.API/Uploads/Attachment
+/TaamerProject.API/Uploads/Organizations/pictures
 /TaamerProject.API/TempFiles
-/TaamerProject.API/Uploads
+/TaamerProject.API/Files/ProjectFiles
+/TaamerProject.API/fonts
 
-/Haseeb.Service/Haseeb.Service.csproj
-/Haseeb.Service/Services/AccServices/AccountsService.cs
-/Haseeb.API/Haseeb.API.csproj
-/Haseeb.API/appsettings.json
+/Haseeb.API/Uploads/Attachment
+/Haseeb.API/Uploads/Organizations/pictures
 /Haseeb.API/TempFiles
-/Haseeb.API/Uploads
+/Haseeb.API/Files/ProjectFiles
+/Haseeb.API/fonts

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup Label="Globals">
     <SccProjectName></SccProjectName>
@@ -51,16 +51,16 @@
 
   <ItemGroup>
     <Reference Include="Interop.zkemkeeper">
-      <HintPath>bin\Debug\net7.0\Interop.zkemkeeper.dll</HintPath>
+      <HintPath>..\newdlls\Interop.zkemkeeper.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
-      <HintPath>bin\Debug\net7.0\itextsharp.dll</HintPath>
+      <HintPath>..\newdlls\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="QRCoder">
-      <HintPath>bin\Debug\net7.0\QRCoder.dll</HintPath>
+      <HintPath>..\newdlls\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="SMSManagerDll">
-      <HintPath>bin\Debug\net7.0\SMSManagerDll.dll</HintPath>
+      <HintPath>..\newdlls\SMSManagerDll.dll</HintPath>
     </Reference>
     <Reference Include="Spire.Doc">
       <HintPath>bin\Debug\net7.0\Spire.Doc.dll</HintPath>

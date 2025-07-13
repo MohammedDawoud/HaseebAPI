@@ -14,8 +14,8 @@ using TaamerProject.Models.DBContext;
 using TaamerProject.Repository.Interfaces;
 using TaamerProject.Service.IGeneric;
 using TaamerProject.Service.Interfaces;
-using Haseeb.Service.LocalResources;
-using static Haseeb.Models.ViewModels.PaymentsAndEarns;
+using Haseeb.Service.LocalResources; 
+using static Haseeb.Models.ViewModels.PaymentsAndEarns; 
 using Haseeb.Models.ViewModels;
 
 namespace TaamerProject.Service.Services

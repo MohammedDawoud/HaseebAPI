@@ -4042,7 +4042,7 @@ namespace TaamerProject.API.Controllers
             }
             else if (Param == 3)
             {
-                var Suppliers = _acc_SuppliersService.GetAllSuppliers("").Result.Select(s => new {
+                var Suppliers = _acc_SuppliersService.GetAllSuppliers("", _globalshared.BranchId_G, _globalshared.YearId_G).Result.Select(s => new {
                     Id = s.SupplierId,
                     Name = s.NameAr
                 });
@@ -4107,7 +4107,7 @@ namespace TaamerProject.API.Controllers
             }
             else if (Param == 13)
             {
-                var Suppliers = _acc_SuppliersService.GetAllSuppliers("").Result.Select(s => new {
+                var Suppliers = _acc_SuppliersService.GetAllSuppliers("", _globalshared.BranchId_G, _globalshared.YearId_G).Result.Select(s => new {
                     Id = s.SupplierId,
                     Name = s.NameAr
                 });

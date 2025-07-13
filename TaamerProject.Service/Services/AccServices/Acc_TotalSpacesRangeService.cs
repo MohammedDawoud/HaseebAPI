@@ -11,7 +11,7 @@ using TaamerProject.Models.DBContext;
 using TaamerProject.Repository.Interfaces;
 using TaamerProject.Service.IGeneric;
 using TaamerProject.Service.Interfaces;
-using Haseeb.Service.LocalResources;
+using Haseeb.Service.LocalResources; 
 
 namespace TaamerProject.Service.Services
 {

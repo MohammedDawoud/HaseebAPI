@@ -4715,7 +4715,7 @@ namespace TaamerProject.Repository.Repositories
 
        public async Task<IEnumerable<InvoicesVM>> GetVoucherRpt(int YearId, int BranchId)
         {
-            var details = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.YearId == YearId && s.BranchId == BranchId && (s.Rad != true)).Select(x => new InvoicesVM
+            var details = _TaamerProContext.Invoices.Where(s => s.IsDeleted == false && s.YearId == YearId && s.BranchId == BranchId && (s.Rad != true) && s.Type != 35).Select(x => new InvoicesVM
             {
                 InvoiceNumber = x.InvoiceNumber,
                 InvoiceId = x.InvoiceId,

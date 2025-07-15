@@ -771,7 +771,7 @@ namespace TaamerProject.Repository.Repositories
             try
             {
 
-                var details = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && (YearId == 0 || s.YearId == YearId) && s.Type != 12 
+                var details = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && (YearId == 0 || s.YearId == YearId) && s.Type != 12 && s.Type !=35
                 && ((isCheckedBranch == false && BranchId == 1) || s.BranchId == BranchId) && s.IsPost == true &&
                 (AccountId == null||s.AccountId == AccountId) 
                 && (CostCenterId == null || s.CostCenterId == CostCenterId || CostCenterId==0)
@@ -998,7 +998,7 @@ namespace TaamerProject.Repository.Repositories
             try
             {
                
-                var details = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && (YearId == 0 || s.YearId == YearId) && s.Type != 12 && ((isCheckedBranch == false && BranchId == 1) || s.BranchId == BranchId)
+                var details = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && (YearId == 0 || s.YearId == YearId) && s.Type != 12 && s.Type !=35 && ((isCheckedBranch == false && BranchId == 1) || s.BranchId == BranchId)
                 && s.IsPost == true && ((s.AccountId == AccountId) || s.Accounts.ParentId == AccountId ||
                 s.Accounts.ParentAccount.ParentId == AccountId || s.Accounts.ParentAccount.ParentAccount.ParentId == AccountId ||
                 s.Accounts.ParentAccount.ParentAccount.ParentAccount.ParentId == AccountId ||
@@ -2172,7 +2172,7 @@ namespace TaamerProject.Repository.Repositories
 
         public async Task< IEnumerable<TransactionsVM>> GetAllJournals(int? FromJournal, int? ToJournal, string FromDate, string ToDate, int YearId, int BranchId)
         {
-            var Journals = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && s.Type!=12  /*&& s.BranchId == BranchId*/ && s.YearId== YearId && s.IsPost==true /*&& s.Invoices.Rad!=true*/).Select(tr => new TransactionsVM
+            var Journals = _TaamerProContext.Transactions.Where(s => s.IsDeleted == false && s.Type!=12  && s.Type !=35 /*&& s.BranchId == BranchId*/ && s.YearId== YearId && s.IsPost==true /*&& s.Invoices.Rad!=true*/).Select(tr => new TransactionsVM
             {
                 TransactionId = tr.TransactionId,
                 JournalNo = tr.JournalNo,

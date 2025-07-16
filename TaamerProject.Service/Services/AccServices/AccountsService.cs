@@ -196,6 +196,18 @@ namespace TaamerProject.Service.Services
                         }
 
                     }
+                    if (Branch != null && Branch.SuppliersAccId != null)
+                    {
+                        if (account.ParentId == Branch.SuppliersAccId)
+                        {
+                            //-----------------------------------------------------------------------------------------------------------------
+                            string ActionDate3 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                            string ActionNote3 = "فشل في حفظ الحساب";
+                            _SystemAction.SaveAction("SaveAccount", "AccountsService", 1, "لا يمكنك الحفظ في حساب الموردين .. يجب عليك حفظ مورد", "", "", ActionDate3, UserId, BranchId, ActionNote3, 0);
+                            //-----------------------------------------------------------------------------------------------------------------
+                            return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "لا يمكنك الحفظ في حساب الموردين .. يجب عليك حفظ مورد" };
+                        }
+                    }
 
                     if (Branch != null && Branch.EmployeesAccId != null)
                     {
@@ -1082,11 +1094,10 @@ namespace TaamerProject.Service.Services
 
                 }
 
-
+                var AccountCheck = _TaamerProContext.Accounts.Where(x => x.AccountId == AccountId).FirstOrDefault();
                 var Branch = _TaamerProContext.Branch.Where(x=>x.BranchId==BranchId).FirstOrDefault();
                 if (Branch != null && Branch.CustomersAccId != null)
                 {
-                    var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
                     if (AccountCheck.ParentId == Branch.CustomersAccId)
                     {
                         //-----------------------------------------------------------------------------------------------------------------
@@ -1099,10 +1110,26 @@ namespace TaamerProject.Service.Services
                     }
 
                 }
+                if (Branch != null && Branch.SuppliersAccId != null)
+                {
+                    //var AccountCheck = _TaamerProContext.Accounts.Where(x => x.AccountId == AccountId).FirstOrDefault();
+                    if (AccountCheck.ParentId == Branch.SuppliersAccId)
+                    {
+                        //-----------------------------------------------------------------------------------------------------------------
+                        string ActionDate3 = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en"));
+                        string ActionNote3 = "فشل في حذف الحساب";
+                        _SystemAction.SaveAction("DeleteAccount", "AccountsService", 1, "لا يمكن حذف حساب من حسابات الموردين , من فضلك قم بمسح المورد أولا", "", "", ActionDate3, UserId, BranchId, ActionNote3, 0);
+                        //-----------------------------------------------------------------------------------------------------------------
+                        return new GeneralMessage { StatusCode = HttpStatusCode.BadRequest, ReasonPhrase = "لا يمكن حذف حساب من حسابات الموردين , من فضلك قم بمسح المورد أولا" };
+
+                    }
+
+                }
+
 
                 if (Branch != null && Branch.EmployeesAccId != null)
                 {
-                    var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
+                    //var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
                     if (AccountCheck.ParentId == Branch.EmployeesAccId)
                     {
                         //-----------------------------------------------------------------------------------------------------------------
@@ -1119,7 +1146,7 @@ namespace TaamerProject.Service.Services
 
                 if (Branch != null && Branch.LoanAccId != null)
                 {
-                    var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
+                    //var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
                     if (AccountCheck.ParentId == Branch.LoanAccId)
                     {
                         //-----------------------------------------------------------------------------------------------------------------
@@ -1136,7 +1163,7 @@ namespace TaamerProject.Service.Services
 
                 if (Branch != null && Branch.PurchaseDelayAccId != null)
                 {
-                    var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
+                    //var AccountCheck = _TaamerProContext.Accounts.Where(x=>x.AccountId==AccountId).FirstOrDefault();
                     if (AccountCheck.ParentId == Branch.PurchaseDelayAccId)
                     {
                         //-----------------------------------------------------------------------------------------------------------------

@@ -169,7 +169,7 @@ namespace TaamerProject.API.Controllers
         }
 
         [HttpGet("GetAllHirearchialAccounts")]
-        public IActionResult GetAllHirearchialAccounts()
+        public IActionResult GetAllHirearchialAccounts() 
         {
             HttpContext httpContext = HttpContext; _globalshared = new GlobalShared(httpContext);
 
